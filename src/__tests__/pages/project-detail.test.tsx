@@ -15,7 +15,7 @@ jest.mock('react-router-dom', () => ({
   useParams: () => ({ id: 'p-detail-1' }),
 }));
 
-jest.mock('@/core/stores', () => ({
+jest.mock('@/shared/stores', () => ({
   useProjectStore: jest.fn(),
 }));
 
