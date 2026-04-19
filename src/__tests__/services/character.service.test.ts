@@ -41,7 +41,7 @@ describe('CharacterService', () => {
       expect(character.id).toBeDefined();
       expect(character.name).toBe('测试角色');
       expect(character.appearance).toEqual(appearance);
-      expect(character.consistency.seed).toBeDefined();
+      expect((character.consistency as any)?.seed).toBeDefined();
       expect(character.createdAt).toBeDefined();
     });
 
@@ -184,7 +184,7 @@ describe('CharacterService', () => {
       expect(duplicate).not.toBeNull();
       expect(duplicate?.name).toContain('副本');
       expect(duplicate?.id).not.toBe(original.id);
-      expect(duplicate?.consistency.seed).not.toBe(original.consistency.seed);
+      expect((duplicate?.consistency as any)?.seed).not.toBe((original.consistency as any)?.seed);
     });
   });
 
@@ -197,8 +197,8 @@ describe('CharacterService', () => {
       expect(character).not.toBeNull();
       expect(character?.name).toBe('自定义主角');
       expect(character?.role).toBe('protagonist');
-      expect(character?.appearance.gender).toBe('male');
-      expect(character?.consistency.seed).toBeDefined();
+      expect((character?.appearance as any)?.gender).toBe('male');
+      expect((character?.consistency as any)?.seed).toBeDefined();
     });
 
     it('不存在的模板应该返回null', () => {
