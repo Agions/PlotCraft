@@ -10,6 +10,8 @@
     "dev": "vite",
     "build": "vite build",
     "build:check": "tsc && vite build",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "preview": "vite preview",
     "tauri": "tauri",
     "docs": "npm run docs:api && ts-node scripts/generate-docs.ts",
