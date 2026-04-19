@@ -106,7 +106,7 @@ jobs:
       - name: Install Linux deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev libgtk-3-dev librsvg2-dev patchelf libssl-dev libsoup2.4-dev libseccomp-dev
+          sudo apt-get install -y libwebkit2gtk-4.0-dev libgtk-3-dev librsvg2-dev patchelf libssl-dev libsoup2.4-dev libjavascriptcoregtk-4.0-dev libseccomp-dev
       - run: npm install
       - run: npm run build
       - name: Build Tauri
