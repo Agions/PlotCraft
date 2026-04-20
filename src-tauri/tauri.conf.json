@@ -1,134 +1,15 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "productName": "PlotCraft",
+  "version": "3.0.0",
+  "identifier": "com.plotcraft.app",
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist"
+    "devUrl": "http://localhost:1420",
+    "frontendDist": "../dist"
   },
-  "package": {
-    "productName": "PlotCraft",
-    "version": "3.0.0"
-  },
-  "tauri": {
-    "allowlist": {
-      "fs": {
-        "all": true,
-        "readFile": true,
-        "writeFile": true,
-        "readDir": true,
-        "exists": true,
-        "createDir": true,
-        "removeDir": true,
-        "removeFile": true,
-        "renameFile": true,
-        "copyFile": true,
-        "scope": ["$APPDATA/**", "$APPDATA/*", "$APPCONFIG/**", "$TEMP/**", "$RESOURCE/**", "$DOWNLOAD/**", "$DOCUMENT/**", "$VIDEO/**"]
-      },
-      "path": {
-        "all": true
-      },
-      "clipboard": {
-        "all": true
-      },
-      "dialog": {
-        "all": true,
-        "ask": true,
-        "confirm": true,
-        "message": true
-      },
-      "window": {
-        "all": true,
-        "create": true,
-        "close": true,
-        "setTitle": true,
-        "setSize": true,
-        "setMinSize": true,
-        "setMaxSize": true,
-        "setPosition": true,
-        "setFullscreen": true,
-        "setFocus": true,
-        "setAlwaysOnTop": true,
-        "minimize": true,
-        "maximize": true,
-        "unmaximize": true,
-        "show": true,
-        "hide": true,
-        "requestUserAttention": true
-      },
-      "shell": {
-        "all": false,
-        "open": true,
-        "execute": false,
-        "sidecar": false,
-        "scope": []
-      },
-      "globalShortcut": {
-        "all": true
-      },
-      "notification": {
-        "all": true
-      },
-      "process": {
-        "all": true,
-        "exit": true,
-        "relaunch": true
-      },
-      "os": {
-        "all": true
-      },
-      "app": {
-        "all": true
-      }
-    },
-    "bundle": {
-      "active": true,
-      "category": "Video",
-      "copyright": "Copyright © 2024-2026 PlotCraft",
-      "deb": {
-        "depends": ["libwebkit2gtk-4.1-0", "libgtk-3-0"]
-      },
-      "externalBin": [],
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "identifier": "com.plotcraft.app",
-      "longDescription": "PlotCraft - Professional AI-Powered Video Script Creation Platform. Transform stories and scripts into polished video content with multi-model AI, voice synthesis, and automated rendering.",
-      "macOS": {
-        "entitlements": null,
-        "exceptionDomain": "",
-        "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null,
-        "minimumSystemVersion": "10.15"
-      },
-      "resources": [],
-      "shortDescription": "Professional AI Video Script Creation Platform",
-      "targets": "all",
-      "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampUrl": "",
-        "wix": null,
-        "nsis": {
-          "languages": ["SimpChinese", "English"],
-          "displayLanguageSelector": true,
-          "installerIcon": "icons/icon.ico"
-        }
-      }
-    },
-    "security": {
-      "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: asset: https://asset.localhost; media-src 'self' blob: asset: https://asset.localhost; connect-src 'self' ipc: https://ipc.localhost https://api.openai.com https://api.anthropic.com https://generativelanguage.googleapis.com https://aip.baidubce.com https://dashscope.aliyuncs.com https://open.bigmodel.cn https://api.minimax.io"
-    },
-    "updater": {
-      "active": false,
-      "pubkey": "",
-      "endpoints": []
-    },
+  "app": {
     "windows": [
       {
         "title": "PlotCraft - Professional AI Video Script Creation Platform",
@@ -144,15 +25,72 @@
         "alwaysOnTop": false,
         "visible": true,
         "focus": true,
-        "fileDropEnabled": true,
-        "maximized": false,
-        "skipTaskbar": false
+        "dragDropEnabled": true,
+        "maximized": false
       }
     ],
-    "systemTray": {
+    "security": {
+      "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: asset: https://asset.localhost; media-src 'self' blob: asset: https://asset.localhost; connect-src 'self' ipc: https://ipc.localhost https://api.openai.com https://api.anthropic.com https://generativelanguage.googleapis.com https://aip.baidubce.com https://dashscope.aliyuncs.com https://open.bigmodel.cn https://api.minimax.io"
+    },
+    "trayIcon": {
       "iconPath": "icons/icon.png",
       "iconAsTemplate": true,
       "menuOnLeftClick": false
+    }
+  },
+  "bundle": {
+    "active": true,
+    "category": "Video",
+    "copyright": "Copyright © 2024-2026 PlotCraft",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "longDescription": "PlotCraft - Professional AI-Powered Video Script Creation Platform. Transform stories and scripts into polished video content with multi-model AI, voice synthesis, and automated rendering.",
+    "shortDescription": "Professional AI Video Script Creation Platform",
+    "targets": "all",
+    "linux": {
+      "deb": {
+        "depends": ["libwebkit2gtk-4.1-0", "libgtk-3-0"]
+      }
+    },
+    "windows": {
+      "digestAlgorithm": "sha256",
+      "nsis": {
+        "languages": ["SimpChinese", "English"],
+        "displayLanguageSelector": true
+      }
+    },
+    "macOS": {
+      "minimumSystemVersion": "10.15"
+    }
+  },
+  "plugins": {
+    "fs": {
+      "scope": {
+        "allow": ["$APPDATA/**", "$APPCONFIG/**", "$TEMP/**", "$RESOURCE/**", "$DOWNLOAD/**", "$DOCUMENT/**", "$VIDEO/**"]
+      }
+    },
+    "dialog": {
+      "all": true
+    },
+    "notification": {
+      "all": true
+    },
+    "clipboard-manager": {
+      "all": true
+    },
+    "shell": {
+      "open": true
+    },
+    "global-shortcut": {
+      "all": true
+    },
+    "os": {
+      "all": true
     }
   }
 }

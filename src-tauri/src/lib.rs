@@ -1,4 +1,4 @@
-use tauri::Manager;
+use tauri::{Manager, AppHandle};
 use log::{info, error};
 use std::process::Command;
 use serde::{Deserialize, Serialize};
@@ -6,7 +6,6 @@ use std::fs::{self, File};
 use std::io::Write;
 use std::collections::HashMap;
 use std::sync::Mutex;
-use std::path::PathBuf;
 
 // 视频元数据
 #[derive(Serialize, Deserialize, Debug)]
@@ -612,10 +611,17 @@ pub fn run() {
     info!("ManGa AI 启动中...");
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_notification::init())
+        .plugin(tauri_plugin_clipboard_manager::init())
+        .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_global_shortcut::init())
+        .plugin(tauri_plugin_os::init())
         .setup(|app| {
             info!("应用程序初始化完成");
 
-            if let Some(window) = app.get_window("main") {
+            if let Some(window) = app.get_webview_window("main") {
                 info!("主窗口已创建: {}", window.label());
             }
 
@@ -629,31 +635,17 @@ pub fn run() {
             generate_preview,
             clean_temp_file,
             check_ffmpeg,
-            // 窗口操作
             show_main_window,
             hide_main_window,
             toggle_fullscreen,
-            // 应用设置
             get_app_settings,
             save_app_settings,
-            // 文件操作
             get_app_data_path,
             open_file_location,
-            // 快捷键
             register_shortcut,
             unregister_shortcut,
             get_registered_shortcuts,
         ])
-        .setup(|app| {
-            info!("应用程序设置完成");
-
-            // 系统托盘通过 tauri.conf.json 配置
-            if let Some(window) = app.get_window("main") {
-                info!("主窗口已创建: {}", window.label());
-            }
-
-            Ok(())
-        })
         .run(tauri::generate_context!())
         .expect("启动 ManGa AI 时发生错误");
 }
@@ -694,8 +686,8 @@ impl Default for AppSettings {
 
 // 显示主窗口
 #[tauri::command]
-fn show_main_window(app_handle: tauri::AppHandle) -> Result<(), String> {
-    if let Some(window) = app_handle.get_window("main") {
+fn show_main_window(app_handle: AppHandle) -> Result<(), String> {
+    if let Some(window) = app_handle.get_webview_window("main") {
         window.show().map_err(|e| e.to_string())?;
         window.set_focus().map_err(|e| e.to_string())?;
         info!("主窗口已显示");
@@ -707,8 +699,8 @@ fn show_main_window(app_handle: tauri::AppHandle) -> Result<(), String> {
 
 // 隐藏主窗口
 #[tauri::command]
-fn hide_main_window(app_handle: tauri::AppHandle) -> Result<(), String> {
-    if let Some(window) = app_handle.get_window("main") {
+fn hide_main_window(app_handle: AppHandle) -> Result<(), String> {
+    if let Some(window) = app_handle.get_webview_window("main") {
         window.hide().map_err(|e| e.to_string())?;
         info!("主窗口已隐藏");
         Ok(())
@@ -719,8 +711,8 @@ fn hide_main_window(app_handle: tauri::AppHandle) -> Result<(), String> {
 
 // 切换全屏
 #[tauri::command]
-fn toggle_fullscreen(app_handle: tauri::AppHandle) -> Result<bool, String> {
-    if let Some(window) = app_handle.get_window("main") {
+fn toggle_fullscreen(app_handle: AppHandle) -> Result<bool, String> {
+    if let Some(window) = app_handle.get_webview_window("main") {
         let is_fullscreen = window.is_fullscreen().map_err(|e| e.to_string())?;
         window.set_fullscreen(!is_fullscreen).map_err(|e| e.to_string())?;
         info!("全屏状态: {}", !is_fullscreen);
@@ -732,8 +724,8 @@ fn toggle_fullscreen(app_handle: tauri::AppHandle) -> Result<bool, String> {
 
 // 获取应用设置
 #[tauri::command]
-fn get_app_settings(app_handle: tauri::AppHandle) -> Result<AppSettings, String> {
-    let config_dir = app_handle.path_resolver().app_config_dir()
+fn get_app_settings(app_handle: AppHandle) -> Result<AppSettings, String> {
+    let config_dir = app_handle.path().app_config_dir()
         .ok_or("无法获取配置目录")?;
     let settings_file = config_dir.join("settings.json");
 
@@ -748,11 +740,10 @@ fn get_app_settings(app_handle: tauri::AppHandle) -> Result<AppSettings, String>
 
 // 保存应用设置
 #[tauri::command]
-fn save_app_settings(app_handle: tauri::AppHandle, settings: AppSettings) -> Result<(), String> {
-    let config_dir = app_handle.path_resolver().app_config_dir()
+fn save_app_settings(app_handle: AppHandle, settings: AppSettings) -> Result<(), String> {
+    let config_dir = app_handle.path().app_config_dir()
         .ok_or("无法获取配置目录")?;
 
-    // 确保目录存在
     fs::create_dir_all(&config_dir).map_err(|e| e.to_string())?;
 
     let settings_file = config_dir.join("settings.json");
@@ -765,8 +756,8 @@ fn save_app_settings(app_handle: tauri::AppHandle, settings: AppSettings) -> Res
 
 // 获取应用数据路径
 #[tauri::command]
-fn get_app_data_path(app_handle: tauri::AppHandle) -> Result<String, String> {
-    let data_dir = app_handle.path_resolver().app_data_dir()
+fn get_app_data_path(app_handle: AppHandle) -> Result<String, String> {
+    let data_dir = app_handle.path().app_data_dir()
         .ok_or("无法获取数据目录")?;
     Ok(data_dir.to_string_lossy().to_string())
 }
@@ -774,7 +765,7 @@ fn get_app_data_path(app_handle: tauri::AppHandle) -> Result<String, String> {
 // 打开文件位置
 #[tauri::command]
 fn open_file_location(path: String) -> Result<(), String> {
-    let path = PathBuf::from(&path);
+    let path = std::path::PathBuf::from(&path);
 
     if !path.exists() {
         return Err("文件不存在".to_string());
@@ -824,7 +815,6 @@ fn register_shortcut(id: String, key: String, action: String, description: Strin
 
     let mut shortcuts = REGISTERED_SHORTCUTS.lock().map_err(|e| e.to_string())?;
 
-    // 检查是否已存在
     if shortcuts.iter().any(|s| s.id == id) {
         return Err(format!("快捷键 ID {} 已存在", id));
     }
