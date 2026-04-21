@@ -1,42 +1,27 @@
-# <picture><source srcset="https://fonts.gstatic.com/s/notosanssc/v36/k3kCo84MPvpLmixcA63oeALhLOCT-8xTDjfzRjLFZSXYV2yr2upz1C0i81aXzXjUVzQ.woff2" type="font/woff2"><img src="https://img.shields.io/badge/PlotCraft-FF6B35?style=for-the-badge&logo=video&logoColor=white" alt="PlotCraft" /></picture>
+# ═══════════════════════════════════════════════════════════
+#
+#    🎬 PlotCraft — AI驱动的专业视频脚本创作平台
+#
+#    7+ AI Models  ·  7-Step Workflow  ·  MIT License
+#
+# ═══════════════════════════════════════════════════════════
 
 <div align="center">
 
-# 🎬 PlotCraft
+![PlotCraft Banner](https://img.shields.io/badge/PlotCraft-FF6B35?style=for-the-badge&logo=video&logoColor=white)
 
-### _AI驱动的专业视频脚本创作平台_
+### _将你的故事转化为专业级视频内容，从创意到成品的完整AI工作流_
 
-<p align="center">
-  <a href="https://github.com/Agions/PlotCraft/releases">
-    <img src="https://img.shields.io/badge/Version-3.0.0-FF6B35?style=for-the-badge&logo=package&logoColor=white" alt="Version" />
-  </a>
-  <a href="https://opensource.org/licenses/MIT">
-    <img src="https://img.shields.io/badge/License-MIT-45B8AC?style=for-the-badge&logo=license&logoColor=white" alt="License" />
-  </a>
-  <a href="https://react.dev">
-    <img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React" />
-  </a>
-  <a href="https://tauri.app">
-    <img src="https://img.shields.io/badge/Tauri-2.0-FFC131?style=for-the-badge&logo=tauri&logoColor=white" alt="Tauri" />
-  </a>
-  <a href="https://www.typescriptlang.org">
-    <img src="https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-  </a>
-</p>
+[![Version](https://img.shields.io/badge/Version-3.0.0-FF6B35?style=for-the-badge&logo=package&logoColor=white)](https://github.com/Agions/PlotCraft/releases)
+[![License](https://img.shields.io/badge/License-MIT-45B8AC?style=for-the-badge&logo=license&logoColor=white)](https://opensource.org/licenses/MIT)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
+[![Tauri](https://img.shields.io/badge/Tauri-2.0-FFC131?style=for-the-badge&logo=tauri&logoColor=white)](https://tauri.app)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Stars](https://img.shields.io/badge/Stars-⭐-f6c90e?style=for-the-badge&logo=star&logoColor=white)](https://github.com/Agions/PlotCraft/stargazers)
+[![CI](https://img.shields.io/badge/CI-GitHub Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/Agions/PlotCraft/actions)
 
-<p align="center">
-  <a href="https://agions.github.io/PlotCraft">
-    <img src="https://img.shields.io/badge/Docs-在线访问-7B68EE?style=for-the-badge&logo=book&logoColor=white" alt="Documentation" />
-  </a>
-  <a href="https://github.com/Agions/PlotCraft/stargazers">
-    <img src="https://img.shields.io/badge/Stars-⭐数字-f6c90e?style=for-the-badge&logo=star&logoColor=white" alt="Stars" />
-  </a>
-  <a href="https://github.com/Agions/PlotCraft/actions">
-    <img src="https://img.shields.io/badge/CI-GitHub Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="CI" />
-  </a>
-</p>
-
-> ### ✨ _将你的故事转化为专业级视频内容，从创意到成品的完整AI工作流_
+[![Docs](https://img.shields.io/badge/Docs-在线访问-7B68EE?style=for-the-badge&logo=book&logoColor=white)](https://agions.github.io/PlotCraft)
+[![Issues](https://img.shields.io/badge/Issues-问题反馈-d5362b?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Agions/PlotCraft/issues)
 
 </div>
 
@@ -44,79 +29,38 @@
 
 ## 🎯 核心特性
 
-<table>
-<tr>
-
-<td valign="top" width="33%">
-
-### 📥 智能导入
-- 支持小说、剧本、AI提示词
-- 自动识别编码格式
-- 智能章节切分
-
-</td>
-
-<td valign="top" width="33%">
-
-### 🤖 多模型AI
-- 文字生成：GLM-5、Kimi、Qwen 2.5、ERNIE 4.0
-- 图像生成：Seedream 5.0、Kling 1.6、Vidu 2.0
-- 语音合成：CosyVoice 2.0、Azure、Edge TTS
-
-</td>
-
-<td valign="top" width="33%">
-
-### 🎬 智能分镜
-- AI自动生成分镜图
-- 支持 9:16 / 1:1 / 16:9 多比例
-- 可视化面板编辑
-
-</td>
-
-</tr>
-
-<tr>
-
-<td valign="top" width="33%">
-
-### 🎭 角色一致性
-- 种子机制保持视觉一致
-- 参考图锁定角色特征
-- 批量渲染零走样
-
-</td>
-
-<td valign="top" width="33%">
-
-### 👄 唇形同步
-- TTS语音自动对齐唇形
-- 多语言支持
-- 情感语气调节
-
-</td>
-
-<td valign="top" width="33%">
-
-### ⚡ 可视化工作流
-- 类n8n节点引擎
-- 拖拽连接构建流程
-- 条件分支与循环
-
-</td>
-
-</tr>
-
-</table>
+```
+┌─────────────────────────────────────────────────────────┐
+│                                                         │
+│   📥 智能导入          🤖 多模型AI          🎬 智能分镜  │
+│   ───────────         ───────────         ───────────  │
+│   小说/剧本/提示词      7+ 模型支持           AI自动生成   │
+│   自动编码检测         文字/图像/语音        多比例支持   │
+│   智能章节切分         按需切换模型          可视化编辑   │
+│                                                         │
+│   🎭 角色一致性        👄 唇形同步           ⚡ 可视化工作流│
+│   ───────────         ───────────         ───────────  │
+│   种子机制             TTS语音对齐           类n8n引擎   │
+│   参考图锁定           多语言支持            拖拽连接     │
+│   批量零走样           情感语气调节          条件分支循环  │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
 
 ---
 
 ## 🔄 七步工作流
 
 ```
-📥 导入  →  🧠 AI分析  →  📝 脚本生成  →  🎬 分镜设计  
-    ↓                                              ↓  
-📤 导出  ←  🎞️ 合成视频  ←  🖼️ 批量渲染  ←  🎭 角色设计
+  📥 导入  ──▶  🧠 AI分析  ──▶  📝 脚本生成  ──▶  🎬 分镜设计
+      │                                              │
+      │          ┌──────────────────────┐           │
+      └──────────┤                      ├──▶ 📤 导出
+                  ▼                      │
+              🖼️ 批量渲染  ◀──  🎭 角色设计
+                   │
+                   ▼
+              🎞️ 合成视频
 ```
 
 | 步骤 | 功能 | 关键配置 |
@@ -135,14 +79,14 @@
 
 | 类别 | 技术 |
 |:---:|------|
-| 前端框架 | React 18 + TypeScript 5 + Vite |
-| UI 组件 | Ant Design 5 + Styled Components |
-| 状态管理 | Zustand |
-| 动画 | Framer Motion |
-| 桌面端 | Tauri 2.0 (Rust) |
-| 国际化 | i18next |
-| 测试 | Jest + Vitest |
-| 文档 | VitePress |
+| **前端框架** | React 18 · TypeScript 5 · Vite |
+| **UI 组件** | Ant Design 5 · Styled Components |
+| **状态管理** | Zustand |
+| **动画** | Framer Motion |
+| **桌面端** | Tauri 2.0 (Rust) |
+| **国际化** | i18next |
+| **测试** | Jest · Vitest |
+| **文档** | VitePress |
 
 ---
 
