@@ -15,7 +15,9 @@ export enum PipelineStepId {
   CHARACTER = 'character',
   STORYBOARD = 'storyboard',
   RENDER = 'render',
+  VIDEO_EDITING = 'video-editing',
   COMPOSITION = 'composition',
+  AUDIO_SYNTHESIS = 'audio-synthesis',
   EXPORT = 'export',
 }
 

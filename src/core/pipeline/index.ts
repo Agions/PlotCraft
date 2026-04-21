@@ -21,6 +21,7 @@ import { createScriptStep, type ScriptOutput } from './step-script';
 import { createCharacterStep, type CharacterOutput } from './step-character';
 import { createStoryboardStep, type StoryboardOutput } from './step-storyboard';
 import { createRenderStep, type RenderOutput } from './step-render';
+import { createVideoEditingStep, type VideoEditingOutput } from './step-video-editing';
 import { createCompositionStep, type CompositionOutput } from './step-composition';
 
 // ========== PipelineService 主类 ==========
@@ -46,6 +47,7 @@ export class PipelineService {
         createCharacterStep(),
         createStoryboardStep(),
         createRenderStep(),
+        createVideoEditingStep(),
         createCompositionStep(),
       ],
     };
@@ -151,6 +153,7 @@ export type {
   CharacterOutput,
   StoryboardOutput,
   RenderOutput,
+  VideoEditingOutput,
   CompositionOutput,
 };
 
