@@ -3,3 +3,4 @@
  * @deprecated Use @shared/utils instead
  */
 export * from '@/shared/utils';
+export { logger, createLogger, consoleLogger, LogLevel } from './logger';

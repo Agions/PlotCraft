@@ -5,6 +5,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import type { VideoInfo, VideoAnalysis, Scene, Keyframe } from '@/core/types';
+import { logger } from '@/core/utils/logger';
 
 // FFmpeg Command Builder
 class FFmpegCommandBuilder {
@@ -144,7 +145,7 @@ class VideoService {
           description: `Keyframe ${i}`
         });
       } catch (error) {
-        console.error(`Failed to extract keyframe ${i}:`, error);
+        logger.error(`Failed to extract keyframe ${i}:`, error);
       }
     }
 
@@ -178,7 +179,7 @@ class VideoService {
           tags: [`scene${i + 1}`]
         });
       } catch (error) {
-        console.error(`Failed to detect scene ${i}:`, error);
+        logger.error(`Failed to detect scene ${i}:`, error);
       }
     }
 
@@ -265,7 +266,7 @@ class VideoService {
     builder.output(outputPath, ['-c:v', 'libx264', '-c:a', 'aac']);
 
     const command = builder.build();
-    console.log('FFmpeg command:', command);
+    logger.info('FFmpeg command:', command);
 
     await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -288,7 +289,7 @@ class VideoService {
       .output(outputPath);
 
     const command = builder.build();
-    console.log('Clip command:', command);
+    logger.info('Clip command:', command);
 
     await new Promise(resolve => setTimeout(resolve, 1000));
     return outputPath;
@@ -302,7 +303,7 @@ class VideoService {
     outputPath: string
   ): Promise<string> {
     const fileList = inputPaths.map(p => `file '${p}'`).join('\n');
-    console.log('Merge file list:', fileList);
+    logger.info('Merge file list:', fileList);
 
     const builder = new FFmpegCommandBuilder();
     builder
@@ -312,7 +313,7 @@ class VideoService {
       .output(outputPath);
 
     const command = builder.build();
-    console.log('Merge command:', command);
+    logger.info('Merge command:', command);
 
     await new Promise(resolve => setTimeout(resolve, 2000));
     return outputPath;
@@ -348,7 +349,7 @@ class VideoService {
       .output(outputPath, ['-c:v', 'libx264', '-c:a', 'copy']);
 
     const command = builder.build();
-    console.log('Subtitle command:', command);
+    logger.info('Subtitle command:', command);
 
     await new Promise(resolve => setTimeout(resolve, 1500));
     return outputPath;
@@ -377,7 +378,7 @@ class VideoService {
       .output(outputPath, codec);
 
     const command = builder.build();
-    console.log('Convert command:', command);
+    logger.info('Convert command:', command);
 
     await new Promise(resolve => setTimeout(resolve, 2000));
     return outputPath;

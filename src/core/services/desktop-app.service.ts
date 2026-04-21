@@ -5,6 +5,7 @@
 
 import { appWindow as getCurrent } from '@tauri-apps/api/window';
 import { sendNotification, isPermissionGranted, requestPermission } from '@tauri-apps/api/notification';
+import { logger } from '@/core/utils/logger';
 
 // 快捷键定义
 export interface ShortcutDefinition {
@@ -259,7 +260,7 @@ class DesktopAppService {
     if (!hasPermission) {
       const granted = await this.requestNotificationPermission();
       if (!granted) {
-        console.warn('通知权限被拒绝');
+        logger.warn('通知权限被拒绝');
         return;
       }
     }

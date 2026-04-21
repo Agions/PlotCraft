@@ -50,40 +50,30 @@ export type { ShortcutDefinition, TrayMenuItem, NotificationOptions, WindowState
 export { default as TauriService, tauriService } from './tauri.service';
 export type { OpenFileOptions, SaveFileOptions, VideoClipOptions, PreviewOptions, ExportProgress, DirInfo } from './tauri.service';
 
-// ========== n8n 风格工作流引擎 ==========
+// ========== 简化线性流程引擎 ==========
 export {
-  workflowManager,
-  projectManager,
-  executeWorkflow,
-  createWorkflowExecutor,
-  workflowExecutionManager,
-  NODE_TEMPLATES,
-  getNodeTemplate,
-  CATEGORY_INFO,
-  getWorkflowTemplates,
-  getWorkflowTemplate,
-  createWorkflowFromTemplate
-} from './n8n-workflow';
+  PipelineService,
+  getPipelineService,
+  createDefaultPipeline,
+  createImportStep,
+  createAnalysisStep,
+  createScriptStep,
+  createStoryboardStep,
+  createCharacterStep,
+  createRenderStep,
+  createExportStep,
+  PIPELINE_STEP_IDS
+} from './pipeline.service';
 export type {
-  // 工作流
-  WorkflowDefinition,
-  WorkflowNode,
-  WorkflowConnection,
-  WorkflowExecutionState,
-  NodeExecutionResult,
-  NodeExecutionStatus,
-  NodeCategory,
-  MangaNodeType,
-  NodeConfig,
-  NodeTemplate,
-  WorkflowSettings,
-  // 项目
-  Project,
-  Episode,
-  ProjectSettings
-} from './n8n-workflow';
+  PipelineStep,
+  PipelineContext,
+  PipelineResult,
+  PipelineStepResult,
+  PipelineConfig,
+  PipelineStatus,
+  PipelineStepId
+} from './pipeline.service';
 
-// 类型
 export type { CostRecord, CostStats, CostBudget, BudgetStatus, CostAlert } from './cost.service';
 export type { BenchmarkSample, EvaluationCaseResult, EvaluationScores, EvaluationItemReport, EvaluationReport } from './evaluation.service';
 export type { QualityGateIssueLevel, QualityGateIssue, QualityGateThresholds, QualityGateInput, QualityGateMetrics, QualityGateResult } from './quality-gate.service';

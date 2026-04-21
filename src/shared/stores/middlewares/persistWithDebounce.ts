@@ -4,6 +4,7 @@
  */
 
 import { StateStorage } from 'zustand/middleware';
+import { logger } from '@/core/utils/logger';
 
 /**
  * 创建防抖存储
@@ -28,7 +29,7 @@ export const createDebouncedStorage = (
       try {
         storage.setItem(key, value);
       } catch (error) {
-        console.error(`[DebouncedStorage] Failed to save "${key}":`, error);
+        logger.error(`[DebouncedStorage] Failed to save "${key}":`, error);
       }
     });
     pendingWrites.clear();
@@ -95,7 +96,7 @@ export const createIncrementalStorage = (
           : updates;
         storage.setItem(key, JSON.stringify(merged));
       } catch (error) {
-        console.error(`[IncrementalStorage] Failed to merge "${key}":`, error);
+        logger.error(`[IncrementalStorage] Failed to merge "${key}":`, error);
       }
     });
     pendingUpdates.clear();
@@ -180,7 +181,7 @@ export const createCompressedStorage = (
         }
       } catch (error) {
         // 压缩失败，直接存储原数据
-        console.warn('[CompressedStorage] Compression failed, storing raw data:', error);
+        logger.warn('[CompressedStorage] Compression failed, storing raw data:', error);
         storage.setItem(name, value);
       }
     },

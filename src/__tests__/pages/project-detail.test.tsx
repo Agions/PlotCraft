@@ -19,11 +19,12 @@ jest.mock('@/shared/stores', () => ({
   useProjectStore: jest.fn(),
 }));
 
-jest.mock('@/core/services/legacy', () => ({
-  saveProjectToFile: (...args: unknown[]) => mockSaveProjectToFile(...args),
-  getApiKey: jest.fn(),
-  generateScriptWithModel: jest.fn(),
-  parseGeneratedScript: jest.fn(),
+jest.mock('@/core/services', () => ({
+  tauriService: {
+    writeText: (...args: unknown[]) => mockSaveProjectToFile(...args),
+    readText: jest.fn(),
+  },
+  aiService: { generate: jest.fn() },
 }));
 
 jest.mock('@tauri-apps/api/tauri', () => ({

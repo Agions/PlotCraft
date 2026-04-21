@@ -30,9 +30,11 @@ jest.mock('@/components/business/StoryboardEditor', () => ({
   }
 }));
 
-jest.mock('@/core/services/legacy', () => ({
-  loadProjectFromFile: (...args: unknown[]) => mockLoadProjectFromFile(...args),
-  saveProjectToFile: (...args: unknown[]) => mockSaveProjectToFile(...args),
+jest.mock('@/core/services', () => ({
+  tauriService: {
+    readText: (...args: unknown[]) => mockLoadProjectFromFile(...args),
+    writeText: (...args: unknown[]) => mockSaveProjectToFile(...args),
+  },
   aiService: { generate: jest.fn() },
 }));
 

@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import type { StoryboardFrame } from '@/shared/types';
 import { aiService } from './ai.service';
 import { imageGenerationService, type ImageGenerationOptions } from './image-generation.service';
+import { logger } from '@/core/utils/logger';
 
 // 存储键
 const STORYBOARD_STORAGE_KEY = 'plotcraft-storyboards';
@@ -198,7 +199,7 @@ ${script.content}
           parsedFrames = JSON.parse(jsonMatch[0]);
         }
       } catch {
-        console.warn('Failed to parse AI response as JSON, using fallback');
+        logger.warn('Failed to parse AI response as JSON, using fallback');
       }
 
       // 如果解析失败，生成默认分镜
@@ -228,7 +229,7 @@ ${script.content}
       return frames;
 
     } catch (error) {
-      console.error('Failed to generate storyboard from script:', error);
+      logger.error('Failed to generate storyboard from script:', error);
       throw error;
     }
   }
@@ -261,7 +262,7 @@ ${script.content}
       return result.url || null;
 
     } catch (error) {
-      console.error('Failed to generate frame image:', error);
+      logger.error('Failed to generate frame image:', error);
       return null;
     }
   }
@@ -412,7 +413,7 @@ ${script.content}
         this.storyboards.set(this.projectId || 'default', frames);
       }
     } catch (error) {
-      console.error('Failed to load storyboards from storage:', error);
+      logger.error('Failed to load storyboards from storage:', error);
     }
   }
 
@@ -430,7 +431,7 @@ ${script.content}
       const frames = this.getAll();
       localStorage.setItem(storageKey, JSON.stringify(frames));
     } catch (error) {
-      console.error('Failed to save storyboards to storage:', error);
+      logger.error('Failed to save storyboards to storage:', error);
     }
   }
 
@@ -459,7 +460,7 @@ ${script.content}
 
       return validFrames;
     } catch (error) {
-      console.error('Failed to import storyboards:', error);
+      logger.error('Failed to import storyboards:', error);
       return [];
     }
   }

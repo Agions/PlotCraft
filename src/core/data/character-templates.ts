@@ -202,13 +202,13 @@ export const templateToCharacter = (
   
   return {
     name: overrides?.name || template.name,
-    role: template.category as any,
+    role: template.category as Character['role'],
     description: overrides?.description || template.description,
     appearance: { ...template.appearance, ...overrides },
-    clothing: template.clothing as any,
-    expressions: template.expressions as any,
+    clothing: template.clothing,
+    expressions: template.expressions,
     consistency: { ...template.consistency },
-    voice: template.recommendedVoice as any,
+    voice: template.recommendedVoice,
     tags: template.tags,
   };
 };

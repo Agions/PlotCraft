@@ -44,4 +44,8 @@ REFORM_PLAN*.md
 *.tmp
 *.temp
 
-dist/
+PIPELINE_DESIGN.md
+PlotCraft-plan/
+AS_ANY_AUDIT.md
+N8N_REMOVAL_REPORT.md
+REPORT.md

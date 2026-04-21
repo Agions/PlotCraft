@@ -579,7 +579,7 @@ export interface Character {
   name: string;
   aliases?: string[];
   description?: string;
-  appearance?: string | CharacterAppearance;
+  appearance?: CharacterAppearance;
   personality?: string;
   background?: string;
   role: 'main' | 'supporting' | 'minor' | 'protagonist' | 'antagonist';
@@ -591,10 +591,15 @@ export interface Character {
   };
   dialogues?: string[];
   relationships?: CharacterRelationship[];
-  clothing?: string[];
-  expressions?: string[];
-  consistency?: string | CharacterConsistency;
-  voice?: string;
+  clothing?: ClothingItem[];
+  expressions?: CharacterExpression[];
+  consistency?: CharacterConsistency;
+  voice?: {
+    provider: 'edge' | 'azure' | 'aliyun' | 'baidu' | 'cosyvoice';
+    voiceId: string;
+    pitch?: number;
+    speed?: number;
+  };
   tags?: string[];
   createdAt?: string;
   updatedAt?: string;
