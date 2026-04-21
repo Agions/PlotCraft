@@ -8,7 +8,7 @@ import {
   FullscreenOutlined,
   FullscreenExitOutlined,
 } from '@ant-design/icons';
-import styles from './index.module.less';
+import styles from './VideoPlayer.module.less';
 
 interface VideoPlayerProps {
   src: string;

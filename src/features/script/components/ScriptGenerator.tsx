@@ -41,7 +41,7 @@ import { useModel, useModelCost } from '@/core/hooks/useModel';
 import { useProject } from '@/core/hooks/useProject';
 import ModelSelector from '@/features/ai/components/ModelSelector';
 import type { ScriptData, ScriptSegment } from '@/core/types';
-import styles from './index.module.less';
+import styles from './ScriptGenerator.module.less';
 
 const { Title, Text, Paragraph } = Typography;
 const { TextArea } = Input;

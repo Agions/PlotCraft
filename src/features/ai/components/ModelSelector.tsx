@@ -36,7 +36,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useModel, useModelCost, useRecommendedModel } from '@/core/hooks/useModel';
 import { LLM_MODELS } from '@/core/constants';
 import type { ModelCategory, ModelProvider } from '@/core/types';
-import styles from './index.module.less';
+import styles from './ModelSelector.module.less';
 
 const { Title, Text, Paragraph } = Typography;
 

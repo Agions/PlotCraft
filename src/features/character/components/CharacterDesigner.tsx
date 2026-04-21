@@ -35,7 +35,7 @@ import {
 } from '@ant-design/icons';
 import type { RcFile } from 'antd/es/upload/interface';
 import type { Color } from 'antd/es/color-picker';
-import styles from './index.module.less';
+import styles from './CharacterDesigner.module.less';
 
 // 使用项目中定义的类型
 import type { 
