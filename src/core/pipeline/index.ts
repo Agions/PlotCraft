@@ -21,6 +21,7 @@ import { createScriptStep, type ScriptOutput } from './step-script';
 import { createCharacterStep, type CharacterOutput } from './step-character';
 import { createStoryboardStep, type StoryboardOutput } from './step-storyboard';
 import { createRenderStep, type RenderOutput } from './step-render';
+import { createAudioSynthesisStep, type AudioSynthesisOutput } from './step-audio-synthesis';
 import { createVideoEditingStep, type VideoEditingOutput } from './step-video-editing';
 import { createCompositionStep, type CompositionOutput } from './step-composition';
 
@@ -44,6 +45,7 @@ export class PipelineService {
         createImportStep(),
         createAnalysisStep(),
         createScriptStep(),
+        createAudioSynthesisStep(),  // 生成配音 + BGM（在渲染之前）
         createCharacterStep(),
         createStoryboardStep(),
         createRenderStep(),
@@ -153,6 +155,7 @@ export type {
   CharacterOutput,
   StoryboardOutput,
   RenderOutput,
+  AudioSynthesisOutput,
   VideoEditingOutput,
   CompositionOutput,
 };
