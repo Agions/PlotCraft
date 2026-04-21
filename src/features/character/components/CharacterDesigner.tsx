@@ -45,12 +45,12 @@ import type {
   CharacterExpression,
   TTSProvider 
 } from '@/core/types';
-import { 
 import { logger } from '@/core/utils/logger';
-  CHARACTER_TEMPLATES, 
-  getTemplatesByCategory, 
+import {
+  CHARACTER_TEMPLATES,
+  getTemplatesByCategory,
   templateToCharacter,
-  type CharacterTemplate 
+  type CharacterTemplate
 } from '@/core/data/character-templates';
 
 // 服装类型标签
