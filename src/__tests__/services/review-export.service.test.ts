@@ -3,7 +3,7 @@ import type { FrameComment, StoryboardVersion } from '@/core/services/collaborat
 
 const mockInvoke = jest.fn();
 
-jest.mock('@tauri-apps/api/tauri', () => ({
+jest.mock('@tauri-apps/api', () => ({
   invoke: (...args: unknown[]) => mockInvoke(...args),
 }));
 

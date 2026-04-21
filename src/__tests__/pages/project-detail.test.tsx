@@ -25,9 +25,24 @@ jest.mock('@/core/services', () => ({
     readText: jest.fn(),
   },
   aiService: { generate: jest.fn() },
+  qualityGateService: {
+    evaluate: jest.fn().mockReturnValue({ pass: true, score: 85, issues: [] }),
+    checkThresholds: jest.fn(),
+  },
+  collaborationService: {
+    hydrate: jest.fn(),
+    listComments: jest.fn().mockReturnValue([]),
+    listVersions: jest.fn().mockReturnValue([]),
+    addComment: jest.fn(),
+    saveVersion: jest.fn(),
+    diffVersions: jest.fn(),
+    rollback: jest.fn(),
+  },
+  costService: { getBudget: jest.fn(), getProjectStats: jest.fn(), getRecords: jest.fn().mockReturnValue([]) },
+  reviewExportService: { exportNotes: jest.fn(), saveMarkdownToFile: jest.fn().mockResolvedValue(true) },
 }));
 
-jest.mock('@tauri-apps/api/tauri', () => ({
+jest.mock('@tauri-apps/api', () => ({
   invoke: (...args: unknown[]) => mockInvoke(...args),
 }));
 

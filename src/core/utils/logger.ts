@@ -25,7 +25,8 @@ export interface LoggerOptions {
   enableColor?: boolean;
 }
 
-const DEFAULT_LEVEL = import.meta.env?.DEV ? LogLevel.DEBUG : LogLevel.INFO;
+// 统一日志级别设置（兼容 Vite dev/build 和 Jest test 环境）
+const DEFAULT_LEVEL = (typeof process !== 'undefined' && process.env?.NODE_ENV === 'production') ? LogLevel.INFO : LogLevel.DEBUG;
 
 function getColorCode(color: string): string {
   const colors: Record<string, string> = {
@@ -93,27 +94,32 @@ class Logger {
 
   debug(message: string, data?: unknown): void {
     if (!this.shouldLog(LogLevel.DEBUG)) return;
-    logger.debug(...this.formatMessage(LogLevel.DEBUG, message, data));
+    const parts = this.formatMessage(LogLevel.DEBUG, message, data);
+    console.debug(...parts);
   }
 
   info(message: string, data?: unknown): void {
     if (!this.shouldLog(LogLevel.INFO)) return;
-    logger.info(...this.formatMessage(LogLevel.INFO, message, data));
+    const parts = this.formatMessage(LogLevel.INFO, message, data);
+    console.info(...parts);
   }
 
   warn(message: string, data?: unknown): void {
     if (!this.shouldLog(LogLevel.WARN)) return;
-    logger.warn(...this.formatMessage(LogLevel.WARN, message, data));
+    const parts = this.formatMessage(LogLevel.WARN, message, data);
+    console.warn(...parts);
   }
 
   error(message: string, data?: unknown): void {
     if (!this.shouldLog(LogLevel.ERROR)) return;
-    logger.error(...this.formatMessage(LogLevel.ERROR, message, data));
+    const parts = this.formatMessage(LogLevel.ERROR, message, data);
+    console.error(...parts);
   }
 
   success(message: string, data?: unknown): void {
     if (!this.shouldLog(LogLevel.INFO)) return;
-    logger.info(`${getColorCode('success')}✓ ${message}${getColorCode('reset')}`, data ?? '');
+    const msg = `${getColorCode('success')}✓ ${message}${getColorCode('reset')}`;
+    console.info(msg, data ?? '');
   }
 
   // 切换日志级别

@@ -118,11 +118,10 @@ Object.defineProperty(HTMLElement.prototype, 'getBoundingClientRect', {
   })),
 });
 
-// Mock console.error/warn to fail tests (optional - helps catch issues)
+// Console error/warn filtering
 const originalError = console.error;
 const originalWarn = console.warn;
 
-// 某些依赖在测试文件导入阶段就会触发该告警，需在 beforeAll 之前拦截
 console.warn = (...args: unknown[]) => {
   if (
     typeof args[0] === 'string' &&
@@ -143,14 +142,12 @@ beforeAll(() => {
         args[0].includes('Template not found:')
       )
     ) {
-      // Ignore React warnings in tests
       return;
     }
     originalError.call(console, ...args);
   };
 
   console.warn = (...args: unknown[]) => {
-    // Ignore specific warnings
     const ignorePatterns = [
       'act',
       'update',
