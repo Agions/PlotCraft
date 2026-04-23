@@ -34,6 +34,20 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+
+      - name: Debug files
+        run: |
+          echo '=== All files in root ==='
+          ls -la
+          echo '=== package-lock.json exists? ==='
+          test -f package-lock.json && echo 'YES' || echo 'NO'
+          echo '=== package.json exists? ==='
+          test -f package.json && echo 'YES' || echo 'NO'
+          echo '=== package.json content (first 3 lines) ==='
+          head -3 package.json || echo 'NOT FOUND'
+          echo '=== docs dir ==='
+          ls docs/ | head -10
 
       - name: Install dependencies
         run: npm install
