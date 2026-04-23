@@ -30,7 +30,9 @@ jobs:
           ref: main
           sparse-checkout: |
             docs
-            .github/workflows/docs.yml
+            package.json
+            package-lock.json
+            node_modules/.package-lock.json
           sparse-checkout-cone-mode: false
 
       - name: Setup Node.js
