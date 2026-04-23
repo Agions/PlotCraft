@@ -28,16 +28,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-          sparse-checkout: |
-            docs
-            package.json
-            package-lock.json
-          sparse-checkout-cone-mode: false
-
-      - name: Debug sparse checkout
-        run: |
-          ls -la
-          cat package-lock.json | head -3
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
