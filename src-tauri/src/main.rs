@@ -744,13 +744,13 @@ fn main() {
     println!("启动 ManGa AI 应用");
     
     tauri::Builder::default()
-        .plugin(tauri_plugin_fs::init())
-        .plugin(tauri_plugin_dialog::init())
-        .plugin(tauri_plugin_notification::init())
-        .plugin(tauri_plugin_clipboard_manager::init())
-        .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_fs::Builder::default().build())
+        .plugin(tauri_plugin_dialog::Builder::default().build())
+        .plugin(tauri_plugin_notification::Builder::default().build())
+        .plugin(tauri_plugin_clipboard_manager::Builder::default().build())
+        .plugin(tauri_plugin_shell::Builder::default().build())
         .plugin(tauri_plugin_global_shortcut::Builder::default().build())
-        .plugin(tauri_plugin_os::init())
+        .plugin(tauri_plugin_os::Builder::default().build())
         .setup(|_app| {
             println!("应用设置初始化");
             Ok(())
