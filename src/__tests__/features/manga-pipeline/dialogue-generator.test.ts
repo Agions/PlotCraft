@@ -18,7 +18,7 @@ describe('DialogueGenerator', () => {
 
   it('should clean speaker prefix from dialogue', () => {
     const scene: Scene = {
-      id: 's1', location: '家', timeOfDay: '晚上', characters: ['A'],
+      id: 's1', location: '家', timeOfDay: '夜晚', characters: ['A'],
       type: '对话', cameraHint: '中景', transition: '切换', emotion: 'neutral', content: '',
     };
     const paragraphs: ClassifiedParagraph[] = [

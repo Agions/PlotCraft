@@ -43,7 +43,7 @@ describe('ScriptEvaluator', () => {
         {
           id: 'scene_1',
           location: '家',
-          timeOfDay: '晚上',
+          timeOfDay: '夜晚',
           characters: ['A'],
           type: '对话',
           cameraHint: '中景',
@@ -72,8 +72,8 @@ describe('ScriptEvaluator', () => {
         { id: 's1', location: '咖啡厅', timeOfDay: '上午', characters: ['A'], type: '对话', cameraHint: '中景', transition: '切换', emotion: 'neutral', content: 'A：场景1', sceneNumber: 1 },
         { id: 's2', location: '公司', timeOfDay: '下午', characters: ['A'], type: '对话', cameraHint: '中景', transition: '切换', emotion: 'neutral', content: 'A：场景2', sceneNumber: 2 },
         { id: 's3', location: '公园', timeOfDay: '傍晚', characters: ['A'], type: '对话', cameraHint: '中景', transition: '切换', emotion: 'neutral', content: 'A：场景3', sceneNumber: 3 },
-        { id: 's4', location: '餐厅', timeOfDay: '晚上', characters: ['A'], type: '对话', cameraHint: '中景', transition: '切换', emotion: 'neutral', content: 'A：场景4', sceneNumber: 4 },
-        { id: 's5', location: '街道', timeOfDay: '深夜', characters: ['A'], type: '对话', cameraHint: '中景', transition: '切换', emotion: 'neutral', content: 'A：场景5', sceneNumber: 5 },
+        { id: 's4', location: '餐厅', timeOfDay: '夜晚', characters: ['A'], type: '对话', cameraHint: '中景', transition: '切换', emotion: 'neutral', content: 'A：场景4', sceneNumber: 4 },
+        { id: 's5', location: '街道', timeOfDay: '夜晚', characters: ['A'], type: '对话', cameraHint: '中景', transition: '切换', emotion: 'neutral', content: 'A：场景5', sceneNumber: 5 },
       ],
       characters: [],
       metadata: { generatedAt: 0, model: 'test', version: '1.0' },
@@ -86,7 +86,7 @@ describe('ScriptEvaluator', () => {
 
   it('should grade correctly', () => {
     const baseScene = {
-      id: 's1', location: '家', timeOfDay: '晚上' as const, characters: ['A'] as string[],
+      id: 's1', location: '家', timeOfDay: '夜晚' as const, characters: ['A'] as string[],
       type: '对话' as const, cameraHint: '中景' as const, transition: '切换' as const,
       emotion: 'neutral' as const, content: 'A：正常对话内容。', sceneNumber: 1 as const,
     };
