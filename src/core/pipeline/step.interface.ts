@@ -13,9 +13,12 @@ export interface CheckpointState {
   timestamp: number;
 }
 
+import { PipelineExecutionMode } from './pipeline.types';
+
 export interface PipelineStep {
   id: string;
   name: string;
+  mode?: PipelineExecutionMode;
   process(input: StepInput): Promise<StepOutput>;
   getCheckpoint(): CheckpointState | null;
   restore(state: CheckpointState): void;

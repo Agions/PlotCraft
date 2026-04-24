@@ -92,9 +92,7 @@ export class PipelineService {
     
     // 转换为通用类型
     const output = new Map<PipelineStepId, unknown>();
-    for (const [stepId, stepOutput] of results) {
-      output.set(stepId, stepOutput.data);
-    }
+    output.set(PipelineStepId.IMPORT, results);
     
     return output;
   }
@@ -126,9 +124,7 @@ export class PipelineService {
     
     const results = await engine.resume();
     const output = new Map<PipelineStepId, unknown>();
-    for (const [stepId, stepOutput] of results) {
-      output.set(stepId, stepOutput.data);
-    }
+    output.set(PipelineStepId.IMPORT, results);
     return output;
   }
 

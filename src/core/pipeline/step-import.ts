@@ -14,7 +14,7 @@ import type {
   StepProgressEvent,
   RetryPolicy,
 } from './pipeline.types';
-import { PipelineStepId, StepStatus } from './pipeline.types';
+import { PipelineStepId, StepStatus, PipelineExecutionMode, QualityGateDecision } from './pipeline.types';
 
 // ========== 导入步骤配置 ==========
 
@@ -22,7 +22,7 @@ export const IMPORT_STEP_CONFIG = {
   id: 'step-import',
   name: '导入与解析',
   stepId: PipelineStepId.IMPORT,
-  mode: 'sequence' as const,
+  mode: PipelineExecutionMode.SEQUENCE,
   retryPolicy: {
     maxRetries: 2,
     initialDelayMs: 1000,
@@ -70,7 +70,7 @@ export class ImportStep implements PipelineStep {
   readonly id: string;
   readonly name: string;
   readonly stepId: PipelineStepId;
-  readonly mode: PipelineExecutionMode = 'sequence';
+  readonly mode: PipelineExecutionMode = PipelineExecutionMode.SEQUENCE;
   readonly retryPolicy: RetryPolicy;
   readonly dependencies?: PipelineStepId[];
   readonly parallelKeys?: string[];
@@ -112,13 +112,9 @@ export class ImportStep implements PipelineStep {
 
       if (importInput.sourceType === 'novel' || detectedType === 'novel') {
         // 调用小说解析服务
-        const parseResult = await novelService.parseNovelContent(
+        const parseResult = await novelService.parseNovel(
           importInput.rawContent,
-          {
-            detectChapters: true,
-            detectCharacters: true,
-            detectEmotions: false,
-          }
+          {}
         );
 
         result = {
@@ -129,10 +125,10 @@ export class ImportStep implements PipelineStep {
             wordCount: ch.wordCount,
           })),
           metadata: {
-            title: parseResult.metadata.title || importInput.filename || '未命名',
-            author: parseResult.metadata.author,
-            wordCount: parseResult.metadata.wordCount,
-            chapterCount: parseResult.metadata.chapterCount,
+            title: parseResult.title || importInput.filename || '未命名',
+            author: parseResult.author,
+            wordCount: parseResult.totalWords,
+            chapterCount: parseResult.chapters.length,
             language: importInput.language || 'zh',
           },
           rawContent: importInput.rawContent,
@@ -173,7 +169,7 @@ export class ImportStep implements PipelineStep {
           durationMs: Date.now() - startTime,
           framesProcessed: result.chapters.length,
         },
-        qualityGate: 'pass',
+        qualityGate: QualityGateDecision.PASS,
         startTime,
         endTime: Date.now(),
         retryCount: 0,

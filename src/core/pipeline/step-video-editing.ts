@@ -12,7 +12,8 @@ import type {
   StepProgressEvent,
   RetryPolicy,
 } from './pipeline.types';
-import { PipelineStepId, StepStatus } from './pipeline.types';
+import { PipelineStepId, StepStatus, QualityGateDecision } from './pipeline.types';
+import { PipelineExecutionMode } from './pipeline.types';
 
 // ========== 类型定义 ==========
 
@@ -288,7 +289,7 @@ export class VideoEditingStep implements PipelineStep {
   readonly id: string;
   readonly name: string;
   readonly stepId = PipelineStepId.VIDEO_EDITING;
-  readonly mode = 'sequence' as const;
+  readonly mode = PipelineExecutionMode.SEQUENCE;
   readonly retryPolicy: RetryPolicy;
   readonly dependencies = [PipelineStepId.RENDER, PipelineStepId.AUDIO_SYNTHESIS];
   onProgress?: (event: StepProgressEvent) => void;
@@ -430,7 +431,7 @@ export class VideoEditingStep implements PipelineStep {
           durationMs: totalMs,
           framesProcessed: clips.length,
         },
-        qualityGate: 'pass',
+        qualityGate: QualityGateDecision.PASS,
         startTime,
         endTime: Date.now(),
         retryCount: 0,

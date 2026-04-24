@@ -5,7 +5,7 @@
  */
 
 import { logger } from '@/core/utils/logger';
-import { videoCompositorService } from '@/core/services/video-compositor.service';
+import { videoCompositorService } from '@/features/video-export/services/video-compositor.service';
 import type {
   PipelineStep,
   StepInput,
@@ -13,7 +13,8 @@ import type {
   StepProgressEvent,
   RetryPolicy,
 } from './pipeline.types';
-import { PipelineStepId, StepStatus } from './pipeline.types';
+import { PipelineStepId, StepStatus, QualityGateDecision } from './pipeline.types';
+import { PipelineExecutionMode } from './pipeline.types';
 
 export interface CompositionOutput {
   videoUrl: string;
@@ -27,7 +28,7 @@ export class CompositionStep implements PipelineStep {
   readonly id: string;
   readonly name: string;
   readonly stepId = PipelineStepId.COMPOSITION;
-  readonly mode = 'sequence' as const;
+  readonly mode = PipelineExecutionMode.SEQUENCE;
   readonly retryPolicy: RetryPolicy;
   readonly dependencies = [PipelineStepId.RENDER];
   onProgress?: (event: StepProgressEvent) => void;
@@ -69,17 +70,13 @@ export class CompositionStep implements PipelineStep {
 
       this.reportProgress(30, '正在合成视频...');
 
-      const result = await videoCompositorService.composeVideo({
-        scenes,
-        outputFormat: 'mp4',
-        quality: 'high',
-        resolution: '1080p',
-        addSubtitles: !!subtitles,
+      const result = await videoCompositorService.compose(scenes, {
+        format: 'mp4',
       });
 
       this.reportProgress(90, '合成完成');
 
-      context.setVariable('composedVideoUrl', result.outputPath || result.videoUrl);
+      context.setVariable('composedVideoUrl', result.outputPath);
 
       logger.success(`[CompositionStep] Video composed: ${result.outputPath}`);
 
@@ -96,7 +93,7 @@ export class CompositionStep implements PipelineStep {
           durationMs: Date.now() - startTime,
           framesProcessed: renderedFrames.length,
         },
-        qualityGate: 'pass',
+        qualityGate: QualityGateDecision.PASS,
         startTime,
         endTime: Date.now(),
         retryCount: 0,

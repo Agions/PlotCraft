@@ -13,7 +13,9 @@ import type {
   StepProgressEvent,
   RetryPolicy,
 } from './pipeline.types';
-import { PipelineStepId, StepStatus } from './pipeline.types';
+import type { ImportOutput } from './step-import';
+import { PipelineStepId, StepStatus, QualityGateDecision } from './pipeline.types';
+import { PipelineExecutionMode } from './pipeline.types';
 
 export interface ScriptStepConfig extends Partial<PipelineStep> {
   model?: string;
@@ -38,7 +40,7 @@ export class ScriptStep implements PipelineStep {
   readonly id: string;
   readonly name: string;
   readonly stepId: PipelineStepId;
-  readonly mode = 'sequence' as const;
+  readonly mode = PipelineExecutionMode.SEQUENCE;
   readonly retryPolicy: RetryPolicy;
   readonly dependencies = [PipelineStepId.IMPORT, PipelineStepId.ANALYSIS];
   onProgress?: (event: StepProgressEvent) => void;
@@ -110,7 +112,7 @@ export class ScriptStep implements PipelineStep {
           durationMs: Date.now() - startTime,
           tokensUsed: scriptContent.length,
         },
-        qualityGate: 'pass',
+        qualityGate: QualityGateDecision.PASS,
         startTime,
         endTime: Date.now(),
         retryCount: 0,

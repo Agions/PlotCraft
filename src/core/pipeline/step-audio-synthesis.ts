@@ -16,7 +16,8 @@ import type {
   StepProgressEvent,
   RetryPolicy,
 } from './pipeline.types';
-import { PipelineStepId, StepStatus } from './pipeline.types';
+import { PipelineStepId, StepStatus, QualityGateDecision } from './pipeline.types';
+import { PipelineExecutionMode } from './pipeline.types';
 
 export interface AudioSynthesisOutput {
   dialogueAudio: Array<{ audioUrl: string; duration: number; speakerId: string }>;
@@ -28,7 +29,7 @@ export class AudioSynthesisStep implements PipelineStep {
   readonly id: string;
   readonly name: string;
   readonly stepId = PipelineStepId.AUDIO_SYNTHESIS;
-  readonly mode = 'sequence' as const;
+  readonly mode = PipelineExecutionMode.SEQUENCE;
   readonly retryPolicy: RetryPolicy;
   readonly dependencies = [PipelineStepId.SCRIPT];
   onProgress?: (event: StepProgressEvent) => void;
@@ -102,7 +103,7 @@ export class AudioSynthesisStep implements PipelineStep {
         metrics: {
           durationMs: totalMs,
         },
-        qualityGate: 'pass',
+        qualityGate: QualityGateDecision.PASS,
         startTime,
         endTime: Date.now(),
         retryCount: 0,

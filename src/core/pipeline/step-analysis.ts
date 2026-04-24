@@ -13,14 +13,15 @@ import type {
   StepProgressEvent,
   RetryPolicy,
 } from './pipeline.types';
-import { PipelineStepId, StepStatus } from './pipeline.types';
+import { PipelineStepId, StepStatus, QualityGateDecision } from './pipeline.types';
+import { PipelineExecutionMode } from './pipeline.types';
 import type { ImportOutput } from './step-import';
 
 export class AnalysisStep implements PipelineStep {
   readonly id: string;
   readonly name: string;
   readonly stepId: PipelineStepId;
-  readonly mode = 'sequence' as const;
+  readonly mode = PipelineExecutionMode.SEQUENCE;
   readonly retryPolicy: RetryPolicy;
   readonly dependencies = [PipelineStepId.IMPORT];
   onProgress?: (event: StepProgressEvent) => void;
@@ -88,7 +89,7 @@ export class AnalysisStep implements PipelineStep {
           durationMs: Date.now() - startTime,
           framesProcessed: sceneCount,
         },
-        qualityGate: 'pass',
+        qualityGate: QualityGateDecision.PASS,
         startTime,
         endTime: Date.now(),
         retryCount: 0,

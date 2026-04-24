@@ -5,7 +5,7 @@
  */
 
 import { logger } from '@/core/utils/logger';
-import { characterService } from '@/core/services/character.service';
+import { getCharacterService } from '@/core/services/character.service';
 import type {
   PipelineStep,
   StepInput,
@@ -13,7 +13,9 @@ import type {
   StepProgressEvent,
   RetryPolicy,
 } from './pipeline.types';
-import { PipelineStepId, StepStatus } from './pipeline.types';
+import type { ImportOutput } from './step-import';
+import { PipelineStepId, StepStatus, QualityGateDecision } from './pipeline.types';
+import { PipelineExecutionMode } from './pipeline.types';
 
 export interface CharacterOutput {
   characters: Array<{
@@ -38,7 +40,7 @@ export class CharacterStep implements PipelineStep {
   readonly id: string;
   readonly name: string;
   readonly stepId = PipelineStepId.CHARACTER;
-  readonly mode = 'sequence' as const;
+  readonly mode = PipelineExecutionMode.SEQUENCE;
   readonly retryPolicy: RetryPolicy;
   readonly dependencies = [PipelineStepId.SCRIPT, PipelineStepId.ANALYSIS];
   onProgress?: (event: StepProgressEvent) => void;
@@ -80,7 +82,7 @@ export class CharacterStep implements PipelineStep {
         this.reportProgress(30 + (i * 40 / characterNames.length), `正在生成角色: ${name}`);
 
         try {
-          const character = await characterService.createCharacter({
+          const character = await getCharacterService().create({
             name,
             description: `角色${i + 1}`,
             appearance: {},
@@ -123,7 +125,7 @@ export class CharacterStep implements PipelineStep {
           durationMs: Date.now() - startTime,
           framesProcessed: characters.length,
         },
-        qualityGate: 'pass',
+        qualityGate: QualityGateDecision.PASS,
         startTime,
         endTime: Date.now(),
         retryCount: 0,

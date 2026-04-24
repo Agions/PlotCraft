@@ -14,7 +14,8 @@ import type {
   RetryPolicy,
   StepCheckpoint,
 } from './pipeline.types';
-import { PipelineStepId, StepStatus } from './pipeline.types';
+import { PipelineStepId, StepStatus, QualityGateDecision } from './pipeline.types';
+import { PipelineExecutionMode } from './pipeline.types';
 import type { StoryboardOutput } from './step-storyboard';
 
 export interface RenderOutput {
@@ -34,12 +35,20 @@ export class RenderStep implements PipelineStep {
   readonly id: string;
   readonly name: string;
   readonly stepId = PipelineStepId.RENDER;
-  readonly mode = 'sequence' as const;
+  readonly mode = PipelineExecutionMode.SEQUENCE;
   readonly retryPolicy: RetryPolicy;
   readonly dependencies = [PipelineStepId.STORYBOARD];
   onProgress?: (event: StepProgressEvent) => void;
 
   private batchSize = 4;
+
+  private reportProgress(progress: number, message: string): void {
+    this.onProgress?.({
+      stepId: this.stepId,
+      progress,
+      message,
+    });
+  }
 
   constructor(config?: Partial<PipelineStep>) {
     this.id = config?.id ?? 'step-render';
@@ -91,16 +100,12 @@ export class RenderStep implements PipelineStep {
         const results = await Promise.allSettled(
           batch.map(async (frame) => {
             try {
-              const result = await imageGenerationService.generateImage({
-                prompt: frame.prompt,
-                model: 'seedream-5.0',
-                size: '2k',
-              });
+              const result = await imageGenerationService.generateImage(frame.prompt, { model: 'seedream-5.0', size: '2K' });
 
               return {
                 frameId: frame.id,
-                imageUrl: result.imageUrl || result.url || '',
-                thumbnailUrl: result.thumbnailUrl,
+                imageUrl: result.url || '',
+                thumbnailUrl: result.url,
                 qualityScore: 0.85,
                 renderTime: Date.now() - startTime,
               };
@@ -156,7 +161,7 @@ export class RenderStep implements PipelineStep {
           framesProcessed: totalFrames,
           qualityScore: successRate,
         },
-        qualityGate: successRate >= 0.8 ? 'pass' : 'warn',
+        qualityGate: successRate >= 0.8 ? QualityGateDecision.PASS : QualityGateDecision.WARN,
         startTime,
         endTime: Date.now(),
         retryCount: 0,
