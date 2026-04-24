@@ -321,7 +321,7 @@ async fn cut_video(params: CutVideoParams, window: tauri::Window) -> Result<Stri
             segment_path
         );
 
-        let _ = window.emit("cut_progress", i as f64 / params.segments.len() as f64 * 0.6);
+        let _ = window.emit_to("main", "cut_progress", i as f64 / params.segments.len() as f64 * 0.6);
 
         info!("执行FFmpeg命令: {}", ffmpeg_command);
         let output = Command::new("sh")
@@ -342,7 +342,7 @@ async fn cut_video(params: CutVideoParams, window: tauri::Window) -> Result<Stri
     // 处理转场效果
     if transition_type != "none" && segment_files.len() > 1 {
         let mut transition_files = Vec::new();
-        let _ = window.emit("cut_progress", 0.7);
+        let _ = window.emit_to("main", "cut_progress", 0.7);
 
         for i in 0..segment_files.len() - 1 {
             let file1 = &segment_files[i];
@@ -424,7 +424,7 @@ async fn cut_video(params: CutVideoParams, window: tauri::Window) -> Result<Stri
         params.output_path
     );
 
-    let _ = window.emit("cut_progress", 0.9);
+    let _ = window.emit_to("main", "cut_progress", 0.9);
 
     info!("执行连接命令: {}", concat_command);
     let output = Command::new("sh")
@@ -439,7 +439,7 @@ async fn cut_video(params: CutVideoParams, window: tauri::Window) -> Result<Stri
         return Err(format!("连接片段失败: {}", err));
     }
 
-    let _ = window.emit("cut_progress", 1.0);
+    let _ = window.emit_to("main", "cut_progress", 1.0);
 
     for segment_path in segment_files {
         let _ = fs::remove_file(segment_path);
@@ -616,15 +616,10 @@ pub fn run() {
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_shell::init())
-        .plugin(tauri_plugin_global_shortcut::init())
+        .plugin(tauri_plugin_global_shortcut::Builder::default().build())
         .plugin(tauri_plugin_os::init())
-        .setup(|app| {
+        .setup(|_app| {
             info!("应用程序初始化完成");
-
-            if let Some(window) = app.get_webview_window("main") {
-                info!("主窗口已创建: {}", window.label());
-            }
-
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
