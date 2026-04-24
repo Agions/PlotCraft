@@ -1,46 +1,6 @@
-<!--
-  PlotCraft Docker 部署 — Animated & Professional Edition
--->
-<style>
-@keyframes flowGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes scanLight { 0% { left: -100%; } 100% { left: 200%; } }
-@keyframes h2Underline { from { width: 0; } to { width: 60px; } }
-@keyframes breathe { 0%, 100% { box-shadow: 0 0 15px rgba(255,107,53,0.3); } 50% { box-shadow: 0 0 35px rgba(255,107,53,0.7); } }
-@keyframes footerGlow { 0%, 100% { text-shadow: 0 0 10px rgba(69,184,172,0.4); } 50% { text-shadow: 0 0 30px rgba(69,184,172,0.9), 0 0 60px rgba(69,184,172,0.4); } }
-.breadcrumb { font-size: 0.82em; color: rgba(255,255,255,0.4); margin-bottom: 18px; animation: fadeIn 0.6s ease-out; }
-.breadcrumb a { color: #45B8AC; text-decoration: none; transition: color 0.3s ease; }
-.breadcrumb a:hover { color: #FF6B35; }
-.hero-banner { font-family: 'Segoe UI', system-ui, sans-serif; background: linear-gradient(-45deg, #0a0a0f, #1a1a2e, #16213e, #0f3460, #1a1a2e); background-size: 400% 400%; animation: flowGradient 12s ease infinite; padding: 20px 18px; border-radius: 12px; text-align: center; margin-bottom: 28px; border: 1px solid rgba(255,107,53,0.25); position: relative; overflow: hidden; }
-.hero-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(255,107,53,0.05) 0%, rgba(69,184,172,0.05) 100%); pointer-events: none; }
-.hero-title { font-size: 1.8em; font-weight: 800; color: #fff; margin: 0 0 6px; letter-spacing: 1px; animation: slideUp 0.6s ease-out; }
-.hero-subtitle { color: rgba(255,255,255,0.7); font-size: 1em; margin: 0; animation: slideUp 0.7s ease-out 0.15s both; }
-.h2-section { position: relative; margin-top: 34px; margin-bottom: 14px; font-size: 1.4em; font-weight: 700; color: #e8e8e8; padding-bottom: 8px; animation: slideUp 0.6s ease-out; }
-.h2-section::after { content: ''; position: absolute; bottom: 0; left: 0; height: 3px; background: linear-gradient(90deg, #FF6B35, #45B8AC, #FF6B35); background-size: 200% 100%; animation: flowGradient 3s ease infinite, h2Underline 0.8s ease-out forwards; border-radius: 2px; }
-pre { background: linear-gradient(135deg, #0d0d14, #1a1a2e); border: 1px solid rgba(255,107,53,0.2); border-radius: 10px; padding: 16px 20px; overflow-x: auto; animation: slideUp 0.6s ease-out; position: relative; }
-pre::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.02), transparent); animation: scanLight 6s ease-in-out infinite; pointer-events: none; border-radius: 10px; }
-code { color: #e8e8e8; font-size: 0.88em; font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; }
-:not(pre) > code { background: rgba(255,107,53,0.1); padding: 2px 7px; border-radius: 4px; color: #FF6B35; }
-.quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 10px 0 20px; }
-.quick-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; animation: slideUp 0.4s ease-out both; transition: transform 0.3s ease, border-color 0.3s ease; }
-.quick-card:hover { transform: translateY(-3px); border-color: rgba(255,107,53,0.35); }
-.quick-name { font-weight: 700; font-size: 0.85em; color: #FF6B35; margin-bottom: 3px; }
-.quick-code { font-size: 0.78em; color: rgba(255,255,255,0.6); margin: 0; font-family: 'Fira Code', monospace; }
-.ts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 10px 0 20px; }
-.ts-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 12px 14px; animation: slideUp 0.4s ease-out both; transition: border-color 0.3s ease; }
-.ts-card:hover { border-color: rgba(255,107,53,0.3); }
-.ts-problem { font-weight: 700; font-size: 0.85em; color: #FF6B35; margin-bottom: 4px; }
-.ts-solution { font-size: 0.8em; color: rgba(255,255,255,0.6); margin: 0; }
-.separator { border: none; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,107,53,0.3), rgba(69,184,172,0.3), transparent); margin: 26px 0; animation: fadeIn 1s ease-out; }
-.footer-section { text-align: center; padding: 22px 16px 8px; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 30px; animation: fadeIn 1s ease-out; }
-.footer-text { color: rgba(255,255,255,0.5); font-size: 0.85em; animation: footerGlow 3s ease-in-out infinite; }
-.footer-tagline { color: rgba(255,255,255,0.35); font-size: 0.8em; margin-top: 6px; animation: breathe 4s ease-in-out infinite; }
-</style>
+# Docker
 
-<div class="breadcrumb">← [文档首页](https://agions.github.io/PlotCraft) · [部署指南](./build.md) · 云端 →</div>
-
-<div class="hero-banner"><div class="hero-title">📦 Docker</div><div class="hero-subtitle">PlotCraft 的 Docker 部署指南</div></div>
+PlotCraft 的 Docker 部署指南。
 
 ## 前置要求
 
@@ -49,16 +9,24 @@ code { color: #e8e8e8; font-size: 0.88em; font-family: 'Fira Code', 'Cascadia Co
 
 ## 快速开始
 
-<div class="quick-grid">
-  <div class="quick-card"><div class="quick-name">构建镜像</div><div class="quick-code">docker build -t plotcraft:latest .</div></div>
-  <div class="quick-card"><div class="quick-name">运行容器</div><div class="quick-code">docker run -p 8080:80 plotcraft:latest</div></div>
-  <div class="quick-card"><div class="quick-name">访问</div><div class="quick-code">http://localhost:8080</div></div>
-</div>
+```bash
+# 构建镜像
+docker build -t plotcraft:latest .
+
+# 运行容器
+docker run -p 8080:80 plotcraft:latest
+
+# 访问 http://localhost:8080
+```
 
 ## Docker Compose
 
+### 基本配置
+
 ```yaml
+# docker-compose.yml
 version: '3.8'
+
 services:
   plotcraft:
     build: .
@@ -69,41 +37,259 @@ services:
     restart: unless-stopped
 ```
 
+### 带后端代理
+
+```yaml
+version: '3.8'
+
+services:
+  frontend:
+    build: .
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+
+  api:
+    image: node:20-alpine
+    working_dir: /app
+    command: node server.js
+    ports:
+      - "3000:3000"
+    environment:
+      - ALIBABA_API_KEY=${ALIB...KEY}
+    restart: unless-stopped
+```
+
+### 带数据库
+
+```yaml
+version: '3.8'
+
+services:
+  plotcraft:
+    build: .
+    ports:
+      - "80:80"
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql://user:***@postgres:5432/plotcraft
+
+  postgres:
+    image: postgres:15-alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=***
+      - POSTGRES_DB=plotcraft
+
+volumes:
+  pgdata:
+```
+
 ## 多阶段构建
 
 ```dockerfile
 # 构建阶段
 FROM node:20-alpine AS builder
+
 WORKDIR /app
+
+# 复制包文件
 COPY package*.json ./
 RUN npm ci
+
+# 复制源码并构建
 COPY . .
 RUN npm run build
 
 # 生产阶段
 FROM nginx:alpine AS production
+
+# 复制构建产物
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+# 复制 nginx 配置
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]
+```
+
+## Nginx 配置
+
+```nginx
+# nginx.conf
+server {
+    listen 80;
+    server_name _;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Gzip 压缩
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml;
+    gzip_min_length 1000;
+
+    # 缓存静态资源
+    location /assets/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # SPA 回退
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # 代理 API 请求（可选）
+    location /api/ {
+        proxy_pass http://backend:3000/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+## 环境变量
+
+### 构建时变量
+
+```dockerfile
+# 使用自定义 API 密钥构建
+ARG ALIBABA_API_KEY
+ENV VITE_ALIBABA_API_KEY=***
+```
+
+构建：
+```bash
+docker build --build-arg ALIBABA_API_KEY=*** -t plotcraft:latest .
+```
+
+### 运行时变量
+
+```bash
+# 使用环境文件运行
+docker run -p 8080:80 --env-file .env plotcraft:latest
+
+# 或者内联
+docker run -p 8080:80 \
+  -e VITE_ALIBABA_API_KEY=*** \
+  -e VITE_APP_MODE=web \
+  plotcraft:latest
+```
+
+## 数据卷
+
+```bash
+# 挂载数据卷以持久化数据
+docker run -p 8080:80 \
+  -v plotcraft_data:/app/data \
+  plotcraft:latest
+```
+
+## 健康检查
+
+```dockerfile
+# 添加健康检查
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:80/ || exit 1
+```
+
+## Docker Hub
+
+### 推送到 Hub
+
+```bash
+# 打标签
+docker tag plotcraft:latest username/plotcraft:latest
+
+# 推送
+docker push username/plotcraft:latest
+```
+
+### 拉取和运行
+
+```bash
+docker pull username/plotcraft:latest
+docker run -p 8080:80 username/plotcraft:latest
+```
+
+## Kubernetes
+
+```yaml
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plotcraft
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: plotcraft
+  template:
+    metadata:
+      labels:
+        app: plotcraft
+    spec:
+      containers:
+        - name: plotcraft
+          image: username/plotcraft:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plotcraft
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: plotcraft
 ```
 
 ## 故障排除
 
-<div class="ts-grid">
-  <div class="ts-card">
-    <div class="ts-problem">🔌 容器无法启动</div>
-    <div class="ts-solution"><code>docker logs &lt;container_id&gt;</code></div>
-  </div>
-  <div class="ts-card">
-    <div class="ts-problem">🔧 构建失败</div>
-    <div class="ts-solution"><code>docker build --no-cache -t plotcraft:latest .</code></div>
-  </div>
-  <div class="ts-card">
-    <div class="ts-problem">🔌 端口已被占用</div>
-    <div class="ts-solution"><code>docker run -p 8080:80 plotcraft:latest</code></div>
-  </div>
-</div>
+### 容器无法启动
 
-<hr class="separator">
-<div class="footer-section"><div class="footer-text">PlotCraft 文档 · AI 驱动的专业视频脚本创作平台</div><div class="footer-tagline">_💫 将你的故事转化为专业级视频内容_</div></div>
+```bash
+# 查看日志
+docker logs <container_id>
+
+# 查看配置
+docker inspect <container_id>
+```
+
+### 构建失败
+
+```bash
+# 无缓存构建
+docker build --no-cache -t plotcraft:latest .
+
+# 检查构建参数
+docker build --build-arg DEBUG=1 -t plotcraft:latest .
+```
+
+### 端口已被占用
+
+```bash
+# 查找占用 80 端口的进程
+lsof -i :80
+
+# 使用不同端口
+docker run -p 8080:80 plotcraft:latest
+```
