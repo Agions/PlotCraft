@@ -17,7 +17,7 @@
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev)
 [![Tauri](https://img.shields.io/badge/Tauri-2.0-FFC131?style=flat-square&logo=tauri&logoColor=white)](https://tauri.app)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![CI](https://img.shields.io/badge/CI-GitHub Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/Agions/PlotCraft/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/Agions/PlotCraft/ci.yml?style=flat-square&label=CI)](https://github.com/Agions/PlotCraft/actions)
 [![Docs](https://img.shields.io/badge/Docs-在线访问-7B68EE?style=flat-square&logo=book&logoColor=white)](https://agions.github.io/PlotCraft)
 [![Stars](https://img.shields.io/badge/Stars-⭐-f6c90e?style=flat-square&logo=star&logoColor=white)](https://github.com/Agions/PlotCraft/stargazers)
 [![Issues](https://img.shields.io/badge/Issues-问题反馈-d5362b?style=flat-square&logo=github&logoColor=white)](https://github.com/Agions/PlotCraft/issues)
