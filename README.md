@@ -1,6 +1,12 @@
 # PlotCraft
 
-**AI驱动的专业视频脚本创作平台 · 将小说、剧本或提示词转化为专业级视频内容**
+**AI驱动的专业视频脚本创作平台** — 将小说、剧本或提示词转化为专业级视频内容
+
+<div align="center">
+
+**7+ AI Models · 7-Step Workflow · MIT License**
+
+</div>
 
 ---
 
@@ -20,12 +26,12 @@
 
 ---
 
-## 八大核心功能
+## ✨ 八大核心功能
 
 | 功能 | 描述 |
 |:---:|------|
 | 📥 **智能导入** | 小说/剧本/提示词，自动编码检测，智能章节切分 |
-| 🤖 **多模型AI** | 7+ 模型支持，文字/图像、语音，按需切换模型 |
+| 🤖 **多模型AI** | 7+ 模型支持，文字/图像/语音，按需切换模型 |
 | 🎬 **智能分镜** | AI自动生成，多比例支持，可视化编辑 |
 | 🎭 **角色一致性** | 种子机制，参考图锁定，批量零走样 |
 | 👄 **唇形同步** | TTS语音对齐，多语言支持，情感语气调节 |
@@ -35,7 +41,7 @@
 
 ---
 
-## 七步工作流
+## 🔄 七步工作流
 
 ```
 📥 导入 ──▶ 🧠 AI分析 ──▶ 📝 脚本生成 ──▶ 🎬 分镜设计
@@ -64,7 +70,76 @@
 
 ---
 
-## 技术栈
+## 🚀 快速开始
+
+### Web 开发（推荐）
+
+**macOS/Linux：**
+
+```bash
+git clone https://github.com/Agions/PlotCraft.git
+cd PlotCraft
+npm install
+npm run dev
+```
+
+**Windows：**
+
+```powershell
+# 使用 winget 安装 Node.js
+winget install OpenJS.NodeJS
+
+git clone https://github.com/Agions/PlotCraft.git
+cd PlotCraft
+npm install
+npm run dev
+```
+
+应用运行在 `http://localhost:5173`
+
+---
+
+### 桌面应用（Tauri 2.0）
+
+**macOS：**
+
+```bash
+# 安装 Homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# 安装 Rust 编译依赖
+brew install rust cmake protobuf llvm
+brew installwebkit2gtk python3 gtkmm3 libsoup3
+
+# 构建桌面应用
+npm install
+npm run tauri build
+```
+
+**Linux（Ubuntu/Debian）：**
+
+```bash
+sudo apt update && sudo apt install -y \
+  rustc cargo cmake ninja-build libgtk-3-dev libwebkitgtk-6.0-dev
+
+npm install
+npm run tauri build
+```
+
+**Windows：**
+
+安装 [Rust](https://rustup.rs/) + [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)，然后：
+
+```powershell
+npm install
+npm run tauri build
+```
+
+> 💡 需要配置 `.env` 文件中的 API Key 才能使用 AI 功能，详见[配置指南](https://agions.github.io/PlotCraft/getting-started/configuration)
+
+---
+
+## 🛠️ 技术栈
 
 | 类别 | 技术 |
 |:---:|------|
@@ -79,20 +154,7 @@
 
 ---
 
-## 快速开始
-
-```bash
-git clone https://github.com/Agions/PlotCraft.git
-cd PlotCraft
-npm install
-npm run dev
-```
-
-> 💡 需要配置 `.env` 文件中的 API Key 才能使用 AI 功能，详见[配置指南](https://agions.github.io/PlotCraft/getting-started/configuration)
-
----
-
-## 支持的AI模型
+## 🤖 支持的AI模型
 
 ### 文字生成
 
@@ -132,7 +194,7 @@ npm run dev
 
 ---
 
-## 项目结构
+## 📁 项目结构
 
 ```
 PlotCraft/
@@ -149,7 +211,7 @@ PlotCraft/
 
 ---
 
-## 文档
+## 📚 文档
 
 | 文档 | 说明 |
 |:---|:---|
