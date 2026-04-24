@@ -321,7 +321,7 @@ async fn cut_video(params: CutVideoParams, window: tauri::Window) -> Result<Stri
             segment_path
         );
 
-        let _ = window.emit_to("main", "cut_progress", i as f64 / params.segments.len() as f64 * 0.6);
+        let _ = window.emit("cut_progress", i as f64 / params.segments.len() as f64 * 0.6);
 
         info!("执行FFmpeg命令: {}", ffmpeg_command);
         let output = Command::new("sh")
@@ -342,7 +342,7 @@ async fn cut_video(params: CutVideoParams, window: tauri::Window) -> Result<Stri
     // 处理转场效果
     if transition_type != "none" && segment_files.len() > 1 {
         let mut transition_files = Vec::new();
-        let _ = window.emit_to("main", "cut_progress", 0.7);
+        let _ = window.emit("cut_progress", 0.7);
 
         for i in 0..segment_files.len() - 1 {
             let file1 = &segment_files[i];
@@ -424,7 +424,7 @@ async fn cut_video(params: CutVideoParams, window: tauri::Window) -> Result<Stri
         params.output_path
     );
 
-    let _ = window.emit_to("main", "cut_progress", 0.9);
+    let _ = window.emit("cut_progress", 0.9);
 
     info!("执行连接命令: {}", concat_command);
     let output = Command::new("sh")
@@ -439,7 +439,7 @@ async fn cut_video(params: CutVideoParams, window: tauri::Window) -> Result<Stri
         return Err(format!("连接片段失败: {}", err));
     }
 
-    let _ = window.emit_to("main", "cut_progress", 1.0);
+    let _ = window.emit("cut_progress", 1.0);
 
     for segment_path in segment_files {
         let _ = fs::remove_file(segment_path);
@@ -721,7 +721,7 @@ fn toggle_fullscreen(app_handle: AppHandle) -> Result<bool, String> {
 #[tauri::command]
 fn get_app_settings(app_handle: AppHandle) -> Result<AppSettings, String> {
     let config_dir = app_handle.path().app_config_dir()
-        .ok_or("无法获取配置目录")?;
+        .ok_or_else(|| "无法获取配置目录".to_string())?;
     let settings_file = config_dir.join("settings.json");
 
     if settings_file.exists() {
@@ -737,7 +737,7 @@ fn get_app_settings(app_handle: AppHandle) -> Result<AppSettings, String> {
 #[tauri::command]
 fn save_app_settings(app_handle: AppHandle, settings: AppSettings) -> Result<(), String> {
     let config_dir = app_handle.path().app_config_dir()
-        .ok_or("无法获取配置目录")?;
+        .ok_or_else(|| "无法获取配置目录".to_string())?;
 
     fs::create_dir_all(&config_dir).map_err(|e| e.to_string())?;
 
@@ -753,7 +753,7 @@ fn save_app_settings(app_handle: AppHandle, settings: AppSettings) -> Result<(),
 #[tauri::command]
 fn get_app_data_path(app_handle: AppHandle) -> Result<String, String> {
     let data_dir = app_handle.path().app_data_dir()
-        .ok_or("无法获取数据目录")?;
+        .ok_or_else(|| "无法获取数据目录".to_string())?;
     Ok(data_dir.to_string_lossy().to_string())
 }
 
