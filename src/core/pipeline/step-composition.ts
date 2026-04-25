@@ -52,7 +52,6 @@ export class CompositionStep implements PipelineStep {
 
     try {
       const renderedFrames = context.getVariable<Array<{ frameId: string; imageUrl: string }>>('renderedFrames') ?? [];
-      const _subtitles = context.getVariable<Array<{ start: number; end: number; text: string }>>('subtitles');
 
       if (renderedFrames.length === 0) {
         throw new Error('No rendered frames to compose');

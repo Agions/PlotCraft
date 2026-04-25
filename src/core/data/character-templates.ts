@@ -199,7 +199,7 @@ export const templateToCharacter = (
   template: CharacterTemplate,
   overrides?: Partial<CharacterAppearance & { name: string; description: string }>
 ): Omit<Character, 'id' | 'createdAt' | 'updatedAt'> => {
-  const now = new Date().toISOString();
+  // const now = new Date().toISOString();
   
   return {
     name: overrides?.name || template.name,
