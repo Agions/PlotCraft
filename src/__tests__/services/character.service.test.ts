@@ -2,7 +2,7 @@
  * CharacterService 单元测试
  */
 
-import { CharacterService } from '@/core/services/character.service';
+import { CharacterService, resetCharacterService } from '@/core/services/character.service';
 import type { CharacterAppearance, Character } from '@/core/types';
 
 describe('CharacterService', () => {
@@ -10,7 +10,6 @@ describe('CharacterService', () => {
 
   beforeEach(() => {
     // 重置服务实例
-    const { resetCharacterService } = require('@/core/services/character.service');
     resetCharacterService();
     service = new CharacterService({ projectId: 'test-project', autoSave: false });
     localStorage.clear();

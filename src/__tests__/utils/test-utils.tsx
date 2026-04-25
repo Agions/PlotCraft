@@ -140,7 +140,7 @@ export const createSessionStorageMock = createLocalStorageMock;
  * 模拟 IntersectionObserver
  */
 export const mockIntersectionObserver = (): void => {
-  global.IntersectionObserver = jest.fn().mockImplementation((callback) => ({
+  global.IntersectionObserver = jest.fn().mockImplementation((_callback) => ({
     observe: jest.fn(),
     unobserve: jest.fn(),
     disconnect: jest.fn(),
@@ -151,7 +151,7 @@ export const mockIntersectionObserver = (): void => {
  * 模拟 ResizeObserver
  */
 export const mockResizeObserver = (): void => {
-  global.ResizeObserver = jest.fn().mockImplementation((callback) => ({
+  global.ResizeObserver = jest.fn().mockImplementation((_callback) => ({
     observe: jest.fn(),
     unobserve: jest.fn(),
     disconnect: jest.fn(),

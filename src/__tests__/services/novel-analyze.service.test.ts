@@ -4,6 +4,7 @@
 
 import { aiService } from '@/core/services/ai.service';
 import { novelAnalyzer } from '@/core/services/novel-analyze.service';
+import { EmotionType } from '@/core/types/novel.types';
 
 // Mock AI 服务
 jest.mock('@/core/services/ai.service', () => ({
@@ -182,8 +183,6 @@ describe('NovelAnalyzer', () => {
 
 describe('EmotionType', () => {
   it('应该包含所有预期的情感类型', () => {
-    const { EmotionType } = require('@/core/types/novel.types');
-
     expect(EmotionType.HAPPY).toBe('happy');
     expect(EmotionType.SAD).toBe('sad');
     expect(EmotionType.ANGRY).toBe('angry');
