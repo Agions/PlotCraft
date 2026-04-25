@@ -1,27 +1,22 @@
-export interface StepInput {
-  [key: string]: any;
-}
+export interface StepInput extends Record<string, unknown> {}
+export interface StepOutput extends Record<string, unknown> {}
 
-export interface StepOutput {
-  [key: string]: any;
-}
-
-export interface CheckpointState {
+export interface CheckpointState<S = unknown> {
   stepId: string;
   completed: boolean;
-  data: any;
+  data: S;
   timestamp: number;
 }
 
 import { PipelineExecutionMode } from './pipeline.types';
 
-export interface PipelineStep {
+export interface PipelineStep<S = unknown> {
   id: string;
   name: string;
   mode?: PipelineExecutionMode;
   process(input: StepInput): Promise<StepOutput>;
-  getCheckpoint(): CheckpointState | null;
-  restore(state: CheckpointState): void;
+  getCheckpoint(): CheckpointState<S> | null;
+  restore(state: CheckpointState<S>): void;
 }
 
 export interface PipelineOptions {

@@ -43,6 +43,8 @@ export interface ImportInput {
   filename?: string;
   /** 语言 */
   language?: 'zh' | 'en';
+  /** Allow additional step data */
+  [key: string]: unknown;
 }
 
 export interface ImportOutput {
@@ -63,6 +65,7 @@ export interface ImportOutput {
   };
   /** 原始内容 */
   rawContent: string;
+  [key: string]: unknown;
 }
 
 // ========== ImportStep 实现 ==========

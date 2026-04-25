@@ -2,7 +2,7 @@ const CHECKPOINT_PREFIX = 'plotcraft_checkpoint_';
 
 export async function saveCheckpoint(
   stepId: string,
-  data: any
+  data: unknown
 ): Promise<void> {
   const key = `${CHECKPOINT_PREFIX}${stepId}`;
   const state = { stepId, completed: true, data, timestamp: Date.now() };
@@ -11,7 +11,7 @@ export async function saveCheckpoint(
 
 export async function loadCheckpoint(
   stepId: string
-): Promise<{ stepId: string; completed: boolean; data: any; timestamp: number } | null> {
+): Promise<{ stepId: string; completed: boolean; data: unknown; timestamp: number } | null> {
   const key = `${CHECKPOINT_PREFIX}${stepId}`;
   const raw = localStorage.getItem(key);
   if (!raw) return null;

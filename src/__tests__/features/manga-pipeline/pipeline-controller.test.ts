@@ -18,7 +18,7 @@ describe('ScriptGenerationPipeline', () => {
 配角：咖啡来了。
 主角：谢谢。`;
 
-    const result = await pipeline.process({ text, title: '测试剧本' });
+    const result = await pipeline.process({ text, title: '测试剧本' }) as { scriptGeneration: { script: { title: string }; metadata: { chaptersCount: number } } };
     expect(result.scriptGeneration).toBeDefined();
     expect(result.scriptGeneration.script).toBeDefined();
     expect(result.scriptGeneration.metadata.chaptersCount).toBe(2);
@@ -30,7 +30,7 @@ describe('ScriptGenerationPipeline', () => {
 主角走进咖啡厅，主角：你好！
 `;
 
-    const result = await pipeline.process({ text });
+    const result = await pipeline.process({ text }) as { scriptGeneration: { metadata: { evaluationScore: number; grade: string } } };
     expect(result.scriptGeneration.metadata.evaluationScore).toBeGreaterThanOrEqual(0);
     expect(['A', 'B', 'C', 'D', 'F']).toContain(result.scriptGeneration.metadata.grade);
   });
@@ -39,7 +39,7 @@ describe('ScriptGenerationPipeline', () => {
     const pipeline = new ScriptGenerationPipeline();
     const text = `第一章
 内容`;
-    const result = await pipeline.process({ text });
+    const result = await pipeline.process({ text }) as { scriptGeneration: { script: { title: string } } };
     expect(result.scriptGeneration.script.title).toBe('未命名剧本');
   });
 });
