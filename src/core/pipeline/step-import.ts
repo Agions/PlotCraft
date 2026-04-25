@@ -212,7 +212,7 @@ export class ImportStep implements PipelineStep {
     }
 
     // 提示词特征：以"/"或"#"开头
-    if (/^[\/\#]/.test(trimmed)) {
+    if (/^[\/#]/.test(trimmed)) {
       return 'prompt';
     }
 

@@ -64,7 +64,7 @@ export class CharacterStep implements PipelineStep {
 
     try {
       const estimatedCharacters = context.getVariable<number>('estimatedCharacters') ?? 3;
-      const scriptOutput = context.getVariable<ImportOutput>('scriptOutput');
+      const _scriptOutput = context.getVariable<ImportOutput>('scriptOutput');
       const scenes = context.getVariable('scenes') as Array<{ description: string }>;
 
       this.reportProgress(10, '正在分析角色需求...');

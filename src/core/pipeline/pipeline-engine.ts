@@ -1,4 +1,4 @@
-import { PipelineStatus, PipelineStepId, StepStatus, type PipelineExecutionState, PipelineContext } from './pipeline.types';
+import { PipelineStatus, type PipelineExecutionState, PipelineContext } from './pipeline.types';
 import { PipelineStep, StepInput, StepOutput, PipelineOptions } from './step.interface';
 
 export type { PipelineStep };
@@ -79,6 +79,6 @@ export class PipelineEngine {
 }
 
 // Factory function for creating pipeline engine
-export function createPipelineEngine(config: any): PipelineEngine {
+export function createPipelineEngine(_config: any): PipelineEngine {
   return new PipelineEngine();
 }

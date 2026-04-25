@@ -4,7 +4,6 @@
  * AI自动生成分镜图描述、镜头语言设计
  */
 
-import { getStoryboardService } from '@/core/services/storyboard.service';
 import { logger } from '@/core/utils/logger';
 
 import type {

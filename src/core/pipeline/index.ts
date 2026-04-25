@@ -12,7 +12,7 @@ import {
   PipelineExecutionMode,
   PipelineStatus,
   type PipelineConfig,
-  type PipelineEngineEvent,
+
   type PipelineExecutionState,
 } from './pipeline.types';
 import { createAnalysisStep } from './step-analysis';

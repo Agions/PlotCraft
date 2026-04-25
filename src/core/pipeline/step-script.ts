@@ -170,7 +170,7 @@ ${chapters.map((ch, i) => `【第${i + 1}章】${ch.title}\n${ch.content.slice(0
 - 总时长建议5-15分钟`;
   }
 
-  private parseScriptOutput(content: string, chapters: ImportOutput['chapters']): ScriptOutput {
+  private parseScriptOutput(content: string, _chapters: ImportOutput['chapters']): ScriptOutput {
     try {
       // 尝试解析 JSON
       const jsonMatch = content.match(/\{[\s\S]*\}/);

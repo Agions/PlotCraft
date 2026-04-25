@@ -4,7 +4,6 @@
  * 识别章节结构、角色、场景
  */
 
-import { novelAnalyzer } from '@/core/services/novel-analyze.service';
 import { logger } from '@/core/utils/logger';
 
 import type {

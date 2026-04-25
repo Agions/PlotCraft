@@ -81,7 +81,7 @@ interface VideoEditingConfig {
 
 // ========== 辅助函数 ==========
 
-function interpolateColor(color1: string, color2: string, t: number): string {
+_function interpolateColor(color1: string, color2: string, t: number): string {
   const parseHex = (hex: string) => {
     const h = hex.replace('#', '');
     return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
@@ -98,7 +98,7 @@ function easeInOut(t: number): number {
   return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 }
 
-function computeTransitionDuration(prevClip: VideoClip, nextClip: VideoClip, transitions: Map<string, Transition>): number {
+_function computeTransitionDuration(prevClip: VideoClip, nextClip: VideoClip, transitions: Map<string, Transition>): number {
   const transition = transitions.get(`${prevClip.id}->${nextClip.id}`);
   return transition?.duration ?? 0.5;
 }
