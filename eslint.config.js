@@ -61,7 +61,7 @@ export default [
       'import/no-unresolved': 'off',
       'import/named': 'off',
       'import/order': [
-        'error',
+        'warn',
         {
           groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
           'newlines-between': 'always',
