@@ -13,6 +13,9 @@
 <div align="center">
 
 [![Version](https://img.shields.io/badge/Version-3.0.0-FF6B35?style=flat-square&logo=package&logoColor=white)](https://github.com/Agions/PlotCraft/releases)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org)
+[![npm](https://img.shields.io/badge/npm-9+-CB3837?style=flat-square&logo=npm&logoColor=white)](https://npmjs.com)
+[![Coverage](https://img.shields.io/badge/Coverage-33%25-45B8AC?style=flat-square&logo=checkmarx&logoColor=white)](https://github.com/Agions/PlotCraft/actions)
 [![License](https://img.shields.io/badge/License-MIT-45B8AC?style=flat-square&logo=license&logoColor=white)](https://opensource.org/licenses/MIT)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev)
 [![Tauri](https://img.shields.io/badge/Tauri-2.0-FFC131?style=flat-square&logo=tauri&logoColor=white)](https://tauri.app)
