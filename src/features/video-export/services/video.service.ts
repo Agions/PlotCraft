@@ -280,8 +280,8 @@ class VideoService {
   async clipVideo(
     inputPath: string,
     outputPath: string,
-    _startTime: number,
-    _endTime: number
+    startTime: number,
+    endTime: number
   ): Promise<string> {
     const builder = new FFmpegCommandBuilder();
     builder

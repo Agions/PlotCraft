@@ -14,7 +14,12 @@ import type {
   StepProgressEvent,
   RetryPolicy,
 } from './pipeline.types';
-import { QualityGateDecision, PipelineExecutionMode } from './pipeline.types';
+import {
+  PipelineStepId,
+  StepStatus,
+  QualityGateDecision,
+  PipelineExecutionMode,
+} from './pipeline.types';
 
 export interface CharacterOutput {
   characters: Array<{

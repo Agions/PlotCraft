@@ -488,8 +488,8 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
         musicAudioRef.current.pause();
         setPlayingMusic(false);
       }
-      sfxAudioRefs.current.forEach((audio, _id) => {
-        if (id !== effect.id) {
+      sfxAudioRefs.current.forEach((audio, _sfxId) => {
+        if (_sfxId !== effect.id) {
           audio.pause();
           audio.currentTime = 0;
         }

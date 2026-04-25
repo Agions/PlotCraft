@@ -162,7 +162,7 @@ export function useVideo(): UseVideoReturn {
       setVideo(info);
       
       return info;
-    } catch {
+    } catch (err) {
       setError(err instanceof Error ? err.message : '上传失败');
       return null;
     } finally {
@@ -234,7 +234,7 @@ export function useVideo(): UseVideoReturn {
       } : null);
       
       return analysisResult;
-    } catch {
+    } catch (err) {
       setError(err instanceof Error ? err.message : '分析失败');
       setTaskStatus(prev => prev ? {
         ...prev,

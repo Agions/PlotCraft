@@ -93,15 +93,15 @@ export function useWorkflow(callbacks?: WorkflowCallbacks): UseWorkflowReturn {
   const isCompleted = state.status === 'completed';
   const hasError = state.status === 'error';
 
-  const analyze = useCallback(async () => {
-    updateStep('analyze');
-    setState(prev => ({ ...prev, progress: 20 }));
-  }, [updateStep]);
-
   const updateStep = useCallback((step: WorkflowStep) => {
     setState(prev => ({ ...prev, step }));
     callbacks?.onStepChange?.(step);
   }, [callbacks]);
+
+  const analyze = useCallback(async () => {
+    updateStep('analyze');
+    setState(prev => ({ ...prev, progress: 20 }));
+  }, [updateStep]);
 
   const updateStatus = useCallback((status: WorkflowState['status'], error?: string) => {
     setState(prev => ({ ...prev, status, error }));
@@ -124,11 +124,6 @@ export function useWorkflow(callbacks?: WorkflowCallbacks): UseWorkflowReturn {
       updateStep('script-generate');
     }
   }, [updateStep, updateStatus]);
-
-  const analyze = useCallback(async () => {
-    updateStep('analyze');
-    setState(prev => ({ ...prev, progress: 20 }));
-  }, [updateStep]);
 
   const selectTemplate = useCallback((_template: ScriptTemplate) => {
     setState(prev => ({

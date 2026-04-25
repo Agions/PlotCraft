@@ -42,6 +42,7 @@ import type {
   Character,
   CharacterAppearance,
   ClothingItem,
+  CharacterExpression,
 } from '@/core/types';
 import { logger } from '@/core/utils/logger';
 import type { CharacterConsistency } from '@/shared/types';
