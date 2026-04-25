@@ -12,7 +12,7 @@ import {
 } from '@ant-design/icons';
 import { convertFileSrc } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-dialog';
-import { Card, Tabs, Button, Upload, Slider, Switch, Table, Tag, message, Popconfirm, Row, Col, Tooltip, Progress, Empty } from 'antd';
+import { Card, Tabs, Button, Slider, Switch, Table, Tag, message, Popconfirm, Row, Col, Tooltip, Progress, Empty, Space } from 'antd';
 import React, { useState, useRef, useEffect } from 'react';
 
 

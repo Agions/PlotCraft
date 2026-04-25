@@ -117,7 +117,7 @@ export function useVideo(): UseVideoReturn {
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [taskStatus, setTaskStatus] = useState<TaskStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   
   const abortControllerRef = useRef<AbortController | null>(null);
   
@@ -162,7 +162,7 @@ export function useVideo(): UseVideoReturn {
       setVideo(info);
       
       return info;
-    } catch (err) {
+    } catch (_err) {
       setError(err instanceof Error ? err.message : '上传失败');
       return null;
     } finally {
@@ -234,7 +234,7 @@ export function useVideo(): UseVideoReturn {
       } : null);
       
       return analysisResult;
-    } catch (err) {
+    } catch (_err) {
       setError(err instanceof Error ? err.message : '分析失败');
       setTaskStatus(prev => prev ? {
         ...prev,
@@ -266,7 +266,7 @@ export function useVideo(): UseVideoReturn {
     
     try {
       return await generateThumbnail(video.path, timestamp);
-    } catch (err) {
+    } catch (_err) {
       setError('提取缩略图失败');
       return null;
     }

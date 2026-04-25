@@ -6,7 +6,7 @@
 import { useState, useCallback, useMemo } from 'react';
 
 import { OPTIMIZATION_CONFIG } from '@/core/config/optimization.config';
-import { aiService, AIResponse } from '@/core/services/ai.service';
+import { aiService } from '@/core/services/ai.service';
 import { costService } from '@/core/services/cost.service';
 
 // 任务类型
