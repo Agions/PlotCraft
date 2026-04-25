@@ -9,10 +9,12 @@ PlotCraft 提供模块化的服务 API，用于 AI 驱动的视频创作。
 | `aiService` | 统一 AI 文本生成（多模型支持） | ✅ 稳定 |
 | `imageGenerationService` | 多提供商图像生成 | ✅ 稳定 |
 | `ttsService` | 文本转语音合成 | ✅ 稳定 |
+| `audioPipelineService` | [配音流水线](./tts-service.md)（对话提取 + TTS + 角色音色映射） | ✅ 稳定 |
 | `lipSyncService` | 唇形同步动画 | ✅ 稳定 |
 | `pipelineService` | [端到端视频创作流水线](./pipeline-service.md) | ✅ 稳定 |
 | `storyboardService` | 分镜管理 | ✅ 稳定 |
 | `characterService` | 角色管理 | ✅ 稳定 |
+| `compositionService` | 合成轨道编辑 | ✅ 稳定 |
 | `videoExportService` | 视频合成与导出 | ✅ 稳定 |
 
 ## 扩展服务

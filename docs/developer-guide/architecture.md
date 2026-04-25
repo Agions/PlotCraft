@@ -27,32 +27,48 @@ PlotCraft 采用基于功能模块化的架构。
 
 ```
 src/
-├── app/                    # 应用入口
+├── App.tsx                 # 应用入口
+├── main.tsx               # React 渲染入口
+├── ErrorBoundary.tsx      # 全局错误边界
 ├── pages/                 # 路由级页面
-├── features/              # 功能模块 (领域驱动)
-│   ├── workflow/          # 工作流引擎
-│   ├── project/           # 项目管理
-│   ├── script/            # 脚本生成
-│   ├── storyboard/        # 分镜编辑器
-│   ├── character/         # 角色设计
-│   ├── video/             # 视频播放
-│   ├── audio/             # 音频处理
-│   └── ...
-├── shared/                # 共享基础设施
-│   ├── components/        # 可复用 UI 组件
-│   ├── hooks/             # 可复用 React Hooks
-│   ├── services/          # 基础设施服务
-│   │   ├── api/           # HTTP 客户端
-│   │   └── storage/       # 存储抽象
-│   ├── stores/            # Zustand 状态存储
-│   ├── types/             # 共享类型定义
-│   └── utils/             # 工具函数
-├── core/                  # 核心服务 (遗留代码, 兼容性)
-│   ├── config/            # 配置
-│   ├── services/          # 核心服务实现
-│   ├── hooks/             # 核心 Hooks
-│   └── stores/            # 遗留存储重导出
-└── styles/                # 全局样式
+├── components/            # 业务组件（CompositionStudio 等）
+├── context/                # React Context
+├── features/               # 功能模块 (DDD)
+│   ├── ai/                 # AI 服务集成
+│   ├── audio/              # 音频处理
+│   ├── character/          # 角色设计
+│   ├── editor/             # 可视化编辑器（Timeline/SimpleTimeline 等）
+│   ├── home/               # 首页
+│   ├── manga-pipeline/     # 漫画流水线（ScriptGeneration 等）
+│   ├── notification/       # 通知系统
+│   ├── project/             # 项目管理
+│   ├── script/             # 脚本生成
+│   ├── storyboard/         # 分镜编辑器
+│   ├── subtitle/           # 字幕编辑
+│   ├── video/              # 视频播放
+│   └── video-export/       # 视频导出
+├── shared/                 # 共享基础设施
+│   ├── components/         # 可复用 UI 组件（Card, Button, Modal 等）
+│   ├── hooks/              # 可复用 React Hooks
+│   ├── services/            # 存储/HTTP 等基础设施服务
+│   ├── stores/              # Zustand 状态存储
+│   ├── types/               # 共享类型定义
+│   ├── utils/               # 工具函数（format/debounce/PDF导出等）
+│   └── config/              # 共享配置
+├── core/                   # 核心服务（Pipeline/AI/Cost 等）
+│   ├── config/             # 工作流配置
+│   ├── constants/          # 常量
+│   ├── data/               # 静态数据
+│   ├── hooks/              # 核心 Hooks
+│   ├── pipeline/           # 流水线引擎（Step/Pipeline/Checkpoint）
+│   ├── router/             # 路由工具
+│   ├── services/           # 核心服务（AI/Cost/Evaluation 等 30+ 服务）
+│   ├── stores/             # 状态存储（Zustand）
+│   └── types/              # 核心类型
+├── providers/             # React Context Providers
+├── hooks/                 # 全局 Hooks
+├── styles/                # 全局样式
+└── types/                 # 全局类型声明
 ```
 
 ## 功能模块结构
@@ -100,11 +116,10 @@ export const storageService = StorageService.getInstance();
 功能模块是自包含的,边界清晰:
 
 ```typescript
-// features/workflow/index.ts
-export { WorkflowEditor } from './components/WorkflowEditor';
-export { useWorkflow } from './hooks/useWorkflow';
-export { workflowService } from './services/workflow.service';
-export type { WorkflowState } from './types';
+// features/character/index.ts
+export { default as CharacterDesigner } from './components/CharacterDesigner';
+export { getCharacterService, resetCharacterService } from '@/core/services/character.service';
+export type { Character } from '@/shared/types';
 ```
 
 ### 3. 共享类型
