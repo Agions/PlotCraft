@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import { Upload, Button, Progress, message } from 'antd';
 import { UploadOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import type { UploadProps, UploadFile } from 'antd/es/upload/interface';
-import { invoke, isTauri } from '@tauri-apps/api/core';
+import { invoke, isTauri , convertFileSrc } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-dialog';
-import { convertFileSrc } from '@tauri-apps/api/core';
-import styles from './VideoUploader.module.less';
+import { Upload, Button, Progress, message } from 'antd';
+import type { UploadProps, UploadFile } from 'antd/es/upload/interface';
+import React, { useState } from 'react';
+
+
 import { logger } from '@/core/utils/logger';
+
+import styles from './VideoUploader.module.less';
 
 interface VideoUploaderProps {
   onUploadSuccess: (videoPath: string) => void;
@@ -135,7 +137,7 @@ const VideoUploader: React.FC<VideoUploaderProps> = ({ onUploadSuccess, initialV
         </div>
       ) : (
         <div className={styles.uploader}>
-          {isTauri ? (
+          {isTauriApp ? (
             <Button
               icon={<VideoCameraOutlined />}
               size="large"

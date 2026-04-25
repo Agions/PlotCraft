@@ -5,6 +5,7 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+
 import type { ProjectData, VideoInfo, ScriptData, ProjectSettings, TaskStatus } from '@/core/types';
 
 export interface UseProjectReturn {
@@ -259,7 +260,7 @@ export function useProject(projectId?: string): UseProjectReturn {
     if (!project) return;
     
     updateProject({
-      settings: { ...project.settings, ...settings }
+      settings: { ...project.settings, ...settings } as ProjectSettings
     });
   }, [project, updateProject]);
   

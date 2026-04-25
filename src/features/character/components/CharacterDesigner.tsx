@@ -1,4 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import {
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  UserOutlined,
+  UploadOutlined,
+  SaveOutlined,
+  CloseOutlined,
+  PictureOutlined,
+  AppstoreOutlined,
+} from '@ant-design/icons';
 import {
   Card,
   List,
@@ -22,22 +32,18 @@ import {
   Collapse,
   Empty,
 } from 'antd';
-import {
-  PlusOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  UserOutlined,
-  UploadOutlined,
-  SaveOutlined,
-  CloseOutlined,
-  PictureOutlined,
-  AppstoreOutlined,
-} from '@ant-design/icons';
-import type { RcFile } from 'antd/es/upload/interface';
 import type { Color } from 'antd/es/color-picker';
-import styles from './CharacterDesigner.module.less';
+import type { RcFile } from 'antd/es/upload/interface';
+import React, { useState, useCallback } from 'react';
+
 
 // 使用项目中定义的类型
+import {
+  CHARACTER_TEMPLATES,
+  getTemplatesByCategory,
+  templateToCharacter,
+  type CharacterTemplate
+} from '@/core/data/character-templates';
 import type { 
   Character, 
   CharacterAppearance, 
@@ -45,14 +51,10 @@ import type {
   CharacterExpression,
   TTSProvider 
 } from '@/core/types';
-import type { CharacterConsistency } from '@/shared/types';
 import { logger } from '@/core/utils/logger';
-import {
-  CHARACTER_TEMPLATES,
-  getTemplatesByCategory,
-  templateToCharacter,
-  type CharacterTemplate
-} from '@/core/data/character-templates';
+import type { CharacterConsistency } from '@/shared/types';
+
+import styles from './CharacterDesigner.module.less';
 
 // 服装类型标签
 const CLOTHING_TYPE_LABELS: Record<ClothingItem['type'], string> = {
@@ -432,7 +434,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
                 />
                 <Divider style={{ margin: '12px 0' }} />
                 <Space size={8} wrap>
-                  {character.tags.slice(0, 3).map(tag => (
+                  {character.tags?.slice(0, 3).map(tag => (
                     <Tag key={tag}>{tag}</Tag>
                   ))}
                 </Space>

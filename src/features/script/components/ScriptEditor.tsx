@@ -1,4 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import {
+  EditOutlined,
+  DeleteOutlined,
+  PlayCircleOutlined,
+  PlusOutlined,
+  SaveOutlined,
+  ExportOutlined,
+  DownOutlined
+} from '@ant-design/icons';
+import { convertFileSrc } from '@tauri-apps/api/core';
 import {
   Card,
   Button,
@@ -13,20 +22,13 @@ import {
   Menu,
   message
 } from 'antd';
-import {
-  EditOutlined,
-  DeleteOutlined,
-  PlayCircleOutlined,
-  PlusOutlined,
-  SaveOutlined,
-  ExportOutlined,
-  DownOutlined
-} from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+
 import { tauriService } from '@/core/services';
 import type { ScriptData, ScriptMetadata } from '@/core/types';
-import { convertFileSrc } from '@tauri-apps/api/core';
-import styles from './ScriptEditor.module.less';
 import { logger } from '@/core/utils/logger';
+
+import styles from './ScriptEditor.module.less';
 
 // 格式化时长 mm:ss
 const formatDuration = (seconds: number): string => {
@@ -380,7 +382,7 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({
             <Button
               type="primary"
               icon={<SaveOutlined />}
-              onClick={() => onSave(segments)}
+              onClick={() => onSave?.(segments)}
             >
               保存
             </Button>

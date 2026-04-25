@@ -132,7 +132,7 @@ describe('CharacterService', () => {
 
       expect(updated).not.toBeNull();
       expect(updated?.name).toBe('新名称');
-      expect(new Date(updated!.updatedAt).getTime()).toBeGreaterThanOrEqual(new Date(character.updatedAt).getTime());
+      expect(new Date(updated!.updatedAt!).getTime()).toBeGreaterThanOrEqual(new Date(character.updatedAt!).getTime());
     });
 
     it('不存在的ID应该返回null', () => {

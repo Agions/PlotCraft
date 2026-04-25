@@ -64,12 +64,14 @@ class Logger {
       ? `[${new Date().toISOString().slice(11, 19)}]`
       : '';
 
-    const levelTag = {
+    const levelTagMap: Record<number, string> = {
       [LogLevel.DEBUG]: 'DEBUG',
       [LogLevel.INFO]: 'INFO ',
       [LogLevel.WARN]: 'WARN ',
       [LogLevel.ERROR]: 'ERROR',
-    }[level];
+      [LogLevel.NONE]: 'NONE ',
+    };
+    const levelTag = levelTagMap[level] ?? 'INFO ';
 
     const colorFn = (text: string, color: string) =>
       this.enableColor ? `${getColorCode(color)}${text}${getColorCode('reset')}` : text;

@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Card, List, Button, Space, Typography, message } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Card, List, Button, Space, Typography, message } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import type { Project } from '@/types';
+
 import styles from './ProjectListView.module.less';
 
 const { Title, Text } = Typography;
@@ -65,7 +67,7 @@ const ProjectListView: React.FC = () => {
                   <Space direction="vertical">
                     <Text type="secondary">{project.description}</Text>
                     <Text type="secondary" className={styles.date}>
-                      创建于: {new Date(project.createdAt).toLocaleDateString()}
+                      创建于: {project.createdAt ? new Date(project.createdAt).toLocaleDateString() : '-'}
                     </Text>
                   </Space>
                 }

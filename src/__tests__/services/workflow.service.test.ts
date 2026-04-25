@@ -134,10 +134,10 @@ describe('WorkflowEditor nodeTemplates', () => {
 
     it('should get workflow', () => {
       const created = workflowManager.createWorkflow('获取测试');
-      const retrieved = workflowManager.getWorkflow(created.id);
+      const retrieved = workflowManager.getWorkflow(created.id) as ReturnType<typeof workflowManager.createWorkflow> | undefined;
       expect(retrieved).toBeDefined();
-      expect(retrieved?.id).toBe(created.id);
-      expect(retrieved?.name).toBe('获取测试');
+      expect(retrieved!.id).toBe(created.id);
+      expect(retrieved!.name).toBe('获取测试');
     });
 
     it('should return null for non-existent workflow', () => {
@@ -154,7 +154,7 @@ describe('WorkflowEditor nodeTemplates', () => {
       };
 
       workflowManager.updateWorkflow(workflow.id, updatedWorkflow);
-      const retrieved = workflowManager.getWorkflow(workflow.id);
+      const retrieved = workflowManager.getWorkflow(workflow.id) as ReturnType<typeof workflowManager.createWorkflow> | undefined;
 
       expect(retrieved?.name).toBe('更新后的名称');
       expect(retrieved?.nodes.length).toBe(1);

@@ -3,7 +3,18 @@
  * 专业的 AI 脚本生成界面
  */
 
-import React, { useState, useCallback } from 'react';
+import {
+  EditOutlined,
+  ThunderboltOutlined,
+  ClockCircleOutlined,
+  FileTextOutlined,
+  UserOutlined,
+  GlobalOutlined,
+  CheckCircleOutlined,
+  LoadingOutlined,
+  SettingOutlined,
+  DollarOutlined
+} from '@ant-design/icons';
 import {
   Card,
   Form,
@@ -24,23 +35,14 @@ import {
   Spin,
   message
 } from 'antd';
-import {
-  EditOutlined,
-  ThunderboltOutlined,
-  ClockCircleOutlined,
-  FileTextOutlined,
-  UserOutlined,
-  GlobalOutlined,
-  CheckCircleOutlined,
-  LoadingOutlined,
-  SettingOutlined,
-  DollarOutlined
-} from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useCallback } from 'react';
+
 import { useModel, useModelCost } from '@/core/hooks/useModel';
 import { useProject } from '@/core/hooks/useProject';
-import ModelSelector from '@/features/ai/components/ModelSelector';
 import type { ScriptData, ScriptSegment } from '@/core/types';
+import ModelSelector from '@/features/ai/components/ModelSelector';
+
 import styles from './ScriptGenerator.module.less';
 
 const { Title, Text, Paragraph } = Typography;
@@ -439,16 +441,16 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
               <div className={styles.scriptMeta}>
                 <Space wrap>
                   <Tag icon={<FileTextOutlined />}>
-                    {generatedScript.metadata.wordCount} 字
+                    {generatedScript.metadata?.wordCount ?? 0} 字
                   </Tag>
                   <Tag icon={<ClockCircleOutlined />}>
-                    约 {generatedScript.metadata.estimatedDuration} 分钟
+                    约 {generatedScript.metadata?.estimatedDuration ?? 0} 分钟
                   </Tag>
                   <Tag icon={<UserOutlined />}>
-                    {AUDIENCE_OPTIONS.find(a => a.value === generatedScript.metadata.targetAudience)?.label}
+                    {AUDIENCE_OPTIONS.find(a => a.value === generatedScript.metadata?.targetAudience)?.label}
                   </Tag>
                   <Tag icon={<GlobalOutlined />}>
-                    {generatedScript.metadata.language === 'zh' ? '中文' : 'English'}
+                    {generatedScript.metadata?.language === 'zh' ? '中文' : 'English'}
                   </Tag>
                 </Space>
               </div>
