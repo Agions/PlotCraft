@@ -302,18 +302,6 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
     e.target.value = '';
   };
 
-  // 添加表情到角色
-  const _addExpressionToCharacter = (characterId: string, expression: CharacterExpression) => {
-    const char = characters.find(c => c.id === characterId);
-    if (!char) return;
-
-    const newExprs = [...(char.expressions || []), expression] as unknown as string[];
-    const newChars = characters.map(c =>
-      c.id === characterId ? { ...c, expressions: newExprs } : c
-    ) as Character[];
-    notifyChange(newChars);
-  };
-
   // 渲染模板卡片
   const renderTemplateCard = (template: CharacterTemplate) => (
     <Card
