@@ -24,6 +24,7 @@ jest.mock('@/components/business/VideoExporter', () => () => <div>VideoExporter<
 jest.mock('@/components/business/StoryboardEditor', () => ({
   __esModule: true,
   default: ({ onFrameSelect }: { initialFrames: Array<{ id: string; title: string }>; onFrameSelect?: (frame: { id: string; title: string }) => void }) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       if (onFrameSelect) onFrameSelect({ id: 'frame-1', title: '镜头1' });
     }, [onFrameSelect]);
