@@ -366,9 +366,9 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
           <div className={styles.emptyState}>
             <User style={{ fontSize: 48, color: '#ccc' }} />
             <Title level={5}>还没有角色</Title>
-            <Paragraph type="secondary">
+            <Text type="secondary">
               您可以手动创建角色，或从预设模板快速开始
-            </Paragraph>
+            </Text>
             <Space>
               <Button type="primary" onClick={handleAdd}>手动创建</Button>
               <Button 
@@ -419,7 +419,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
                 />
                 <Divider style={{ margin: '12px 0' }} />
                 <Space size={8} wrap>
-                  {character.tags?.slice(0, 3).map(tag => (
+                  {(character.tags ?? []).slice(0, 3).map((tag: string) => (
                     <Tag key={tag}>{tag}</Tag>
                   ))}
                 </Space>
@@ -547,7 +547,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
               <Select mode="tags" placeholder="已添加的服装项目">
                 {clothingItems && clothingItems.length > 0 ? (
                   clothingItems.map((item, idx) => (
-                    <Option key={idx} value={`${item.type}:${item.name}:${item.color}`}>
+                    <Option key={String(idx)} value={`${item.type}:${item.name}:${item.color}`}>
                       {CLOTHING_TYPE_LABELS[item.type] || item.type}: {item.name} ({item.color})
                     </Option>
                   ))
