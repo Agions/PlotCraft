@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 
 import NovelImporter from './NovelImporter';
 import ScriptGenerator from './ScriptGenerator';
+import { Card } from '@/components/ui/card';
+import { Space } from '@/components/ui/antd-compat';
+import { Alert } from '@/components/ui/alert';
 import styles from './ScriptGeneratorView.module.less';
 
 /**
@@ -38,7 +41,7 @@ const ScriptGeneratorView: React.FC = () => {
 
         {novelMetadata && (
           <Card title="生成脚本">
-            {isGenerating && <Spin tip="正在生成脚本..." />}
+            {isGenerating && <Alert>正在生成脚本...</Alert>}
             <ScriptGenerator
               projectId={undefined}
               onGenerate={undefined}

@@ -15,10 +15,10 @@ import {
   Settings,
   DollarSign
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormItem } from '@/components/ui/antd-compat';
-import { Input, Textarea } from '@/components/ui/input';
-import { Select, Option } from '@/components/ui/antd-compat';
+import { Card as CardBase } from '@/components/ui/card';
+import { Form, FormItem, useForm } from '@/components/ui/antd-compat';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/antd-compat';
 import { Button } from '@/components/ui/button';
 import { Space } from '@/components/ui/antd-compat';
 import { Divider } from '@/components/ui/antd-compat';
@@ -26,7 +26,7 @@ import { Text, Title, Paragraph } from '@/components/ui/typography';
 import { Slider } from '@/components/ui/slider';
 import { RadioGroup, Radio, RadioButton } from '@/components/ui/antd-compat';
 import { Tag } from '@/components/ui/tag';
-import { Progress } from '@/components/ui/antd-compat';
+import { Progress } from '@/components/ui/progress';
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip as TooltipRoot, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -108,7 +108,7 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
   const { selectedModel, isConfigured } = useModel();
   const { estimateScriptCost, formatCost } = useModelCost();
 
-  const [form] = Form.useForm();
+  const [form] = useForm();
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
   const [generatedScript, setGeneratedScript] = useState<ScriptData | null>(null);
@@ -116,7 +116,7 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
 
   // 估算成本
   const estimatedCost = useCallback(() => {
-    const length = form.getFieldValue('length') || 'medium';
+    const length = form.getValues?.()?.length || 'medium';
     const wordCount = LENGTH_OPTIONS.find(l => l.value === length)?.words || '500-800字';
     const avgWords = parseInt(wordCount.split('-')[0]) + 200;
     return formatCost(estimateScriptCost(avgWords));
@@ -206,10 +206,10 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
       </Title>
 
       {/* 模型选择 */}
-      <Card className={styles.modelCard} size="small">
+      <CardBase className={styles.modelCard}>
         <div className={styles.modelHeader}>
           <Space>
-            <Text strong>当前模型:</Text>
+            <Text type="secondary">当前模型:</Text>
             {selectedModel ? (
               <Badge
                 status={isConfigured ? 'success' : 'warning'}
@@ -251,7 +251,7 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
             </motion.div>
           )}
         </AnimatePresence>
-      </Card>
+      </CardBase>
 
       {/* 生成表单 */}
       <Form
@@ -267,7 +267,7 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
         }}
         className={styles.form}
       >
-        <Card title="脚本设置" className={styles.settingsCard}>
+        <CardBase title="脚本设置" className={styles.settingsCard}>
           <FormItem
             name="topic"
             label="脚本主题"
@@ -333,11 +333,10 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
             name="audience"
             label="目标受众"
           >
-            <Select placeholder="选择目标受众">
-              {AUDIENCE_OPTIONS.map(opt => (
-                <Option key={opt.value} value={opt.value}>{opt.label}</Option>
-              ))}
-            </Select>
+            <Select
+              placeholder="选择目标受众"
+              options={AUDIENCE_OPTIONS.map(opt => ({ value: opt.value, label: opt.label }))}
+            />
           </FormItem>
 
           <FormItem
@@ -354,12 +353,13 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
             name="requirements"
             label="特殊要求（可选）"
           >
-            <TextArea
+            <textarea
               rows={3}
+              className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               placeholder="例如：需要包含产品介绍、使用步骤、注意事项等"
             />
           </FormItem>
-        </Card>
+        </CardBase>
 
         {/* 生成按钮 */}
         <div className={styles.actions}>
@@ -369,27 +369,19 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
               size="large"
               icon={isGenerating ? <Loader /> : <Zap />}
               onClick={() => form.submit()}
-              loading={isGenerating}
-              disabled={!selectedModel || !isConfigured}
+              disabled={isGenerating || !selectedModel || !isConfigured}
               block
             >
               {isGenerating ? '生成中...' : '生成脚本'}
             </Button>
 
             {isGenerating && (
-              <Progress percent={progress} status="active" />
+              <Progress value={progress} />
             )}
 
-            <Alert
-              message={
-                <Space>
-                  <DollarSign />
-                  <Text>预估成本: {estimatedCost()}</Text>
-                </Space>
-              }
-              type="info"
-              showIcon={false}
-            />
+            <Alert>
+              预估成本: {estimatedCost()}
+            </Alert>
           </Space>
         </div>
       </Form>
@@ -402,7 +394,7 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
           >
-            <Card
+            <CardBase
               title={
                 <Space>
                   <CheckCircle style={{ color: '#52c41a' }} />
@@ -444,7 +436,7 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
                   </Tag>
                 </Space>
               </div>
-            </Card>
+            </CardBase>
           </motion.div>
         )}
       </AnimatePresence>
