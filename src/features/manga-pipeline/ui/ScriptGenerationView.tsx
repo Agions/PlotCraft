@@ -1,7 +1,9 @@
 import React, { useState, useCallback } from 'react';
-
-import type { ScriptGenerationResult, Script } from '../steps/step1-script-generation';
-import { ScriptGenerationPipeline } from '../steps/step1-script-generation/pipeline-controller';
+import { PipelineProgress } from '@/shared/components/pipeline/PipelineProgress';
+import { GenerationResult } from '@/shared/components/pipeline/GenerationResult';
+import { PipelineControls } from '@/shared/components/pipeline/PipelineControls';
+import { ScriptGenerationPipeline, ScriptGenerationResult } from '../steps/step1-script-generation/pipeline-controller';
+import type { Script } from '../steps/step1-script-generation/types/script';
 
 interface Props {
   onScriptGenerated?: (script: Script) => void;
@@ -11,9 +13,14 @@ export const ScriptGenerationView: React.FC<Props> = ({ onScriptGenerated }) => 
   const [text, setText] = useState('');
   const [title, setTitle] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [subStepName, setSubStepName] = useState('');
   const [result, setResult] = useState<ScriptGenerationResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Pipeline controller ref for pause/resume/skip
+  const pipelineRef = React.useRef<ScriptGenerationPipeline | null>(null);
 
   const handleGenerate = useCallback(async () => {
     if (!text.trim()) {
@@ -25,38 +32,63 @@ export const ScriptGenerationView: React.FC<Props> = ({ onScriptGenerated }) => 
     setError(null);
     setProgress(0);
     setResult(null);
+    setIsPaused(false);
 
     try {
       const pipeline = new ScriptGenerationPipeline();
+      pipelineRef.current = pipeline;
 
-      // Simulate progress updates
-      const progressInterval = setInterval(() => {
-        setProgress(p => Math.min(p + 10, 90));
-      }, 500);
+      // Wire up progress callback
+      pipeline.onProgress((event) => {
+        setProgress(event.progress);
+        setSubStepName(event.message);
+      });
 
       const output = await pipeline.process({ text, title: title || '未命名剧本' });
-      clearInterval(progressInterval);
-      setProgress(100);
-
       const scriptResult = (output as any).scriptGeneration as ScriptGenerationResult;
       setResult(scriptResult);
+      setProgress(100);
+      setSubStepName('完成');
       onScriptGenerated?.(scriptResult.script);
     } catch (err) {
       setError(err instanceof Error ? err.message : '生成失败');
     } finally {
       setIsGenerating(false);
+      pipelineRef.current = null;
     }
   }, [text, title, onScriptGenerated]);
 
-  const getGradeColor = (grade: string) => {
-    switch (grade) {
-      case 'A': return 'text-green-600';
-      case 'B': return 'text-blue-600';
-      case 'C': return 'text-yellow-600';
-      case 'D': return 'text-orange-600';
-      default: return 'text-red-600';
+  const handlePause = useCallback(async () => {
+    if (pipelineRef.current) {
+      await pipelineRef.current.pause();
+      setIsPaused(true);
     }
-  };
+  }, []);
+
+  const handleResume = useCallback(() => {
+    if (pipelineRef.current) {
+      pipelineRef.current.resume();
+      setIsPaused(false);
+    }
+  }, []);
+
+  const handleSkip = useCallback(() => {
+    // Skip is handled at the pipeline level internally
+    // Just log for now
+  }, []);
+
+  const handleCancel = useCallback(() => {
+    if (pipelineRef.current) {
+      pipelineRef.current.cancel();
+      setIsGenerating(false);
+      setIsPaused(false);
+    }
+  }, []);
+
+  const handleRetry = useCallback(() => {
+    pipelineRef.current?.reset();
+    handleGenerate();
+  }, [handleGenerate]);
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
@@ -65,7 +97,9 @@ export const ScriptGenerationView: React.FC<Props> = ({ onScriptGenerated }) => 
       {/* Input Section */}
       <div className="space-y-4 mb-6">
         <div>
-          <label htmlFor="script-title" className="block text-sm font-medium mb-2">剧本标题（可选）</label>
+          <label htmlFor="script-title" className="block text-sm font-medium mb-2">
+            剧本标题（可选）
+          </label>
           <input
             id="script-title"
             type="text"
@@ -78,7 +112,9 @@ export const ScriptGenerationView: React.FC<Props> = ({ onScriptGenerated }) => 
         </div>
 
         <div>
-          <label htmlFor="script-text" className="block text-sm font-medium mb-2">小说原文</label>
+          <label htmlFor="script-text" className="block text-sm font-medium mb-2">
+            小说原文
+          </label>
           <textarea
             id="script-text"
             value={text}
@@ -105,140 +141,74 @@ export const ScriptGenerationView: React.FC<Props> = ({ onScriptGenerated }) => 
       {/* Error Display */}
       {error && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-          ❌ {error}
+          <div className="flex justify-between items-start">
+            <span>❌ {error}</span>
+            <button
+              onClick={handleRetry}
+              className="text-sm text-red-600 hover:text-red-800 underline"
+            >
+              重试
+            </button>
+          </div>
         </div>
       )}
 
-      {/* Progress Bar */}
+      {/* Progress Section */}
       {isGenerating && (
-        <div className="mb-6">
-          <div className="flex justify-between text-sm mb-1">
-            <span>生成中...</span>
-            <span>{progress}%</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div
-              className="bg-orange-500 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
+        <div className="mb-6 bg-white border rounded-lg p-4 space-y-4">
+          <PipelineProgress
+            progress={progress}
+            stepName={subStepName}
+            isIndeterminate={false}
+          />
+          <PipelineControls
+            isRunning={isGenerating}
+            isPaused={isPaused}
+            canSkip={true}
+            canRetry={false}
+            onAction={(action) => {
+              switch (action) {
+                case 'pause': handlePause(); break;
+                case 'resume': handleResume(); break;
+                case 'skip': handleSkip(); break;
+                case 'cancel': handleCancel(); break;
+              }
+            }}
+          />
         </div>
       )}
 
       {/* Result Section */}
       {result && !isGenerating && (
-        <div className="space-y-6">
-          {/* Metadata */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="font-semibold mb-3">📊 生成统计</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-              <div>
-                <span className="text-gray-500">章节</span>
-                <p className="text-lg font-medium">{result.metadata.chaptersCount}</p>
-              </div>
-              <div>
-                <span className="text-gray-500">事件</span>
-                <p className="text-lg font-medium">{result.metadata.eventsCount}</p>
-              </div>
-              <div>
-                <span className="text-gray-500">角色</span>
-                <p className="text-lg font-medium">{result.metadata.charactersCount}</p>
-              </div>
-              <div>
-                <span className="text-gray-500">场景</span>
-                <p className="text-lg font-medium">{result.metadata.scenesCount}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Evaluation Score */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="font-semibold mb-3">⭐ 质量评分</h3>
-            <div className="flex items-center gap-6">
-              <div className="text-center">
-                <p className={`text-5xl font-bold ${getGradeColor(result.metadata.grade)}`}>
-                  {result.metadata.grade}
-                </p>
-                <p className="text-sm text-gray-500">等级</p>
-              </div>
-              <div className="flex-1">
-                <div className="flex justify-between text-sm mb-1">
-                  <span>综合评分</span>
-                  <span className="font-medium">{result.metadata.evaluationScore}/100</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className={`h-2 rounded-full ${
-                      result.metadata.evaluationScore >= 80 ? 'bg-green-500' :
-                      result.metadata.evaluationScore >= 60 ? 'bg-yellow-500' : 'bg-red-500'
-                    }`}
-                    style={{ width: `${result.metadata.evaluationScore}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Script Preview */}
-          <div className="bg-white border rounded-lg p-4">
-            <h3 className="font-semibold mb-3">🎬 剧本预览</h3>
-            <div className="space-y-3">
-              {result.script.scenes.slice(0, 5).map(scene => (
-                <div key={scene.id} className="border-b pb-3 last:border-b-0">
-                  <div className="flex gap-2 text-xs text-gray-500 mb-1">
-                    <span>场景{scene.sceneNumber}</span>
-                    <span>•</span>
-                    <span>{scene.location}</span>
-                    <span>•</span>
-                    <span>{scene.timeOfDay}</span>
-                    <span>•</span>
-                    <span className={
-                      scene.emotion === 'happy' ? 'text-green-500' :
-                      scene.emotion === 'sad' ? 'text-blue-500' :
-                      scene.emotion === 'tense' ? 'text-orange-500' :
-                      scene.emotion === 'angry' ? 'text-red-500' : 'text-gray-500'
-                    }>
-                      {scene.emotion}
-                    </span>
-                  </div>
-                  <p className="text-sm">{scene.content.slice(0, 100)}...</p>
-                  <div className="flex gap-2 mt-1">
-                    <span className="text-xs px-2 py-0.5 bg-gray-100 rounded">
-                      {scene.cameraHint}
-                    </span>
-                    <span className="text-xs px-2 py-0.5 bg-gray-100 rounded">
-                      {scene.type}
-                    </span>
-                    <span className="text-xs px-2 py-0.5 bg-gray-100 rounded">
-                      {scene.transition}
-                    </span>
-                  </div>
-                </div>
-              ))}
-              {result.script.scenes.length > 5 && (
-                <p className="text-sm text-gray-500 text-center">
-                  还有 {result.script.scenes.length - 5} 个场景...
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Characters */}
-          {result.script.characters.length > 0 && (
-            <div className="bg-white border rounded-lg p-4">
-              <h3 className="font-semibold mb-3">👥 角色列表</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {result.script.characters.map(char => (
-                  <div key={char.id} className="border rounded p-3">
-                    <p className="font-medium">{char.name}</p>
-                    <p className="text-xs text-gray-500">{char.personality}</p>
-                    <p className="text-xs text-gray-400 mt-1">{char.speakingStyle}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+        <GenerationResult
+          title={result.script.title}
+          grade={result.metadata.grade}
+          evaluationScore={result.metadata.evaluationScore}
+          metadata={{
+            chaptersCount: result.metadata.chaptersCount,
+            eventsCount: result.metadata.eventsCount,
+            charactersCount: result.metadata.charactersCount,
+            scenesCount: result.metadata.scenesCount,
+          }}
+          scenes={result.script.scenes.map(s => ({
+            id: s.id,
+            sceneNumber: s.sceneNumber,
+            location: s.location,
+            timeOfDay: s.timeOfDay,
+            emotion: s.emotion,
+            content: s.content,
+            cameraHint: s.cameraHint,
+            type: s.type,
+            transition: s.transition,
+          }))}
+          characters={result.script.characters.map(c => ({
+            id: c.id,
+            name: c.name,
+            personality: c.personality,
+            speakingStyle: c.speakingStyle,
+          }))}
+          maxScenesToShow={5}
+        />
       )}
     </div>
   );
