@@ -120,8 +120,8 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
 
     try {
       const characterData = templateToCharacter(selectedTemplate, {
-        name: name || selectedTemplate.name,
-        description: description || selectedTemplate.description,
+        name: name ?? selectedTemplate.name,
+        description: description ?? selectedTemplate.description,
       });
       const now = new Date().toISOString();
       
@@ -130,7 +130,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
         id: generateId(),
         createdAt: now,
         updatedAt: now,
-        expressions: characterData.expressions || [],
+        expressions: characterData.expressions ?? [],
       };
 
       const newChars = [...characters, newCharacter];
@@ -170,7 +170,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
     setSelectedTemplate(null);
     setEditingId(character.id);
     setAvatarUrl(undefined);
-    setClothingItems((character.clothing || []) as ClothingItem[]);
+    setClothingItems((character.clothing ?? []) as ClothingItem[]);
     form.setFieldsValue({
       name: character.name,
       role: character.role,
@@ -232,26 +232,26 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
       const now = new Date().toISOString();
 
       // 确保 consistency.seed 存在
-      const consistency = values.consistency || {
+      const consistency = values.consistency ?? {
         seed: editingId 
           ? (characters.find(c => c.id === editingId)?.consistency as CharacterConsistency)?.seed 
           : Math.floor(Math.random() * 10000)
       };
 
       const newCharacter: Character = {
-        id: editingId || generateId(),
+        id: editingId ?? generateId(),
         name: values.name,
-        role: values.role || 'supporting',
-        description: values.description || '',
+        role: values.role ?? 'supporting',
+        description: values.description ?? '',
         appearance: values.appearance,
-        clothing: clothingItems.length > 0 ? clothingItems : (values.clothing || []),
+        clothing: clothingItems.length > 0 ? clothingItems : (values.clothing ?? []),
         expressions: editingId
-          ? characters.find(c => c.id === editingId)?.expressions || []
+          ? characters.find(c => c.id === editingId)?.expressions ?? []
           : [],
         consistency,
         voice: values.voice,
-        tags: values.tags || [],
-        createdAt: editingId ? characters.find(c => c.id === editingId)?.createdAt || now : now,
+        tags: values.tags ?? [],
+        createdAt: editingId ? characters.find(c => c.id === editingId)?.createdAt ?? now : now,
         updatedAt: now,
       };
 
@@ -290,7 +290,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
     const reader = new FileReader();
     reader.onload = () => {
       const url = reader.result as string;
-      const currentId = editingId || 'new';
+      const currentId = editingId ?? 'new';
       setExpressionImages(prev => ({
         ...prev,
         [currentId]: [...(prev[currentId] || []), url],
@@ -733,7 +733,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
                   <Button icon={<Image />}>添加表情</Button>
                 </label>
                 <div className={styles.exprList}>
-                  {(expressionImages[editingId || 'new'] || []).map((img, idx) => (
+                  {(expressionImages[editingId ?? 'new'] ?? []).map((img, idx) => (
                     <img key={idx} src={img} alt={`expr-${idx}`} className={styles.exprThumb} />
                   ))}
                 </div>

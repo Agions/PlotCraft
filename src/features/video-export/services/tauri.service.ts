@@ -330,10 +330,7 @@ class TauriService {
 let tauriService: TauriService | null = null;
 
 export function getTauriService(): TauriService {
-  if (!tauriService) {
-    tauriService = new TauriService();
-  }
-  return tauriService;
+  return tauriService ??= new TauriService();
 }
 
 export default TauriService;

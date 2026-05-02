@@ -107,7 +107,7 @@ export default [
       '@typescript-eslint/ban-ts-comment': 'warn',
       '@typescript-eslint/no-restricted-types': 'warn',
       '@typescript-eslint/prefer-optional-chain': 'warn',
-      '@typescript-eslint/prefer-nullish-coalescing': 'warn',
+      '@typescript-eslint/prefer-nullish-coalescing': 'off',
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
       'react/display-name': 'off',

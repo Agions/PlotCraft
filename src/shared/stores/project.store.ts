@@ -123,8 +123,8 @@ export const useProjectStore = create<ProjectState>()(
       createProject: (projectData) => {
         const newProject: ProjectData = {
           id: `project_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-          name: projectData.name || '未命名项目',
-          description: projectData.description || '',
+          name: projectData.name ?? '未命名项目',
+          description: projectData.description ?? '',
           status: 'draft',
           videos: [],
           scripts: [],
@@ -160,7 +160,7 @@ export const useProjectStore = create<ProjectState>()(
           return {
             projects,
             currentProject: state.currentProject?.id === id
-              ? updatedProject || null
+              ? updatedProject ?? null
               : state.currentProject
           };
         });
@@ -184,7 +184,7 @@ export const useProjectStore = create<ProjectState>()(
         if (project) {
           set({ currentProject: project });
         }
-        return project || null;
+        return project ?? null;
       },
 
       // 脚本操作
@@ -208,7 +208,7 @@ export const useProjectStore = create<ProjectState>()(
           return {
             projects,
             currentProject: state.currentProject?.id === projectId
-              ? updatedProject || null
+              ? updatedProject ?? null
               : state.currentProject
           };
         });
@@ -236,7 +236,7 @@ export const useProjectStore = create<ProjectState>()(
           return {
             projects,
             currentProject: state.currentProject?.id === projectId
-              ? updatedProject || null
+              ? updatedProject ?? null
               : state.currentProject
           };
         });
@@ -262,7 +262,7 @@ export const useProjectStore = create<ProjectState>()(
           return {
             projects,
             currentProject: state.currentProject?.id === projectId
-              ? updatedProject || null
+              ? updatedProject ?? null
               : state.currentProject
           };
         });
@@ -289,7 +289,7 @@ export const useProjectStore = create<ProjectState>()(
           return {
             projects,
             currentProject: state.currentProject?.id === projectId
-              ? updatedProject || null
+              ? updatedProject ?? null
               : state.currentProject
           };
         });
@@ -315,7 +315,7 @@ export const useProjectStore = create<ProjectState>()(
           return {
             projects,
             currentProject: state.currentProject?.id === projectId
-              ? updatedProject || null
+              ? updatedProject ?? null
               : state.currentProject
           };
         });

@@ -139,7 +139,7 @@ export class ScriptStep implements PipelineStep {
   }
 
   private buildScriptPrompt(chapters: ImportOutput['chapters'], analysisResult?: ImportOutput): string {
-    const genre = analysisResult?.metadata?.title || '通用';
+    const genre = analysisResult?.metadata?.title ?? '通用';
     const sceneCount = chapters.length;
 
     return `你是专业的视频剧本作家。请根据以下故事内容生成适合AI视频制作的剧本。
@@ -213,7 +213,7 @@ ${chapters.map((ch, i) => `【第${i + 1}章】${ch.title}\n${ch.content.slice(0
         duration: 60,
         shots: 3,
       }],
-      totalDuration: scenes.reduce((sum, s) => sum + (s.duration || 30), 0),
+      totalDuration: scenes.reduce((sum, s) => sum + (s.duration ?? 30), 0),
     };
   }
 }
