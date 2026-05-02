@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/utils/class-names';
 
 import { useTheme } from '@/context/ThemeContext';
 import { getStatusConfig, formatDate } from '@/shared/utils/format-ui';

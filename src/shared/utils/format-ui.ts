@@ -3,7 +3,7 @@
  * 提供项目状态、徽章样式、日期格式化等公共函数
  */
 
-import type { Project } from '@/features/home/components/Home/ProjectGrid';
+import type { Project } from '@/features/home/components/ProjectGrid';
 
 export type ProjectStatus = 'draft' | 'processing' | 'completed' | 'archived';
 
