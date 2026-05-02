@@ -1,6 +1,12 @@
 /**
- * @core/utils - Backward compatibility re-export from shared/utils
- * @deprecated Use @shared/utils instead
+ * 统一工具导出
  */
-export * from '@/shared/utils';
-export { logger, createLogger, consoleLogger, LogLevel } from './logger';
+
+export * from './http-client';
+export * from './logger';
+export * from './hooks';
+export * from './requestCache';
+export * from './retryRequest';
+export * from './idle';
+export * from './motion';
+export * from './platform';
