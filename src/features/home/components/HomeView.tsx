@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
+
 import { Separator } from '@/components/ui/separator';
+import { useProjectStore } from '@/shared/stores/project.store';
 
 import styles from './Home.module.less';
-import { useProjectStore } from '@/shared/stores/project.store';
 
 import {
   HeroSection,

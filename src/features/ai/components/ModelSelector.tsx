@@ -3,6 +3,7 @@
  * 专业的 AI 模型选择界面
  */
 
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bot,
   CheckCircle,
@@ -14,7 +15,6 @@ import {
   Search,
   Loader2
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import React, { useState, useMemo } from 'react';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -26,7 +26,6 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip } from '@/components/ui/tooltip';
-
 import { MODEL_PROVIDERS } from '@/core/config/models.config';
 import { LLM_MODELS } from '@/core/constants';
 import { useModel, useModelCost, useRecommendedModel } from '@/core/hooks/useModel';

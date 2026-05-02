@@ -1,7 +1,7 @@
 import { Video, Star, Flame } from 'lucide-react';
 import React from 'react';
-import { Card } from '@/components/ui/card';
 
+import { Card } from '@/components/ui/card';
 import { useTheme } from '@/context/ThemeContext';
 import type { ProjectData } from '@/shared/types';
 

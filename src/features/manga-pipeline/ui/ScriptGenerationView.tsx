@@ -1,7 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { PipelineProgress } from '@/shared/components/pipeline/PipelineProgress';
+
 import { GenerationResult } from '@/shared/components/pipeline/GenerationResult';
 import { PipelineControls } from '@/shared/components/pipeline/PipelineControls';
+import { PipelineProgress } from '@/shared/components/pipeline/PipelineProgress';
+
 import { ScriptGenerationPipeline, ScriptGenerationResult } from '../steps/step1-script-generation/pipeline-controller';
 import type { Script } from '../steps/step1-script-generation/types/script';
 

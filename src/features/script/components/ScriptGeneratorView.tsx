@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
+import { Alert } from '@/components/ui/alert';
+import { Space } from '@/components/ui/antd-compat';
+import { Card } from '@/components/ui/card';
+
 import NovelImporter from './NovelImporter';
 import ScriptGenerator from './ScriptGenerator';
-import { Card } from '@/components/ui/card';
-import { Space } from '@/components/ui/antd-compat';
-import { Alert } from '@/components/ui/alert';
 import styles from './ScriptGeneratorView.module.less';
 
 /**

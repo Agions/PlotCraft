@@ -4,14 +4,12 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { EmptyState } from '@/shared/components/ui';
-import { Skeleton } from '@/shared/components/ui';
 import { toast } from '@/components/ui/sonner';
-
-import type { ProjectData } from '@/shared/types';
-import { useProjectStore } from '@/shared/stores/project.store';
-import { formatDate } from '@/shared/utils/format-ui';
 import { logger } from '@/core/utils/logger';
+import { EmptyState , Skeleton } from '@/shared/components/ui';
+import { useProjectStore } from '@/shared/stores/project.store';
+import type { ProjectData } from '@/shared/types';
+import { formatDate } from '@/shared/utils/format-ui';
 
 import styles from './ProjectListView.module.less';
 

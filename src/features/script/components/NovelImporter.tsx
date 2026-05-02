@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
 import { Upload, FileText, Trash2 } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Card } from '@/components/ui/card';
-import { Loading } from '@/shared/components/ui';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
 
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
 import { scriptImportService, tauriService } from '@/core/services';
 import type { ScriptChapter, ScriptSource, ScriptValidationResult } from '@/core/types';
 import { logger } from '@/core/utils/logger';
+import { Loading } from '@/shared/components/ui';
 
 import styles from './NovelImporter.module.less';
 

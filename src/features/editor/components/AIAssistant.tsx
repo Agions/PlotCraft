@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
 import { 
   Bot, Send, Scissors, Radio, Lightbulb, Zap, FlaskConical, CircleQuestionMark as HelpCircle, Languages
 } from 'lucide-react';
+import React, { useState } from 'react';
+
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 import {
   Select,
   SelectContent,
@@ -16,24 +19,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import { Slider } from '@/components/ui/slider';
-import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Text, Title, Paragraph } from '@/components/ui/typography';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { Text, Title, Paragraph } from '@/components/ui/typography';
 
 import styles from './AIAssistant.module.less';
 

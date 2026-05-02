@@ -3,8 +3,9 @@
  * 统一的 HTTP 请求管理
  */
 
-import { toast } from '@/shared/components/ui';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+
+import { toast } from '@/shared/components/ui';
 
 // 请求配置
 interface RequestConfig extends AxiosRequestConfig {

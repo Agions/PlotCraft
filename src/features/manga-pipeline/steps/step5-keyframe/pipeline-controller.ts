@@ -9,8 +9,9 @@
  * 5. 合成视频
  */
 
-import { BasePipelineController } from '../../base/BasePipelineController';
 import { StepInput, StepOutput } from '@/core/pipeline/step.interface';
+
+import { BasePipelineController } from '../../base/BasePipelineController';
 
 export enum MotionType {
   FADE = 'fade',           // 淡入淡出

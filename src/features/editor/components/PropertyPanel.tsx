@@ -5,16 +5,9 @@ import {
   Save,
   Download
 } from 'lucide-react';
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from '@/components/ui/tabs';
+import React, { useMemo } from 'react';
+
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
-import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectTrigger,
@@ -23,7 +16,16 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import React, { useMemo } from 'react';
+import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+
 
 import styles from './PropertyPanel.module.less';
 

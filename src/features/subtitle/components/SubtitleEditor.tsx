@@ -14,6 +14,9 @@ import {
   Eye,
   Copy,
 } from 'lucide-react';
+import React, { useState } from 'react';
+
+import { Badge } from '@/components/ui/badge';
 import {
   Button,
 } from '@/components/ui/button';
@@ -23,6 +26,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -30,20 +34,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
-import { Badge } from '@/components/ui/badge';
-import { Text, Title, Paragraph } from '@/components/ui/typography';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Separator } from '@/components/ui/separator';
-import React, { useState } from 'react';
-
+import { Text, Title, Paragraph } from '@/components/ui/typography';
 import { useTheme } from '@/context/ThemeContext';
 
 import styles from './SubtitleEditor.module.less';

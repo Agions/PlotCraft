@@ -77,7 +77,7 @@ export const mockApiError = (message: string, status = 500): Promise<never> => {
 /**
  * 创建模拟函数
  */
-export const createMockFn = <T extends (...args: never[]) => unknown>(
+export const createMockFn = (
   returnValue?: ReturnType<typeof jest.fn>
 ): jest.Mock => {
   return jest.fn(() => returnValue);

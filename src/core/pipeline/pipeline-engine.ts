@@ -3,10 +3,11 @@
  * 重构版本：支持检查点恢复、中间件、事件驱动
  */
 
+import { logger } from '@/core/utils/logger';
+
+import { saveCheckpoint, loadCheckpoint, hasCheckpoint } from './checkpoint';
 import { PipelineStatus, type PipelineExecutionState, PipelineContext } from './pipeline.types';
 import { PipelineStep, StepInput, StepOutput, PipelineOptions } from './step.interface';
-import { saveCheckpoint, loadCheckpoint, hasCheckpoint } from './checkpoint';
-import { logger } from '@/core/utils/logger';
 
 export type { PipelineStep };
 

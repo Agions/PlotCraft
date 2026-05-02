@@ -1,5 +1,5 @@
-export interface StepInput extends Record<string, unknown> {}
-export interface StepOutput extends Record<string, unknown> {}
+export type StepInput = Record<string, unknown>
+export type StepOutput = Record<string, unknown>
 
 export interface CheckpointState<S = unknown> {
   stepId: string;

@@ -5,9 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Tooltip } from '@/components/ui/tooltip';
 import { toast } from '@/components/ui/sonner';
-
+import { Tooltip } from '@/components/ui/tooltip';
 import { tauriService } from '@/core/services';
 import type { ScriptData } from '@/core/types';
 import { logger } from '@/core/utils/logger';

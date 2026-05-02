@@ -1,3 +1,5 @@
+import { convertFileSrc } from '@tauri-apps/api/core';
+import { open } from '@tauri-apps/plugin-dialog';
 import {
   Upload,
   Trash2,
@@ -10,21 +12,18 @@ import {
   MicOff,
   Folder,
 } from 'lucide-react';
-import { convertFileSrc } from '@tauri-apps/api/core';
-import { open } from '@tauri-apps/plugin-dialog';
 import React, { useState, useRef, useEffect } from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+
+import { message, Space, Tag, Row, Col, Table, Empty, Progress } from '@/components/ui/antd-compat';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Popconfirm, AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from '@/components/ui/confirm-dialog';
+import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { message, Space, Tag, Row, Col, Table, Empty, Progress } from '@/components/ui/antd-compat';
-import { Popconfirm, AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from '@/components/ui/confirm-dialog';
-
-
 import { logger } from '@/core/utils/logger';
 
 import styles from './AudioEditor.module.less';

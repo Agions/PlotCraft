@@ -12,6 +12,8 @@ import {
   Palette,
   Settings,
 } from 'lucide-react';
+import React from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
@@ -20,7 +22,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import React from 'react';
 
 import styles from './AIFeaturePanel.module.less';
 

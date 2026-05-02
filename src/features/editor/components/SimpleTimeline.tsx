@@ -11,9 +11,10 @@ import {
   GripVertical,
   Video
 } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Tooltip } from '@/components/ui/tooltip';
-import React, { useRef, useState } from 'react';
 
 import styles from './SimpleTimeline.module.less';
 

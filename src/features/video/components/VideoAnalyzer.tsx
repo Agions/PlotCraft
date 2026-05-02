@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { toast } from '@/components/ui/sonner';
-
 import { logger } from '@/core/utils/logger';
 import type { VideoAnalysis, KeyMoment, EmotionAnalysis } from '@/types';
 

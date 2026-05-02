@@ -3,8 +3,8 @@
  * 根据配置创建合适的 Provider 实例
  */
 
-import { OpenAICompatibleProvider } from './openai-compatible.provider';
 import type { AIProvider, AIProviderConfig } from './ai-provider.interface';
+import { OpenAICompatibleProvider } from './openai-compatible.provider';
 
 export type ProviderType = 'openai' | 'openrouter' | 'azure' | 'claude' | 'gemini' | 'custom';
 

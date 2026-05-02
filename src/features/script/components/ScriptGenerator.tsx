@@ -3,6 +3,7 @@
  * 专业的 AI 脚本生成界面
  */
 
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Edit,
   Zap,
@@ -15,22 +16,21 @@ import {
   Settings,
   DollarSign
 } from 'lucide-react';
-import { Card as CardBase } from '@/components/ui/card';
+import React, { useState, useCallback } from 'react';
+import { toast } from 'sonner';
+
+import { Alert, AlertTitle } from '@/components/ui/alert';
 import { Form, FormItem, useForm, Input, Select, Space, Divider, RadioGroup, Radio, RadioButton } from '@/components/ui/antd-compat';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Text, Title, Paragraph } from '@/components/ui/typography';
+import { Card as CardBase } from '@/components/ui/card';
+import { Empty } from '@/components/ui/empty';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
 import { Tag } from '@/components/ui/tag';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertTitle } from '@/components/ui/alert';
-import { Separator } from '@/components/ui/separator';
+import { Text, Title, Paragraph } from '@/components/ui/typography';
 import { Tooltip as TooltipRoot, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Badge } from '@/components/ui/badge';
-import { Empty } from '@/components/ui/empty';
-import { toast } from 'sonner';
-import { motion, AnimatePresence } from 'framer-motion';
-import React, { useState, useCallback } from 'react';
-
 import { useModel, useModelCost } from '@/core/hooks/useModel';
 import { useProject } from '@/core/hooks/useProject';
 import type { ScriptData, ScriptSegment } from '@/core/types';

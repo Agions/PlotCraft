@@ -3,10 +3,10 @@ import React from 'react';
 import AIAssistant from './AIAssistant';
 import AIFeaturePanel from './AIFeaturePanel';
 import AssetPanel from './AssetPanel';
+import styles from './EditorView.module.less';
 import Preview from './Preview';
 import PropertyPanel from './PropertyPanel';
 import Timeline from './Timeline';
-import styles from './EditorView.module.less';
 
 /**
  * 编辑器视图组件

@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
 import { Upload as LucideUpload, Search, MoreHorizontal, Video, Music, FileImage, FileText, Mic } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
 
+import { Dropdown, Upload as AntUpload } from '@/components/ui/antd-compat';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -9,12 +10,10 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/components/ui/tabs';
-import { Dropdown, Upload as AntUpload } from '@/components/ui/antd-compat';
-import { EmptyState } from '@/shared/components/ui';
-import { toast } from '@/shared/components/ui';
+import { logger } from '@/core/utils/logger';
+import { EmptyState , toast } from '@/shared/components/ui';
 import { assetService, Asset } from '@/shared/services/asset.service';
 import { formatDuration, formatSizeMB } from '@/utils/format';
-import { logger } from '@/core/utils/logger';
 
 import styles from './AssetPanel.module.less';
 
@@ -44,6 +43,7 @@ const AssetPanel: React.FC<AssetPanelProps> = ({ projectId }) => {
 
   useEffect(() => {
     loadAssets();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadAssets]);
 
   // 过滤显示的素材

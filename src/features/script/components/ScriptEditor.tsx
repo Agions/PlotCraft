@@ -1,3 +1,4 @@
+import { convertFileSrc } from '@tauri-apps/api/core';
 import {
   Edit3,
   Trash2,
@@ -8,7 +9,6 @@ import {
   ChevronDown,
   Sparkles
 } from 'lucide-react';
-import { convertFileSrc } from '@tauri-apps/api/core';
 import React, { useState, useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -37,7 +37,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from '@/components/ui/sonner';
-
 import { tauriService } from '@/core/services';
 import type { ScriptData, ScriptMetadata } from '@/core/types';
 import { logger } from '@/core/utils/logger';
@@ -109,6 +108,7 @@ const ScriptEditor: React.FC<ScriptEditorProps> = ({
   useEffect(() => {
     const duration = segments.reduce((sum, segment) => sum + (segment.end - segment.start), 0);
     setTotalDuration(duration);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [segments]);
 
   // 添加新片段

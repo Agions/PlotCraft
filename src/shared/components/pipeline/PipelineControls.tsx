@@ -1,5 +1,5 @@
-import React from 'react';
 import { Pause, Play, SkipForward, X, RotateCcw } from 'lucide-react';
+import React from 'react';
 
 export type PipelineAction = 'pause' | 'resume' | 'skip' | 'cancel' | 'retry';
 

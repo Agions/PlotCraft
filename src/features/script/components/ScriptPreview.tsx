@@ -7,11 +7,8 @@ import {
   Calendar
 } from 'lucide-react';
 import React, { useState } from 'react';
-
 import { toast } from 'sonner';
 
-import { logger } from '@/core/utils/logger';
-import type { Script } from '@/types';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -21,6 +18,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { logger } from '@/core/utils/logger';
+import type { Script } from '@/types';
 
 import styles from './ScriptPreview.module.less';
 

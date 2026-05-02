@@ -8,11 +8,11 @@
  * 4. 语音合成 (Voice Synthesis)
  */
 
+import { BasePipelineController, StepState } from '../base/BasePipelineController';
 import { ScriptGenerationPipeline, ScriptGenerationResult } from '../steps/step1-script-generation/pipeline-controller';
 import { composeStoryboard, Storyboard } from '../steps/step2-storyboard/storyboard-composer';
 import { MaterialMatchingPipeline, MaterialMatchingResult } from '../steps/step3-material-matching/pipeline-controller';
 import { VoiceSynthesisPipeline, VoiceSynthesisResult } from '../steps/step4-voice-synthesis/pipeline-controller';
-import { BasePipelineController, StepState } from '../base/BasePipelineController';
 
 export enum MangaPipelineStep {
   SCRIPT = 'script',

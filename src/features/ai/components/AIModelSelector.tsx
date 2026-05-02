@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import {
   Bot,
   CheckCircle,
@@ -11,7 +12,6 @@ import {
   Search,
   Image as ImageIcon
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';

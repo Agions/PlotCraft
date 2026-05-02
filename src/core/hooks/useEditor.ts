@@ -3,8 +3,9 @@
  * 提供基础的视频编辑状态管理
  */
 
-import { toast } from '@/shared/components/ui';
 import { useState, useCallback } from 'react';
+
+import { toast } from '@/shared/components/ui';
 
 export interface TimelineClip {
   id: string;

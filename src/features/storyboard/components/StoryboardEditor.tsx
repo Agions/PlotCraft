@@ -10,21 +10,20 @@ import {
   ArrowLeftRight,
 } from 'lucide-react';
 import React, { useState, useCallback, useEffect } from 'react';
-
 import { toast } from 'sonner';
 
-import { Slider } from '@/components/ui/slider';
+import { message, Tag, TextArea, Text, Title, Option, Select } from '@/components/ui/antd-compat';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
+import { Slider } from '@/components/ui/slider';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { message, Tag, TextArea, Text, Title, Option, Select } from '@/components/ui/antd-compat';
 
 import styles from './StoryboardEditor.module.less';
 

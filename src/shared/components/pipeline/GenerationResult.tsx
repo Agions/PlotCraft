@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { GradeBadge } from './GradeBadge';
 
 export interface ScenePreview {

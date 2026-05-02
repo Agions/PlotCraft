@@ -8,12 +8,12 @@ import {
 } from 'lucide-react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/shared/utils/class-names';
 
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTheme } from '@/context/ThemeContext';
+import { cn } from '@/shared/utils/class-names';
 import { getStatusConfig, formatDate } from '@/shared/utils/format-ui';
 
 import styles from './ProjectGrid.module.less';
