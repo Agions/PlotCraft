@@ -122,7 +122,8 @@ describe('工具函数测试', () => {
       const id2 = generateId();
 
       expect(id1).not.toBe(id2);
-      expect(id1).toMatch(/^\d+_[a-z0-9]+$/);
+      // Support both UUID format (crypto.randomUUID) and timestamp format fallback
+      expect(id1).toMatch(/^([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}|\d+_[a-z0-9]+)$/);
     });
   });
 

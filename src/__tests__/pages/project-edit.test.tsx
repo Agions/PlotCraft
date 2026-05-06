@@ -15,22 +15,14 @@ jest.mock('react-router-dom', () => ({
   useLocation: () => ({ search: '' }),
 }));
 
+jest.mock('@/features/script/components/ScriptEditor', () => () => <div>ScriptEditor</div>);
 jest.mock('@/components/business/CostDashboard', () => () => <div data-testid="mock-cost-dashboard">CostDashboard</div>);
-jest.mock('@/components/business/NovelImporter', () => () => <div>NovelImporter</div>);
-jest.mock('@/components/business/ScriptEditor', () => () => <div>ScriptEditor</div>);
-jest.mock('@/components/business/RenderCenter', () => () => <div>RenderCenter</div>);
-jest.mock('@/components/business/AudioEditor', () => () => <div>AudioEditor</div>);
-jest.mock('@/components/business/VideoExporter', () => () => <div>VideoExporter</div>);
-jest.mock('@/components/business/StoryboardEditor', () => ({
-  __esModule: true,
-  default: ({ onFrameSelect }: { initialFrames: Array<{ id: string; title: string }>; onFrameSelect?: (frame: { id: string; title: string }) => void }) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      if (onFrameSelect) onFrameSelect({ id: 'frame-1', title: '镜头1' });
-    }, [onFrameSelect]);
-    return <div>StoryboardEditor</div>;
-  }
-}));
+jest.mock('@/features/storyboard/components/StoryboardEditor', ({ onFrameSelect }: { initialFrames: Array<{ id: string; title: string }>; onFrameSelect?: (frame: { id: string; title: string }) => void }) => {
+  React.useEffect(() => {
+    if (onFrameSelect) onFrameSelect({ id: 'frame-1', title: '镜头1' });
+  }, [onFrameSelect]);
+  return <div>StoryboardEditor</div>;
+});
 
 jest.mock('@/core/services', () => ({
   tauriService: {

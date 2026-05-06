@@ -3,6 +3,27 @@
  * 集中管理所有常量
  */
 
+// ============================================================
+// LLM Model Types
+// ============================================================
+export interface LLMModelConfig {
+  provider: string;
+  name: string;
+  modelId: string;
+  version: string;
+  maxTokens: number;
+  contextWindow: number;
+  supportsStreaming: boolean;
+  supportsFunctionCalling: boolean;
+  pricing: { input: number; output: number };
+  capabilities: string[];
+  recommended: boolean;
+}
+
+export interface LLMModels {
+  [key: string]: LLMModelConfig;
+}
+
 // 脚本风格
 export const SCRIPT_STYLES = [
   { value: 'professional', label: '专业正式', desc: '适合商业、教育类视频' },
@@ -304,7 +325,7 @@ export const ANIMATION_CONFIG = {
 
 // LLM 模型配置（2026年最新）
 // 数据来源：各厂商官方 API 文档
-export const LLM_MODELS = {
+export const LLM_MODELS: LLMModels = {
   // 百度千帆 - ERNIE 5.0
   // API: https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/ernie-5.0
   BAIDU: {

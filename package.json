@@ -12,6 +12,7 @@
     "build:check": "tsc && vite build",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "prepare": "husky install",
     "preview": "vite preview",
     "tauri": "tauri",
     "docs": "npm run docs:api && ts-node scripts/generate-docs.ts",
@@ -20,10 +21,11 @@
     "docs:dev": "docsify serve docs",
     "evaluate:regression": "ts-node scripts/run-evaluation.ts",
     "test": "jest",
-    "test:pages": "jest --runInBand src/__tests__/pages/project-edit.test.tsx src/__tests__/pages/project-detail.test.tsx",
+    "test:fast": "jest --coverage --maxWorkers=4",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:ci": "npm run test:ci:core",
+    "test:changed": "jest --onlyChanged",
+    "test:ci": "npm run test -- --runInBand --coverage && npm run build:check",
     "test:ci:core": "npm test -- --runInBand src/__tests__/services/review-export.service.test.ts src/__tests__/services/collaboration.service.test.ts src/__tests__/services/cost.service.test.ts src/__tests__/services/evaluation.service.test.ts src/__tests__/services/quality-gate.service.test.ts src/__tests__/utils/idle.test.ts src/__tests__/router/page-preload.test.ts && npm run build:check",
     "test:ci:full": "jest --ci --reporters=default",
     "docs:vp:build": "vitepress build docs",
@@ -53,7 +55,7 @@
     "@tauri-apps/plugin-notification": "^2.3.3",
     "@tauri-apps/plugin-store": "^2.4.2",
     "@types/file-saver": "^2.0.7",
-    "axios": "^1.6.0",
+    "axios": "^1.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
@@ -71,7 +73,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.74.0",
     "react-i18next": "^15.4.1",
-    "react-router-dom": "^6.18.0",
+    "react-router-dom": "^7.15.0",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
     "uuid": "^14.0.0",
@@ -80,7 +82,9 @@
     "zustand": "^4.4.6"
   },
   "devDependencies": {
+    "@commitlint/config-conventional": "^20.5.3",
     "@tauri-apps/cli": "^2.0.0",
+    "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/jest": "^30.0.0",
@@ -92,6 +96,7 @@
     "@typescript-eslint/parser": "^8.59.0",
     "@vitejs/plugin-react": "^4.0.3",
     "autoprefixer": "^10.5.0",
+    "commitlint": "^20.5.3",
     "docsify-cli": "^4.4.2",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
@@ -104,16 +109,27 @@
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "less": "^4.2.0",
+    "lint-staged": "^17.0.1",
     "prettier": "^3.8.3",
+
     "tailwindcss": "^3.4.19",
     "terser": "^5.46.0",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.1",
     "typedoc": "^0.24.8",
-    "typescript": "^5.0.2",
+    "typescript": "^5.4.0",
     "unplugin-auto-import": "^21.0.0",
     "vite": "^4.4.4",
     "vite-plugin-compression": "^0.5.1",
     "vitepress": "^1.6.4"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css}": [
+      "prettier --write"
+    ]
   }
 }

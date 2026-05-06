@@ -1,4 +1,4 @@
-import { PipelineStep, StepInput, StepOutput } from '../../../../core/pipeline/step.interface';
+import { PipelineStep, StepInput, StepOutput, CheckpointState } from '../../../../core/pipeline/step.interface';
 import { Script } from '../step1-script-generation/types/script';
 
 import { selectBGM, BGMSelection } from './services/bgm-selector';
@@ -20,11 +20,11 @@ export interface VoiceSynthesisResult {
   };
 }
 
-export class VoiceSynthesisPipeline implements PipelineStep {
+export class VoiceSynthesisPipeline implements PipelineStep<VoiceSynthesisResult> {
   id = 'voice-synthesis';
   name = 'Voice Synthesis';
 
-  private _checkpoint: any = null;
+  private _checkpoint: CheckpointState<VoiceSynthesisResult> | null = null;
 
   async process(input: StepInput): Promise<StepOutput> {
     const { script } = input as StepInput & { script: Script };
@@ -72,7 +72,7 @@ export class VoiceSynthesisPipeline implements PipelineStep {
     return this._checkpoint;
   }
 
-  restore(state: any) {
+  restore(state: CheckpointState<VoiceSynthesisResult>) {
     this._checkpoint = state;
   }
 }

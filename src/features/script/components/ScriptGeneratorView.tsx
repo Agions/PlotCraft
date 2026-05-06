@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Alert } from '@/components/ui/alert';
 import { Card } from '@/components/ui/card';
 import { Space } from '@/components/ui/ui-components';
+import type { NovelMetadata } from './NovelImporter';
 
 import NovelImporter from './NovelImporter';
 import ScriptGenerator from './ScriptGenerator';
@@ -13,10 +14,10 @@ import styles from './ScriptGeneratorView.module.less';
  * 组合 NovelImporter 和 ScriptGenerator
  */
 const ScriptGeneratorView: React.FC = () => {
-  const [novelMetadata, setNovelMetadata] = useState<any>(null);
+  const [novelMetadata, setNovelMetadata] = useState<NovelMetadata | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const handleNovelImport = (metadata: any) => {
+  const handleNovelImport = (metadata: NovelMetadata) => {
     setNovelMetadata(metadata);
   };
 

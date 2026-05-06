@@ -9,7 +9,7 @@ import styles from './AudioEditorView.module.less';
  */
 interface AudioEditorViewProps {
   projectId?: string;
-  onSave?: (config: any) => void;
+  onSave?: (config: unknown) => void;
 }
 
 const AudioEditorView: React.FC<AudioEditorViewProps> = ({ projectId, onSave }) => {

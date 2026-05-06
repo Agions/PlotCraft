@@ -23,7 +23,7 @@ export interface Scene {
   tags: string[];
   type?: string;
   confidence?: number;
-  features?: any;
+  features?: Record<string, unknown>;
   objectCount?: number;
   dominantEmotion?: string;
 }

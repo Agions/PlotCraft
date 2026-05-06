@@ -48,6 +48,11 @@ jest.mock('@tauri-apps/api', () => ({
 }));
 
 jest.mock('@/components/business/CostDashboard', () => () => <div data-testid="mock-cost-dashboard">CostDashboard</div>);
+jest.mock('@/features/script/components/ScriptEditor', () => () => <div data-testid="mock-script-editor">ScriptEditor</div>);
+jest.mock('@/components/business/RenderCenter', () => () => <div data-testid="mock-render-center">RenderCenter</div>);
+jest.mock('@/features/character/components/CharacterDesigner', () => () => <div data-testid="mock-character-designer">CharacterDesigner</div>);
+jest.mock('@/components/business/CompositionStudio', () => () => <div data-testid="mock-composition-studio">CompositionStudio</div>);
+jest.mock('@/features/audio/components/AudioEditor', () => () => <div data-testid="mock-audio-editor">AudioEditor</div>);
 
 describe('ProjectDetail page collaboration regression', () => {
   beforeEach(() => {

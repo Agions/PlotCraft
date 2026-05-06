@@ -10,7 +10,7 @@ import styles from './SubtitleEditorView.module.less';
 interface SubtitleEditorViewProps {
   projectId?: string;
   videoPath?: string;
-  onSave?: (subtitleData: any) => void;
+  onSave?: (subtitleData: unknown) => void;
 }
 
 const SubtitleEditorView: React.FC<SubtitleEditorViewProps> = ({ projectId: _projectId, videoPath: _videoPath, onSave: _onSave }) => {

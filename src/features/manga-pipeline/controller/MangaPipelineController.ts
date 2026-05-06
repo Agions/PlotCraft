@@ -9,6 +9,7 @@
  */
 
 import { BasePipelineController, StepState } from '../base/BasePipelineController';
+import { StepOutput } from '@/core/pipeline/step.interface';
 import { ScriptGenerationPipeline, ScriptGenerationResult } from '../steps/step1-script-generation/pipeline-controller';
 import { composeStoryboard, Storyboard } from '../steps/step2-storyboard/storyboard-composer';
 import { MaterialMatchingPipeline, MaterialMatchingResult } from '../steps/step3-material-matching/pipeline-controller';
@@ -21,6 +22,12 @@ export enum MangaPipelineStep {
   MATERIAL = 'material',
   VOICE = 'voice',
   KEYFRAME = 'keyframe',
+}
+
+export interface MangaPipelineInput {
+  text: string;
+  title?: string;
+  style?: string;
 }
 
 export interface MangaPipelineState {
@@ -130,7 +137,7 @@ export class MangaPipelineController extends BasePipelineController {
     return start + (stepProgress / 100) * (end - start);
   }
 
-  protected async _doProcess(input: any): Promise<any> {
+  protected async _doProcess(input: MangaPipelineInput): Promise<MangaPipelineResult> {
     const { text, title, style = 'anime' } = input;
 
     this.result = {};
@@ -140,7 +147,7 @@ export class MangaPipelineController extends BasePipelineController {
       // ============ Step 1: Script Generation ============
       this.emitProgress(MangaPipelineStep.SCRIPT, 0, '解析文本');
       const scriptOutput = await this.scriptPipeline.process({ text, title });
-      const scriptResult = (scriptOutput as any).scriptGeneration as ScriptGenerationResult;
+      const scriptResult = (scriptOutput as StepOutput).scriptGeneration as ScriptGenerationResult;
       this.result.scriptResult = scriptResult;
       this.emitProgress(MangaPipelineStep.SCRIPT, 100, '质量评估');
       await this.pauseCheck();

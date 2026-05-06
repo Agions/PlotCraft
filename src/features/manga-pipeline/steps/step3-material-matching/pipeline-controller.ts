@@ -14,11 +14,11 @@ export interface MaterialMatchingResult {
   coverage: number;  // 0-1，有素材覆盖的场景比例
 }
 
-export class MaterialMatchingPipeline implements PipelineStep {
+export class MaterialMatchingPipeline implements PipelineStep<MaterialMatchingResult> {
   id = 'material-matching';
   name = 'Material Matching';
 
-  private _checkpoint: any = null;
+  private _checkpoint: CheckpointState<MaterialMatchingResult> | null = null;
 
   async process(input: StepInput): Promise<StepOutput> {
     const { storyboard } = input as StepInput & { storyboard: Storyboard };
@@ -58,7 +58,7 @@ export class MaterialMatchingPipeline implements PipelineStep {
     return this._checkpoint;
   }
 
-  restore(state: any) {
+  restore(state: CheckpointState<MaterialMatchingResult>) {
     this._checkpoint = state;
   }
 }

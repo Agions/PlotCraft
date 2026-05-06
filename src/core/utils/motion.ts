@@ -13,7 +13,7 @@ export const transitions = {
 };
 
 // 缓动函数
-export const easings = {
+export const easings: Record<string, Easing> = {
   standard: [0.4, 0, 0.2, 1],
   decelerate: [0, 0, 0.2, 1],
   accelerate: [0.4, 0, 1, 1]
@@ -30,7 +30,7 @@ export const pageVariants: Variants = {
     y: 0,
     transition: {
       duration: 0.25,
-      ease: easings.standard as unknown as Easing
+      ease: easings.standard
     }
   },
   exit: {
@@ -38,7 +38,7 @@ export const pageVariants: Variants = {
     y: -20,
     transition: {
       duration: 0.2,
-      ease: easings.accelerate as unknown as Easing
+      ease: easings.accelerate
     }
   }
 };
@@ -73,7 +73,7 @@ export const listItemVariants: Variants = {
     transition: {
       delay: i * 0.05,
       duration: 0.25,
-      ease: easings.standard as unknown as Easing
+      ease: easings.standard
     }
   })
 };
@@ -89,7 +89,7 @@ export const cardHoverVariants: Variants = {
     boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
     transition: {
       duration: 0.2,
-      ease: easings.standard as unknown as Easing
+      ease: easings.standard
     }
   }
 };
@@ -118,15 +118,15 @@ export const skeletonVariants: Variants = {
  */
 export const createPageTransition = (customTransitions?: {
   duration?: number;
-  ease?: number[];
+  ease?: Easing;
 }) => ({
   ...pageVariants,
   animate: {
     ...pageVariants.animate,
     transition: {
-      ...(pageVariants.animate as any).transition,
+      ...pageVariants.animate.transition,
       duration: customTransitions?.duration,
-      ease: customTransitions?.ease as unknown as Easing | undefined
+      ease: customTransitions?.ease
     }
   }
 });

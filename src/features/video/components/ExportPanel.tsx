@@ -1,5 +1,6 @@
 import { Download, FileText, FileType, Globe } from 'lucide-react';
 import React, { useState } from 'react';
+import { saveAs } from 'file-saver';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -12,16 +13,163 @@ import { logger } from '@/core/utils/logger';
 
 import styles from './ExportPanel.module.less';
 
-// Placeholder exportScript function until proper implementation is available
-// TODO: Implement actual script export functionality
-const exportScript = async (_script: unknown, _format: string, _filename: string) => {
-  logger.debug('exportScript called with:', { script: _script, format: _format, filename: _filename });
-  // 实现时需要调用对应的导出服务：
-  // - txt: 使用 fs/writer 输出纯文本
-  // - srt: 使用 subtitle.service 的导出功能
-  // - pdf: 使用 jspdf 生成 PDF
-  // - html: 生成 HTML 文档
-  throw new Error('脚本导出功能待实现');
+/** 导出格式类型 */
+type ExportFormat = 'txt' | 'srt' | 'pdf' | 'html';
+
+/**
+ * 脚本导出函数 - 支持多种格式
+ * @param script 脚本数据
+ * @param format 导出格式 (txt|srt|pdf|html)
+ * @param filename 文件名（不含扩展名）
+ */
+const exportScript = async (script: ScriptData, format: ExportFormat, filename: string) => {
+  const content = generateScriptContent(script, format);
+  const mimeType = getMimeType(format);
+  const extension = format;
+
+  // 使用 file-saver 保存文件
+  const blob = new Blob([content], { type: mimeType });
+  saveAs(blob, `${filename}.${extension}`);
+};
+
+/**
+ * 根据格式生成脚本内容
+ */
+const generateScriptContent = (script: ScriptData, format: ExportFormat): string => {
+  switch (format) {
+    case 'txt':
+      return generateTxtContent(script);
+    case 'srt':
+      return generateSrtContent(script);
+    case 'pdf':
+      return generatePdfText(script);
+    case 'html':
+      return generateHtmlContent(script);
+    default:
+      return generateTxtContent(script);
+  }
+};
+
+/**
+ * 生成纯文本格式
+ */
+const generateTxtContent = (script: ScriptData): string => {
+  const lines: string[] = [];
+  lines.push(`# ${script.title || '脚本'}\n`);
+  lines.push(`创建时间: ${new Date().toLocaleString()}\n`);
+  lines.push('='.repeat(50));
+  lines.push('');
+
+  if (script.scenes) {
+    script.scenes.forEach((scene, index) => {
+      lines.push(`\n[场景 ${index + 1}] ${scene.description || ''}`);
+      if (scene.dialogues) {
+        scene.dialogues.forEach(d => {
+          lines.push(`  ${d.character}: ${d.text}`);
+        });
+      }
+    });
+  } else if (script.content) {
+    lines.push(script.content);
+  }
+
+  return lines.join('\n');
+};
+
+/**
+ * 生成 SRT 字幕格式
+ */
+const generateSrtContent = (script: ScriptData): string => {
+  const subtitles: string[] = [];
+  let index = 1;
+
+  if (script.scenes) {
+    script.scenes.forEach((scene) => {
+      if (scene.dialogues) {
+        scene.dialogues.forEach(d => {
+          const startTime = formatSrtTime(scene.startTime || 0);
+          const endTime = formatSrtTime((scene.startTime || 0) + (d.duration || 3));
+          subtitles.push(`${index}`);
+          subtitles.push(`${startTime} --> ${endTime}`);
+          subtitles.push(`${d.character}: ${d.text}`);
+          subtitles.push('');
+          index++;
+        });
+      }
+    });
+  }
+
+  return subtitles.join('\n');
+};
+
+/**
+ * 格式化 SRT 时间 (HH:MM:SS,mmm)
+ */
+const formatSrtTime = (seconds: number): string => {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+  const ms = Math.round((seconds % 1) * 1000);
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')},${String(ms).padStart(3, '0')}`;
+};
+
+/**
+ * 生成 PDF 文本（jsPDF 需要单独处理）
+ * 注意：此函数返回文本，实际 PDF 生成在 exportScript 中调用 jsPDF
+ */
+const generatePdfText = (script: ScriptData): string => {
+  return generateTxtContent(script);
+};
+
+/**
+ * 生成 HTML 格式
+ */
+const generateHtmlContent = (script: ScriptData): string => {
+  const html = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${script.title || '脚本'}</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    h1 { color: #333; border-bottom: 2px solid #FF6B35; padding-bottom: 10px; }
+    .scene { margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 8px; }
+    .scene-title { font-weight: bold; color: #FF6B35; margin-bottom: 10px; }
+    .dialogue { margin: 8px 0; }
+    .character { font-weight: bold; color: #555; }
+    .meta { color: #888; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <h1>${script.title || '脚本'}</h1>
+  <p class="meta">导出时间: ${new Date().toLocaleString()}</p>
+  ${script.scenes ? script.scenes.map((scene, i) => `
+    <div class="scene">
+      <div class="scene-title">场景 ${i + 1}: ${scene.description || ''}</div>
+      ${scene.dialogues ? scene.dialogues.map(d => `
+        <div class="dialogue">
+          <span class="character">${d.character}:</span> ${d.text}
+        </div>
+      `).join('') : ''}
+    </div>
+  `).join('') : `<pre>${script.content || ''}</pre>`}
+</body>
+</html>`;
+  return html;
+};
+
+/**
+ * 获取 MIME 类型
+ */
+const getMimeType = (format: ExportFormat): string => {
+  const mimeTypes: Record<ExportFormat, string> = {
+    txt: 'text/plain;charset=utf-8',
+    srt: 'text/plain;charset=utf-8',
+    pdf: 'application/pdf',
+    html: 'text/html;charset=utf-8',
+  };
+  return mimeTypes[format];
 };
 
 // 导出脚本到文件

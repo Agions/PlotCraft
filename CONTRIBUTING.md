@@ -152,19 +152,106 @@ npm run dev
 # Build
 npm run build
 
+# Type check
+npm run build:check
+
 # Run tests
 npm test
 
+# Fast tests with coverage
+npm run test:fast
+
+# Watch mode
+npm run test:watch
+
+# Run tests for changed files only
+npm run test:changed
+
+# Run tests with coverage report
+npm run test:coverage
+
 # Build Tauri desktop app
 npm run tauri build
+
+# Lint
+npm run lint
+
+# Auto-fix lint issues
+npm run lint:fix
 ```
 
-## Code Standards
+## Testing
 
 - Use TypeScript strict mode
 - Use functional components + Hooks
 - Follow React component decomposition principles
 - Use ESLint + Prettier formatting
+- Format commit messages using Conventional Commits
+
+## Commit Conventions
+
+We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
+
+```
+<type>(<scope>): <subject>
+
+[optional body]
+
+[optional footer]
+```
+
+### Types
+
+| Type | Description |
+|------|-------------|
+| `feat` | New feature |
+| `fix` | Bug fix |
+| `docs` | Documentation changes |
+| `style` | Code formatting (no logic change) |
+| `refactor` | Code refactoring |
+| `perf` | Performance improvement |
+| `test` | Adding or updating tests |
+| `build` | Build system changes |
+| `ci` | CI/CD configuration changes |
+| `chore` | Other changes |
+| `revert` | Reverting previous changes |
+
+### Examples
+
+```bash
+# Feature
+git commit -m "feat(editor): add video preview functionality"
+
+# Bug fix
+git commit -m "fix(workflow): resolve pipeline cancellation issue"
+
+# Documentation
+git commit -m "docs(readme): update installation instructions"
+
+# Refactoring
+git commit -m "refactor(services): extract common retry logic"
+```
+
+## Versioning & Releases
+
+We use `standard-version` for automated versioning and CHANGELOG generation.
+
+```bash
+# Patch release (bug fixes)
+npm run release:patch
+
+# Minor release (new features, backward compatible)
+npm run release:minor
+
+# Major release (breaking changes)
+npm run release:major
+```
+
+This will:
+1. Bump version in `package.json`
+2. Update `CHANGELOG.md`
+3. Create a git tag
+4. Commit changes
 
 ## Testing
 

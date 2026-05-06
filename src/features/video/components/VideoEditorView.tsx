@@ -2,6 +2,7 @@ import { convertFileSrc } from '@tauri-apps/api/core';
 import React, { useState } from 'react';
 
 import { Card } from '@/components/ui/card';
+import type { VideoAnalysis } from '@/shared/types/video';
 
 import VideoAnalyzer from './VideoAnalyzer';
 import styles from './VideoEditorView.module.less';
@@ -17,7 +18,7 @@ import VideoUploader from './VideoUploader';
  */
 const VideoEditorView: React.FC = () => {
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
-  const [videoInfo, setVideoInfo] = useState<any>(null);
+  const [videoInfo, setVideoInfo] = useState<VideoAnalysis | null>(null);
 
   const handleVideoSelect = (videoPath: string) => {
     setSelectedVideo(videoPath);
@@ -27,7 +28,7 @@ const VideoEditorView: React.FC = () => {
     setSelectedVideo(videoPath);
   };
 
-  const handleAnalysisComplete = (info: any) => {
+  const handleAnalysisComplete = (info: VideoAnalysis) => {
     setVideoInfo(info);
   };
 

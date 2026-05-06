@@ -18,6 +18,8 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "rootDir": ".",
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
     "paths": {
       "@/*": ["./src/*"]
     }

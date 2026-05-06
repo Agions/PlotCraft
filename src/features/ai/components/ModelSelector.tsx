@@ -25,7 +25,7 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip } from '@/components/ui/tooltip';
 import { MODEL_PROVIDERS } from '@/core/config/models.config';
-import { LLM_MODELS } from '@/core/constants';
+import { LLM_MODELS, type LLMModelConfig } from '@/core/constants';
 import { useModel, useModelCost, useRecommendedModel } from '@/core/hooks/useModel';
 import type { ModelCategory, ModelProvider } from '@/core/types';
 
@@ -90,19 +90,19 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
 
   // 转换 LLM_MODELS 为组件格式
   const allModels = useMemo(() => {
-    const models = Object.values(LLM_MODELS) as any[];
-    return models.map((m: any) => ({
+    const models = Object.values(LLM_MODELS) as LLMModelConfig[];
+    return models.map((m: LLMModelConfig): ModelCardData => ({
       id: m.modelId,
       name: m.name,
       provider: m.provider as ModelProvider,
-      category: Array.from(m.capabilities) as string[],
+      category: m.capabilities,
       description: `${m.name} - ${m.version}`,
       version: m.version,
       contextWindow: m.contextWindow,
       maxTokens: m.maxTokens,
       recommended: m.recommended,
       pricing: m.pricing,
-      features: Array.from(m.capabilities) as string[]
+      features: m.capabilities
     }));
   }, []);
 

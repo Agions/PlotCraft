@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "productName": "PanelFlow",
-  "version": "3.0.0",
+  "version": "3.0.3",
   "identifier": "com.PanelFlow.app",
   "build": {
     "beforeDevCommand": "npm run dev",
