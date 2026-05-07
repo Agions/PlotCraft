@@ -271,3 +271,17 @@ jobs:
           assets: ${{ needs.build-linux.outputs.artifact_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  finalize:
+    name: Publish Release
+    needs: [prepare, build-windows-x64, build-windows-arm64, build-macos, build-linux]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.prepare.outputs.tag }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
