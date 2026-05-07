@@ -472,7 +472,7 @@ async fn cut_video(params: CutVideoParams, window: tauri::Window) -> Result<Stri
         "-y", "-f", "concat", "-safe", "0", "-i", &list_file_str,
         "-c:v", out_vcodec, "-c:a", out_acodec, "-strict", "-2",
         &output_path_str,
-    ])?
+    ])?;
     
     
     for segment_path in segment_files {
