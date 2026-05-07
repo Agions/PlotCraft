@@ -103,7 +103,7 @@ export default defineConfig({
     ],
     footer: {
       message: 'MIT License © 2026 Agions',
-      copyright: 'PanelFlow v3.0.0 — AI驱动的视频脚本创作平台',
+      copyright: 'PanelFlow v1.0.0 — AI驱动的视频脚本创作平台',
     },
     search: {
       provider: 'local',
