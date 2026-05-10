@@ -166,7 +166,7 @@ export const VideoControls: React.FC<VideoControlsProps> = ({
       <div className={styles.controlBar}>
         <div className={styles.leftControls}>
           {/* 播放/暂停 */}
-          <Tooltip content={isPlaying ? '暂停' : '播放'}>
+          <Tooltip title={isPlaying ? '暂停' : '播放'}>
             <Button
               variant="ghost"
               size="lg"
@@ -177,14 +177,14 @@ export const VideoControls: React.FC<VideoControlsProps> = ({
           </Tooltip>
 
           {/* 上一帧/下一帧 */}
-          <Tooltip content="上一帧">
+          <Tooltip title="上一帧">
             <Button
               variant="ghost"
               icon={<SkipBack size={18} />}
               onClick={() => onSeek(Math.max(0, currentTime - 1 / 30))}
             />
           </Tooltip>
-          <Tooltip content="下一帧">
+          <Tooltip title="下一帧">
             <Button
               variant="ghost"
               icon={<SkipForward size={18} />}
@@ -223,7 +223,7 @@ export const VideoControls: React.FC<VideoControlsProps> = ({
 
           {/* 音量控制 */}
           <div className={styles.volumeControl}>
-            <Tooltip content={muted ? '取消静音' : '静音'}>
+            <Tooltip title={muted ? '取消静音' : '静音'}>
               <Button
                 variant="ghost"
                 icon={muted || volume === 0 ? <VolumeX size={18} /> : <Volume2 size={18} />}
@@ -240,7 +240,7 @@ export const VideoControls: React.FC<VideoControlsProps> = ({
           </div>
 
           {/* 全屏切换 */}
-          <Tooltip content={isFullscreen ? '退出全屏' : '全屏'}>
+          <Tooltip title={isFullscreen ? '退出全屏' : '全屏'}>
             <Button
               variant="ghost"
               icon={isFullscreen ? <Minimize2 size={18} /> : <Maximize size={18} />}

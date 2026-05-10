@@ -101,7 +101,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
       contextWindow: m.contextWindow,
       maxTokens: m.maxTokens,
       recommended: m.recommended,
-      pricing: m.pricing,
+      pricing: m.pricing ? { input: m.pricing.input, output: m.pricing.output, unit: '元/千token' } : undefined,
       features: m.capabilities
     }));
   }, []);

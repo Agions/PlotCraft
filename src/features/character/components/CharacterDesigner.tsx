@@ -34,8 +34,9 @@ import {
   FormItem,
   ListItem,
   useForm,
-  type RcFile,
+  CardMeta,
 } from '@/components/ui/ui-components';
+import type { RcFile } from '@/components/ui/upload';
 import {
   getTemplatesByCategory,
   templateToCharacter,
@@ -87,7 +88,8 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
   onChange,
   projectId: _projectId,
 }) => {
-  const [, form] = useForm();
+  const formReturn = useForm();
+  const form = formReturn as any;
   const [editingId, setEditingId] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>();
@@ -323,7 +325,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
         </Button>
       ]}
     >
-      <Card.Meta
+      <CardMeta
         title={template.name}
         description={
           <Space className="flex-col" size={2}>
@@ -392,7 +394,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
                   <Trash2 key="delete" onClick={() => handleDelete(character.id)} />,
                 ]}
               >
-                <Card.Meta
+                <CardMeta
                   avatar={<Avatar size={64} src={undefined} icon={<User />} />}
                   title={character.name}
                   description={

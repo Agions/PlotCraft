@@ -197,7 +197,7 @@ function VideoPlayer({
       
       {/* 预览按钮 */}
       <div className={styles.previewButtonContainer}>
-        <Tooltip content="全屏预览">
+        <Tooltip title="全屏预览">
           <Button
             variant="default"
             size="lg"

@@ -842,8 +842,8 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
 
                 {voiceTracks.length > 0 ? (
                   <Table
-                    dataSource={voiceTracks}
-                    columns={voiceColumns}
+                    dataSource={voiceTracks as any}
+                    columns={voiceColumns as any}
                     rowKey="id"
                     size="small"
                     pagination={false}
@@ -1005,8 +1005,8 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
 
                 {soundEffects.length > 0 ? (
                   <Table
-                    dataSource={soundEffects}
-                    columns={sfxColumns}
+                    dataSource={soundEffects as any}
+                    columns={sfxColumns as any}
                     rowKey="id"
                     size="small"
                     pagination={false}

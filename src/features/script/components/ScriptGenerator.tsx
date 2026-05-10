@@ -98,7 +98,7 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
   const { selectedModel, isConfigured } = useModel();
   const { estimateScriptCost, formatCost } = useModelCost();
 
-  const [form] = useForm();
+  const [form] = useForm() as any;
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
   const [generatedScript, setGeneratedScript] = useState<ScriptData | null>(null);
@@ -247,7 +247,7 @@ export const ScriptGenerator: React.FC<ScriptGeneratorProps> = ({
       <Form
         form={form}
         layout="vertical"
-        onFinish={handleGenerate}
+        onFinish={handleGenerate as any}
         initialValues={{
           style: 'professional',
           tone: 'friendly',

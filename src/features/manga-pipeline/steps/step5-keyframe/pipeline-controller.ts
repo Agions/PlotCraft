@@ -75,9 +75,27 @@ export interface KeyframePipelineInput {
     description: string;
     location: string;
     emotion?: string;
+    /** 视频生成专用 prompt（包含角色约束） */
+    videoPrompt?: string;
   }>;
   style?: 'anime' | 'comic' | 'realistic';
   aspectRatio?: '16:9' | '9:16' | '4:3' | '1:1';
+  /** 角色参考图（用于视频生成绑定） */
+  characterReferences?: CharacterVideoReference[];
+}
+
+/** 角色视频参考（用于生成时绑定角色一致性） */
+export interface CharacterVideoReference {
+  characterId: string;
+  name: string;
+  /** 角色特征描述 token */
+  referencePrompt: string;
+  /** 三视图参考图 URL */
+  referenceImageUrls?: {
+    front?: string;
+    side?: string;
+    fullBody?: string;
+  };
 }
 
 export interface KeyframePipelineResult {
@@ -161,7 +179,11 @@ export function estimateSceneDuration(scene: KeyframeScene): number {
 }
 
 /**
- * 创建关键帧场景（调用真实图像生成 API）
+ * 创建关键帧场景（并发生成首帧+尾帧）
+ * 
+ * 优化点：
+ * 1. 首帧和尾帧并发生成（不是串行等待）
+ * 2. 支持传入角色参考图用于视频生成绑定
  */
 export async function createKeyframeScene(
   scene: KeyframePipelineInput['scenes'][0],
@@ -171,74 +193,82 @@ export async function createKeyframeScene(
     style: string;
     aspectRatio: string;
     imageOptions?: Partial<ImageGenerationOptions>;
+    /** 角色参考图（用于视频生成时绑定一致性） */
+    characterReferences?: CharacterVideoReference[];
     signal?: AbortSignal;
   }
 ): Promise<KeyframeScene> {
-  const { frameCount = 2, defaultDuration = 3, style, aspectRatio, imageOptions = {}, signal } = options;
-  
-  // 生成关键帧对
-  const keyframes: KeyframePair[] = [];
-  for (let i = 0; i < frameCount; i += 2) {
-    if (i + 1 < frameCount) {
-      // 生成首帧
-      const startFrameResult = await generateImage(
-        buildFramePrompt(scene, i, 'start'),
-        {
-          model: (imageOptions.model as ImageGenerationOptions['model']) || 'seedream-5.0',
-          size: '2K',
-          style: style as ImageGenerationOptions['style'],
-          ...imageOptions,
-          signal,
-        }
-      );
-      
-      // 生成尾帧
-      const endFrameResult = await generateImage(
-        buildFramePrompt(scene, i + 1, 'end'),
-        {
-          model: (imageOptions.model as ImageGenerationOptions['model']) || 'seedream-5.0',
-          size: '2K',
-          style: style as ImageGenerationOptions['style'],
-          ...imageOptions,
-          signal,
-        }
-      );
-      
-      keyframes.push({
+  const {
+    frameCount = 2,
+    defaultDuration = 3,
+    style,
+    aspectRatio,
+    imageOptions = {},
+    characterReferences,
+    signal,
+  } = options;
+
+  // 并发生成首帧和尾帧
+  const [startFrameResult, endFrameResult] = await Promise.all([
+    generateImage(
+      buildFramePrompt(scene, 0, 'start'),
+      {
+        model: (imageOptions.model as ImageGenerationOptions['model']) || 'seedream-5.0',
+        size: '2K',
+        style: style as ImageGenerationOptions['style'],
+        ...imageOptions,
+        signal,
+      }
+    ),
+    generateImage(
+      buildFramePrompt(scene, 1, 'end'),
+      {
+        model: (imageOptions.model as ImageGenerationOptions['model']) || 'seedream-5.0',
+        size: '2K',
+        style: style as ImageGenerationOptions['style'],
+        ...imageOptions,
+        signal,
+      }
+    ),
+  ]);
+
+  // 构建带角色约束的帧 prompt
+  const startPrompt = buildFramePrompt(scene, 0, 'start');
+  const endPrompt = buildFramePrompt(scene, 1, 'end');
+
+  return {
+    sceneId: scene.sceneId,
+    sceneNumber: scene.sceneNumber,
+    description: scene.description,
+    location: scene.location,
+    keyframes: [
+      {
         startFrame: {
-          id: `${scene.sceneId}-kf-${i}`,
+          id: `${scene.sceneId}-kf-0`,
           imageUrl: startFrameResult.url,
-          prompt: buildFramePrompt(scene, i, 'start'),
+          prompt: startPrompt,
           width: startFrameResult.width,
           height: startFrameResult.height,
           model: startFrameResult.model,
         },
         endFrame: {
-          id: `${scene.sceneId}-kf-${i + 1}`,
+          id: `${scene.sceneId}-kf-1`,
           imageUrl: endFrameResult.url,
-          prompt: buildFramePrompt(scene, i + 1, 'end'),
+          prompt: endPrompt,
           width: endFrameResult.width,
           height: endFrameResult.height,
           model: endFrameResult.model,
         },
         motionType: suggestMotionType(scene.description, scene.emotion),
         duration: defaultDuration,
-      });
-    }
-  }
-  
-  return {
-    sceneId: scene.sceneId,
-    sceneNumber: scene.sceneNumber,
-    description: scene.description,
-    location: scene.location,
-    keyframes,
-    totalDuration: keyframes.reduce((sum, kf) => sum + kf.duration, 0),
+      },
+    ],
+    totalDuration: defaultDuration,
   };
 }
 
 /**
- * 构建帧提示词
+ * 构建帧提示词（集成角色一致性约束）
  */
 function buildFramePrompt(
   scene: KeyframePipelineInput['scenes'][0],
@@ -246,8 +276,19 @@ function buildFramePrompt(
   frameType: 'start' | 'end'
 ): string {
   const basePrompt = `${scene.description}, ${scene.location}`;
-  const frameHint = frameType === 'start' ? '起始画面, 角色站立' : '结束画面, 动作延续';
-  return `${basePrompt}, ${frameHint}, 第${frameIndex + 1}帧`;
+  
+  // 帧类型描述
+  const frameHint = frameType === 'start'
+    ? '起始画面, character in standing pose, stable composition'
+    : 'ending frame, motion continues naturally from previous scene';
+
+  // 角色约束（如果有）
+  const charHint = scene.description.length > 0
+    ? 'maintain consistent character appearance across frames'
+    : '';
+
+  const parts = [basePrompt, frameHint, charHint, `第${frameIndex + 1}帧`].filter(Boolean);
+  return parts.join(', ');
 }
 
 /**
@@ -273,7 +314,12 @@ function createPlaceholderFrame(
 }
 
 /**
- * KeyframePipeline - 关键帧驱动流水线
+ * KeyframePipeline - 关键帧驱动流水线（并发生成版）
+ * 
+ * 优化点：
+ * 1. 多个场景并发生成（非串行等待）
+ * 2. 首帧+尾帧并发生成
+ * 3. 集成角色一致性约束到帧和视频生成
  */
 export class KeyframePipeline extends BasePipelineController {
   id = 'keyframe-pipeline';
@@ -281,45 +327,50 @@ export class KeyframePipeline extends BasePipelineController {
 
   protected subSteps = [
     '分析场景',
-    '生成首帧',
-    '生成尾帧',
+    '生成关键帧',
     '分析运动',
-    '插值计算',
     '合成视频',
   ];
 
   protected async _doProcess(input: StepInput): Promise<StepOutput> {
-    const { scenes, style = 'anime', aspectRatio = '16:9' } = input as StepInput & KeyframePipelineInput;
+    const {
+      scenes,
+      style = 'anime',
+      aspectRatio = '16:9',
+      characterReferences,
+    } = input as StepInput & KeyframePipelineInput;
 
     this.updateProgress(0, '分析场景');
 
-    // 创建关键帧场景（调用真实图像生成 API）
-    const keyframeScenes: KeyframeScene[] = [];
-    for (let index = 0; index < scenes.length; index++) {
-      this.updateProgress(
-        (index / scenes.length) * 40,
-        '生成首帧'
-      );
-      
-      const keyframeScene = await createKeyframeScene(scenes[index], {
+    // ========== 阶段1：并发生成所有场景的关键帧 ==========
+    // 优化：使用 Promise.all 并行处理所有场景，而非串行等待
+    const sceneCount = scenes.length;
+    const progressBase = 0;
+
+    this.updateProgress(5, `生成关键帧（0/${sceneCount}）`);
+
+    const keyframeScenePromises = scenes.map((scene, index) =>
+      createKeyframeScene(scene, {
         frameCount: 2,
         defaultDuration: 3,
         style,
         aspectRatio,
         imageOptions: { model: 'seedream-5.0' },
-      });
-      
-      this.updateProgress(
-        ((index + 0.5) / scenes.length) * 40,
-        '生成尾帧'
-      );
-      
-      keyframeScenes.push(keyframeScene);
-    }
+        characterReferences,
+      }).then(result => {
+        // 更新进度
+        this.updateProgress(
+          5 + ((index + 1) / sceneCount) * 35,
+          `生成关键帧（${index + 1}/${sceneCount}）`
+        );
+        return result;
+      })
+    );
 
-    this.updateProgress(45, '分析运动');
-    
-    // 分析运动类型
+    const keyframeScenes = await Promise.all(keyframeScenePromises);
+
+    // ========== 阶段2：分析运动类型 ==========
+    this.updateProgress(42, '分析运动');
     keyframeScenes.forEach(scene => {
       scene.keyframes.forEach(kf => {
         kf.motionType = suggestMotionType(scene.description, undefined);
@@ -327,37 +378,37 @@ export class KeyframePipeline extends BasePipelineController {
       });
     });
 
-    this.updateProgress(50, '生成视频');
+    // ========== 阶段3：并发生成视频片段 ==========
+    this.updateProgress(45, '生成视频');
     
-    // 为每个关键帧场景生成视频
-    for (let i = 0; i < keyframeScenes.length; i++) {
-      const scene = keyframeScenes[i];
-      this.updateProgress(
-        50 + (i / keyframeScenes.length) * 40,
-        `合成场景 ${i + 1} 视频`
-      );
-      
-      for (let j = 0; j < scene.keyframes.length; j++) {
-        const kf = scene.keyframes[j];
-        
-        // 使用首帧作为参考图生成视频
-        const videoResult = await generateVideo(
-          buildVideoPrompt(scene, kf),
-          {
-            model: 'seedance-2.0',
-            duration: kf.duration,
-            referenceImage: kf.startFrame.imageUrl,
-            aspectRatio: aspectRatio as VideoGenerationOptions['aspectRatio'],
-          }
-        );
-        
-        // 存储视频结果到 keyframe 中
-        kf.startFrame.imageUrl = videoResult.url || kf.startFrame.imageUrl;
-      }
-    }
+    const videoPromises = keyframeScenes.map((scene, i) =>
+      Promise.all(
+        scene.keyframes.map(async (kf) => {
+          this.updateProgress(
+            45 + ((i + 1) / keyframeScenes.length) * 45,
+            `合成场景 ${i + 1} 视频`
+          );
 
-    this.updateProgress(95, '插值计算');
-    
+          const videoResult = await generateVideo(
+            buildVideoPrompt(scene, kf, characterReferences),
+            {
+              model: 'seedance-2.0',
+              duration: kf.duration,
+              referenceImage: kf.startFrame.imageUrl,
+              aspectRatio: aspectRatio as VideoGenerationOptions['aspectRatio'],
+            }
+          );
+
+          kf.startFrame.imageUrl = videoResult.url || kf.startFrame.imageUrl;
+          return videoResult;
+        })
+      )
+    );
+
+    await Promise.all(videoPromises);
+
+    this.updateProgress(95, '后处理');
+
     const totalDuration = keyframeScenes.reduce(
       (sum, scene) => sum + scene.totalDuration,
       0
@@ -382,20 +433,35 @@ export class KeyframePipeline extends BasePipelineController {
 }
 
 /**
- * 构建视频生成提示词
+ * 构建视频生成提示词（集成角色一致性绑定）
  */
 function buildVideoPrompt(
   scene: KeyframeScene,
-  kf: KeyframePair
+  kf: KeyframePair,
+  characterReferences?: CharacterVideoReference[]
 ): string {
   const motionHint: Record<MotionType, string> = {
-    [MotionType.FADE]: '淡入淡出过渡',
-    [MotionType.SLIDE]: '平滑滑动',
-    [MotionType.ZOOM]: '缩放效果',
-    [MotionType.PAN]: '平移运镜',
-    [MotionType.ROTATE]: '旋转运镜',
-    [MotionType.CROSSFADE]: '交叉淡入淡出',
+    [MotionType.FADE]: 'fade in/out transition',
+    [MotionType.SLIDE]: 'smooth sliding motion',
+    [MotionType.ZOOM]: 'zoom effect',
+    [MotionType.PAN]: 'pan camera movement',
+    [MotionType.ROTATE]: 'rotate camera movement',
+    [MotionType.CROSSFADE]: 'crossfade transition',
   };
-  
-  return `${scene.description}, ${motionHint[kf.motionType]}, 镜头${scene.cameraMovement || CameraMovement.STATIC}`;
+
+  const parts: string[] = [
+    scene.description,
+    motionHint[kf.motionType],
+    `camera ${scene.cameraMovement || CameraMovement.STATIC}`,
+  ];
+
+  // 注入角色约束（如果有）
+  if (characterReferences && characterReferences.length > 0) {
+    const charPrompts = characterReferences
+      .map(c => `${c.name}: ${c.referencePrompt}`)
+      .join(' | ');
+    parts.push(`maintain character consistency: ${charPrompts}`);
+  }
+
+  return parts.join(', ');
 }

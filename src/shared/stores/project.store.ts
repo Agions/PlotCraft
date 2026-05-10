@@ -6,7 +6,8 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 import { storageService } from '@/core/services';
-import type { ProjectData, ScriptData, VideoInfo, ExportRecord } from '@/core/types';
+import type { ScriptData, VideoInfo, ExportRecord } from '@/core/types';
+import type { ProjectData } from '@/shared/types/project';
 
 import { createDebouncedStorage } from './middlewares/persistWithDebounce';
 

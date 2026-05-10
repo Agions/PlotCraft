@@ -75,7 +75,7 @@ const VideoEditorView: React.FC = () => {
                 name={selectedVideo?.split('/').pop() || 'video'}
                 duration={videoInfo?.duration || 0}
                 path={selectedVideo || ''}
-                metadata={videoInfo}
+                metadata={videoInfo as any}
               />
             </Card>
           )}

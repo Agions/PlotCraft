@@ -361,7 +361,7 @@ const AIModelSelector: React.FC<AIModelSelectorProps> = ({
 
   const renderListView = () => (
     <div className={styles.modelList}>
-      <RadioGroup value={selectedModelId} onValueChange={handleModelSelect}>
+      <RadioGroup value={selectedModelId} onChange={handleModelSelect}>
         {filteredModels.map((model, index) => {
           const provider = getProviderInfo(model.provider);
           return (

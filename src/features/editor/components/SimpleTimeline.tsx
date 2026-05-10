@@ -128,7 +128,7 @@ const SimpleTimeline: React.FC<SimpleTimelineProps> = ({
       {/* 顶部工具栏 */}
       <div className={styles.toolbar}>
         <div className={styles.leftTools}>
-          <Tooltip content={isPlaying ? '暂停' : '播放'}>
+          <Tooltip title={isPlaying ? '暂停' : '播放'}>
             <Button
               variant="ghost"
               size="sm"
@@ -144,10 +144,10 @@ const SimpleTimeline: React.FC<SimpleTimelineProps> = ({
           </div>
           
           <div style={{ display: 'flex', gap: 4 }}>
-            <Tooltip content="后退一帧">
+            <Tooltip title="后退一帧">
               <Button variant="ghost" size="sm" icon={<SkipBack />} />
             </Tooltip>
-            <Tooltip content="前进一帧">
+            <Tooltip title="前进一帧">
               <Button variant="ghost" size="sm" icon={<SkipForward />} />
             </Tooltip>
           </div>
@@ -155,7 +155,7 @@ const SimpleTimeline: React.FC<SimpleTimelineProps> = ({
 
         <div className={styles.rightTools}>
           <div style={{ display: 'flex', gap: 8 }}>
-            <Tooltip content="添加片段">
+            <Tooltip title="添加片段">
               <Button
                 variant="ghost"
                 size="sm"
@@ -165,7 +165,7 @@ const SimpleTimeline: React.FC<SimpleTimelineProps> = ({
             </Tooltip>
             
             {selectedSegmentId && (
-              <Tooltip content="删除片段">
+              <Tooltip title="删除片段">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -176,7 +176,7 @@ const SimpleTimeline: React.FC<SimpleTimelineProps> = ({
             )}
             
             <div className={styles.zoomControls}>
-              <Tooltip content="缩小">
+              <Tooltip title="缩小">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -185,7 +185,7 @@ const SimpleTimeline: React.FC<SimpleTimelineProps> = ({
                 />
               </Tooltip>
               <span className={styles.zoomLevel}>{Math.round(localZoom * 100)}%</span>
-              <Tooltip content="放大">
+              <Tooltip title="放大">
                 <Button
                   variant="ghost"
                   size="sm"

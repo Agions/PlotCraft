@@ -254,7 +254,7 @@ const VideoExporter: React.FC<VideoExporterProps> = ({
               <File size={16} />
               <span style={{ fontWeight: 600 }}>导出格式</span>
             </div>
-            <RadioGroup value={format} onValueChange={(v) => setFormat(v as ExportFormat)} disabled={exporting}>
+            <RadioGroup value={format} onChange={(v) => setFormat(v as ExportFormat)} disabled={exporting}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {EXPORT_FORMATS.map((fmt) => (
                   <div key={fmt} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -304,7 +304,7 @@ const VideoExporter: React.FC<VideoExporterProps> = ({
               <Play size={16} />
               <span style={{ fontWeight: 600 }}>帧率</span>
             </div>
-            <RadioGroup value={String(frameRate)} onValueChange={(v) => setFrameRate(Number(v) as FrameRate)} disabled={exporting}>
+            <RadioGroup value={String(frameRate)} onChange={(v) => setFrameRate(Number(v) as FrameRate)} disabled={exporting}>
               <div style={{ display: 'flex', gap: 16 }}>
                 {FRAME_RATES.map((fps) => (
                   <div key={fps} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -329,7 +329,7 @@ const VideoExporter: React.FC<VideoExporterProps> = ({
               <Settings size={16} />
               <span style={{ fontWeight: 600 }}>质量预设</span>
             </div>
-            <RadioGroup value={quality} onValueChange={(v) => setQuality(v as QualityPreset)} disabled={exporting}>
+            <RadioGroup value={quality as string} onChange={(v) => setQuality(v as any)} disabled={exporting}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {Object.entries(QUALITY_PRESETS).map(([key, preset]) => (
                   <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -385,7 +385,7 @@ const VideoExporter: React.FC<VideoExporterProps> = ({
                       取消
                     </Button>
                   )}
-                  <TooltipPrimitive content={!filename.trim() ? '请输入文件名' : undefined}>
+                  <TooltipPrimitive title={!filename.trim() ? '请输入文件名' : undefined}>
                     <span>
                       <Button
                         variant="default"

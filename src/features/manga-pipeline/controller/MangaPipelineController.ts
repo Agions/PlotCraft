@@ -8,7 +8,7 @@
  * 4. 语音合成 (Voice Synthesis)
  */
 
-import { StepOutput } from '@/core/pipeline/step.interface';
+import { StepInput, StepOutput } from '@/core/pipeline/step.interface';
 
 import { BasePipelineController, StepState } from '../base/BasePipelineController';
 import { ScriptGenerationPipeline, ScriptGenerationResult } from '../steps/step1-script-generation/pipeline-controller';
@@ -138,8 +138,8 @@ export class MangaPipelineController extends BasePipelineController {
     return start + (stepProgress / 100) * (end - start);
   }
 
-  protected async _doProcess(input: MangaPipelineInput): Promise<MangaPipelineResult> {
-    const { text, title, style = 'anime' } = input;
+  protected async _doProcess(input: StepInput): Promise<StepOutput> {
+    const { text, title, style = 'anime' } = input as unknown as MangaPipelineInput;
 
     this.result = {};
     this.currentStep = MangaPipelineStep.SCRIPT;
@@ -198,7 +198,7 @@ export class MangaPipelineController extends BasePipelineController {
       this.result.keyframeResult = (keyframeOutput as any).keyframePipeline;
       this.emitProgress(MangaPipelineStep.KEYFRAME, 100, '合成视频');
 
-      return { mangaPipeline: this.result };
+      return this.result as StepOutput;
     } catch (err) {
       this.checkpointOnError(this.result);
       throw err;

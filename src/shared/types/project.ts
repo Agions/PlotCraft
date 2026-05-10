@@ -10,6 +10,7 @@ export interface ProjectData {
   name: string;
   description?: string;
   status?: 'draft' | 'processing' | 'completed' | 'failed';
+  content?: string;
   videos?: { id: string; path?: string; name: string; duration?: number; width?: number; height?: number; fps?: number; format?: string; size?: number; thumbnail?: string; createdAt?: string }[];
   scripts?: Script[];
   settings?: ProjectSettings;
@@ -23,6 +24,13 @@ export interface ProjectData {
   novelMetadata?: unknown;
   storyboardComments?: unknown[];
   storyboardVersions?: unknown[];
+  // Extended properties used by ProjectDetailPage (use any to avoid circular deps)
+  storyboardFrames?: any[];
+  characters?: any[];
+  composition?: any;
+  audioConfig?: any;
+  evaluationSummary?: any;
+  evaluationReport?: { summary?: any };
 }
 
 export interface ProjectSettings {

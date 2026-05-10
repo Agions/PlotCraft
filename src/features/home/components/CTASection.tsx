@@ -23,7 +23,6 @@ const CTASection: React.FC = () => {
   return (
     <Card
       className={`${styles.cta} ${isDarkMode ? styles.darkCta : ''}`}
-      borderless
     >
       <CardHeader>
         <CardTitle>准备好开始创作了吗？</CardTitle>

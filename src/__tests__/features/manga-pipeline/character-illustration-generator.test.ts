@@ -66,35 +66,35 @@ describe('character-illustration-generator', () => {
     // 性格 → 姿态/表情测试
     describe('性格映射', () => {
       it('开朗性格应生成动态姿态和明亮表情', () => {
-        const cheerfulChar: CharacterCard = { ...mockCharacter, personality: '开朗、活泼' };
+        const cheerfulChar: CharacterCard = { ...mockCharacter, personality: '开朗、活泼', speakingStyle: '普通' };
         const result = generateCharacterIllustration(cheerfulChar);
         expect(result.pose).toContain('dynamic');
         expect(result.expression).toContain('bright smile');
       });
 
       it('内向性格应生成保守姿态和内敛表情', () => {
-        const introvertedChar: CharacterCard = { ...mockCharacter, personality: '内向、沉默' };
+        const introvertedChar: CharacterCard = { ...mockCharacter, personality: '内向、沉默', speakingStyle: '普通' };
         const result = generateCharacterIllustration(introvertedChar);
         expect(result.pose).toContain('guarded');
         expect(result.expression).toContain('reserved');
       });
 
       it('急躁性格应生成紧张姿态和坚定表情', () => {
-        const impatientChar: CharacterCard = { ...mockCharacter, personality: '急躁、暴躁' };
+        const impatientChar: CharacterCard = { ...mockCharacter, personality: '急躁、暴躁', speakingStyle: '普通' };
         const result = generateCharacterIllustration(impatientChar);
         expect(result.pose).toContain('tense');
         expect(result.expression).toContain('intense');
       });
 
       it('谨慎性格应生成稳健姿态和沉静表情', () => {
-        const cautiousChar: CharacterCard = { ...mockCharacter, personality: '谨慎、冷静' };
+        const cautiousChar: CharacterCard = { ...mockCharacter, personality: '谨慎、冷静', speakingStyle: '普通' };
         const result = generateCharacterIllustration(cautiousChar);
         expect(result.pose).toContain('steady');
         expect(result.expression).toContain('serene');
       });
 
       it('默认性格应生成自然姿态', () => {
-        const normalChar: CharacterCard = { ...mockCharacter, personality: '普通' };
+        const normalChar: CharacterCard = { ...mockCharacter, personality: '普通', speakingStyle: '普通' };
         const result = generateCharacterIllustration(normalChar);
         expect(result.pose).toContain('natural');
         expect(result.expression).toContain('neutral');

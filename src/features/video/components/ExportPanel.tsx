@@ -14,7 +14,6 @@ import { logger } from '@/core/utils/logger';
 import styles from './ExportPanel.module.less';
 
 /** 导出格式类型 */
-type ExportFormat = 'txt' | 'srt' | 'pdf' | 'html';
 
 /**
  * 脚本导出函数 - 支持多种格式
@@ -231,7 +230,7 @@ const ExportPanel: React.FC<ExportPanelProps> = ({ script }) => {
       title="导出脚本"
       className={styles.exportPanel}
       extra={
-        <Tooltip content="导出后的文件将保存到您选择的位置">
+        <Tooltip title="导出后的文件将保存到您选择的位置">
           <Button
             variant="default"
             icon={<Download size={16} />}
@@ -258,7 +257,7 @@ const ExportPanel: React.FC<ExportPanelProps> = ({ script }) => {
         <div className={styles.formatSection}>
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label className={styles.label}>导出格式:</label>
-          <RadioGroup value={exportFormat} onValueChange={(value) => setExportFormat(value as ExportFormat)}>
+          <RadioGroup value={exportFormat} onChange={(value) => setExportFormat(value as ExportFormat)}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <RadioGroupItem value="txt" id="txt" />

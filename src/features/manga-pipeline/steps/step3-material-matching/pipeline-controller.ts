@@ -1,6 +1,6 @@
 import type { Storyboard } from '@/features/manga-pipeline/steps/step2-storyboard/storyboard-composer';
 
-import { PipelineStep, StepInput, StepOutput } from '../../../../core/pipeline/step.interface';
+import { PipelineStep, StepInput, StepOutput, CheckpointState } from '../../../../core/pipeline/step.interface';
 
 import { BatchGenerationPlan, createAIGenerationPlan } from './services/ai-material-generator';
 import { MaterialMatch, batchSearch } from './services/material-searcher';

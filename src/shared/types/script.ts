@@ -37,4 +37,9 @@ export interface Script {
   updatedAt: string;
   videoId?: string;
   modelUsed?: string;
+  scenes?: Array<{
+    description?: string;
+    startTime?: number;
+    dialogues?: Array<{ character: string; text: string; duration?: number }>;
+  }>;
 }
