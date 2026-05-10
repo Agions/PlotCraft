@@ -25,8 +25,8 @@ export default [
   // Base recommended rules from ESLint
   eslint.configs.recommended,
 
-  // TypeScript ESLint recommended (flat)
-  ...tseslint.configs['flat/recommended'],
+  // TypeScript ESLint recommended (flat) with type checking
+  ...tseslint.configs['flat/recommended-type-checked'],
 
   // React recommended (flat)
   { ...reactPlugin.configs.flat.recommended },
