@@ -1,12 +1,4 @@
-import {
-  Plus,
-  Edit,
-  Trash2,
-  User,
-  Upload,
-  Image,
-  LayoutGrid,
-} from 'lucide-react';
+import { Plus, Edit, Trash2, User, Upload, Image, LayoutGrid } from 'lucide-react';
 import React, { useState, useCallback } from 'react';
 
 import {
@@ -40,15 +32,12 @@ import type { RcFile } from '@/components/ui/upload';
 import {
   getTemplatesByCategory,
   templateToCharacter,
-  type CharacterTemplate
+  type CharacterTemplate,
 } from '@/core/data/character-templates';
-import type {
-  Character,
-  CharacterAppearance,
-  ClothingItem,
-} from '@/core/types';
+import type { Character, CharacterAppearance, ClothingItem } from '@/core/types';
 import { logger } from '@/core/utils/logger';
 import type { CharacterConsistency } from '@/shared/types';
+import { generatePrefixedId } from '@/shared/utils';
 
 import styles from './CharacterDesigner.module.less';
 
@@ -81,7 +70,7 @@ const DEFAULT_APPEARANCE: CharacterAppearance = {
 };
 
 // 生成唯一ID
-const generateId = () => `char_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+const generateId = () => generatePrefixedId('char');
 
 const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
   characters = [],
@@ -98,7 +87,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
   const [selectedTemplate, setSelectedTemplate] = useState<CharacterTemplate | null>(null);
   const [templatePreviewVisible, setTemplatePreviewVisible] = useState(false);
   const [templateCategory, setTemplateCategory] = useState<string>('all');
-  
+
   // 服装编辑器状态
   const [clothingItems, setClothingItems] = useState<ClothingItem[]>([]);
   const [newClothingType, setNewClothingType] = useState<ClothingItem['type']>('top');
@@ -106,9 +95,12 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
   const [newClothingColor, setNewClothingColor] = useState('#000000');
 
   // 通知父组件更新
-  const notifyChange = useCallback((newChars: Character[]) => {
-    onChange?.(newChars);
-  }, [onChange]);
+  const notifyChange = useCallback(
+    (newChars: Character[]) => {
+      onChange?.(newChars);
+    },
+    [onChange]
+  );
 
   // 从模板创建角色
   const handleCreateFromTemplate = (template: CharacterTemplate) => {
@@ -126,7 +118,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
         description: description ?? selectedTemplate.description,
       });
       const now = new Date().toISOString();
-      
+
       const newCharacter: Character = {
         ...characterData,
         id: generateId(),
@@ -191,7 +183,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
       title: '确认删除',
       content: '确定要删除这个角色吗？',
       onOk: () => {
-        const newChars = characters.filter(c => c.id !== id);
+        const newChars = characters.filter((c) => c.id !== id);
         notifyChange(newChars);
         message.success('角色已删除');
       },
@@ -212,18 +204,18 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
       color: newClothingColor,
     };
 
-    setClothingItems(prev => [...prev, newItem]);
+    setClothingItems((prev) => [...prev, newItem]);
     setNewClothingName('');
     setNewClothingColor('#000000');
     message.success('已添加到服装列表');
   };
 
   const handleRemoveClothing = (index: number) => {
-    setClothingItems(prev => prev.filter((_, i) => i !== index));
+    setClothingItems((prev) => prev.filter((_, i) => i !== index));
   };
 
   const quickAddClothing = (type: ClothingItem['type'], name: string, color: string) => {
-    setClothingItems(prev => [...prev, { type, name, style: '', color }]);
+    setClothingItems((prev) => [...prev, { type, name, style: '', color }]);
     message.success(`已添加: ${name}`);
   };
 
@@ -235,9 +227,9 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
 
       // 确保 consistency.seed 存在
       const consistency = values.consistency ?? {
-        seed: editingId 
-          ? (characters.find(c => c.id === editingId)?.consistency as CharacterConsistency)?.seed 
-          : Math.floor(Math.random() * 10000)
+        seed: editingId
+          ? (characters.find((c) => c.id === editingId)?.consistency as CharacterConsistency)?.seed
+          : Math.floor(Math.random() * 10000),
       };
 
       const newCharacter: Character = {
@@ -248,18 +240,18 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
         appearance: values.appearance,
         clothing: clothingItems.length > 0 ? clothingItems : (values.clothing ?? []),
         expressions: editingId
-          ? characters.find(c => c.id === editingId)?.expressions ?? []
+          ? (characters.find((c) => c.id === editingId)?.expressions ?? [])
           : [],
         consistency,
         voice: values.voice,
         tags: values.tags ?? [],
-        createdAt: editingId ? characters.find(c => c.id === editingId)?.createdAt ?? now : now,
+        createdAt: editingId ? (characters.find((c) => c.id === editingId)?.createdAt ?? now) : now,
         updatedAt: now,
       };
 
       let newChars: Character[];
       if (editingId) {
-        newChars = characters.map(c => c.id === editingId ? newCharacter : c);
+        newChars = characters.map((c) => (c.id === editingId ? newCharacter : c));
         message.success('角色已更新');
       } else {
         newChars = [...characters, newCharacter];
@@ -293,7 +285,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
     reader.onload = () => {
       const url = reader.result as string;
       const currentId = editingId ?? 'new';
-      setExpressionImages(prev => ({
+      setExpressionImages((prev) => ({
         ...prev,
         [currentId]: [...(prev[currentId] || []), url],
       }));
@@ -309,20 +301,22 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
       key={template.id}
       hoverable
       className={styles.templateCard}
-      cover={template.thumbnail && (
-        <div className={styles.templateThumb}>
-          <img src={template.thumbnail} alt={template.name} />
-        </div>
-      )}
+      cover={
+        template.thumbnail && (
+          <div className={styles.templateThumb}>
+            <img src={template.thumbnail} alt={template.name} />
+          </div>
+        )
+      }
       actions={[
-        <Button 
-          key="select" 
-          type="primary" 
+        <Button
+          key="select"
+          type="primary"
           size="small"
           onClick={() => handleCreateFromTemplate(template)}
         >
           使用此模板
-        </Button>
+        </Button>,
       ]}
     >
       <CardMeta
@@ -333,7 +327,9 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
             <Text type="secondary" style={{ fontSize: 12 }}>
               {template.description}
             </Text>
-            <Tag color="blue">{template.appearance.gender}, {template.appearance.age}岁</Tag>
+            <Tag color="blue">
+              {template.appearance.gender}, {template.appearance.age}岁
+            </Tag>
           </Space>
         }
       />
@@ -346,8 +342,8 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
         <Button type="primary" icon={<Plus />} onClick={handleAdd}>
           新建角色
         </Button>
-        <Button 
-          icon={<LayoutGrid />} 
+        <Button
+          icon={<LayoutGrid />}
           onClick={() => {
             setActiveTab('template');
             setModalVisible(true);
@@ -363,12 +359,12 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
           <div className={styles.emptyState}>
             <User style={{ fontSize: 48, color: '#ccc' }} />
             <Title level={5}>还没有角色</Title>
-            <Text type="secondary">
-              您可以手动创建角色，或从预设模板快速开始
-            </Text>
+            <Text type="secondary">您可以手动创建角色，或从预设模板快速开始</Text>
             <Space>
-              <Button type="primary" onClick={handleAdd}>手动创建</Button>
-              <Button 
+              <Button type="primary" onClick={handleAdd}>
+                手动创建
+              </Button>
+              <Button
                 icon={<LayoutGrid />}
                 onClick={() => {
                   setActiveTab('template');
@@ -399,12 +395,30 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
                   title={character.name}
                   description={
                     <Space className="flex-col" size={2}>
-                      <Tag color={character.role === 'protagonist' ? 'gold' : character.role === 'antagonist' ? 'red' : 'blue'}>
-                        {character.role === 'protagonist' ? '主角' : character.role === 'antagonist' ? '反派' : character.role === 'supporting' ? '配角' : character.role}
+                      <Tag
+                        color={
+                          character.role === 'protagonist'
+                            ? 'gold'
+                            : character.role === 'antagonist'
+                              ? 'red'
+                              : 'blue'
+                        }
+                      >
+                        {character.role === 'protagonist'
+                          ? '主角'
+                          : character.role === 'antagonist'
+                            ? '反派'
+                            : character.role === 'supporting'
+                              ? '配角'
+                              : character.role}
                       </Tag>
-                      <Text type="secondary">{(character.appearance as CharacterAppearance).gender}, {(character.appearance as CharacterAppearance).age}岁</Text>
+                      <Text type="secondary">
+                        {(character.appearance as CharacterAppearance).gender},{' '}
+                        {(character.appearance as CharacterAppearance).age}岁
+                      </Text>
                       <Text type="secondary" style={{ fontSize: 12 }}>
-                        {(character.appearance as CharacterAppearance).hairStyle} · {(character.appearance as CharacterAppearance).hairColor}
+                        {(character.appearance as CharacterAppearance).hairStyle} ·{' '}
+                        {(character.appearance as CharacterAppearance).hairColor}
                       </Text>
                       {(character.consistency as CharacterConsistency).seed !== undefined && (
                         <Text type="secondary" style={{ fontSize: 11 }}>
@@ -443,9 +457,9 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
         <Form form={form} layout="vertical" initialValues={{ appearance: DEFAULT_APPEARANCE }}>
           <Row gutter={16}>
             <Col span={12}>
-              <FormItem 
-                name="name" 
-                label="角色名称" 
+              <FormItem
+                name="name"
+                label="角色名称"
                 rules={[{ required: true, message: '请输入角色名称' }]}
               >
                 <Input placeholder="如：张三" />
@@ -549,7 +563,9 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
                     </Option>
                   ))
                 ) : (
-                  <Option value="" disabled>暂无服装，请添加</Option>
+                  <Option value="" disabled>
+                    暂无服装，请添加
+                  </Option>
                 )}
               </Select>
             </FormItem>
@@ -569,11 +585,11 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
                   <Text className="font-bold">操作:</Text>
                 </Col>
               </Row>
-              
+
               <Row gutter={8} align="middle" style={{ marginTop: 8 }}>
                 <Col span={5}>
-                  <Select 
-                    placeholder="类型" 
+                  <Select
+                    placeholder="类型"
                     style={{ width: '100%' }}
                     value={newClothingType}
                     onChange={(v) => setNewClothingType(v as typeof newClothingType)}
@@ -586,30 +602,30 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
                   </Select>
                 </Col>
                 <Col span={5}>
-                  <Input 
-                    placeholder="如：衬衫" 
+                  <Input
+                    placeholder="如：衬衫"
                     value={newClothingName}
                     onChange={(e) => setNewClothingName(e.target.value)}
                   />
                 </Col>
                 <Col span={5}>
-                  <Input 
-                    placeholder="如：蓝色" 
+                  <Input
+                    placeholder="如：蓝色"
                     value={newClothingColor}
                     onChange={(e) => setNewClothingColor(e.target.value)}
                   />
                 </Col>
                 <Col span={6}>
                   <Space>
-                    <Button 
-                      type="primary" 
+                    <Button
+                      type="primary"
                       size="small"
                       onClick={handleAddClothing}
                       disabled={!newClothingName || !newClothingColor}
                     >
                       添加
                     </Button>
-                    <Button 
+                    <Button
                       size="small"
                       onClick={() => {
                         setNewClothingType('top');
@@ -625,36 +641,43 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
 
               {/* 快速选择常用服装 */}
               <div className={styles.quickClothing}>
-                <Text type="secondary" style={{ marginRight: 8 }}>快速添加:</Text>
+                <Text type="secondary" style={{ marginRight: 8 }}>
+                  快速添加:
+                </Text>
                 <Space className="flex-wrap">
-                  <Button 
-                    size="small" 
-                    onClick={() => quickAddClothing('top', 'T恤', '#ffffff')}
-                  >白T恤</Button>
-                  <Button 
-                    size="small" 
-                    onClick={() => quickAddClothing('top', '衬衫', '#ffffff')}
-                  >白衬衫</Button>
-                  <Button 
-                    size="small" 
+                  <Button size="small" onClick={() => quickAddClothing('top', 'T恤', '#ffffff')}>
+                    白T恤
+                  </Button>
+                  <Button size="small" onClick={() => quickAddClothing('top', '衬衫', '#ffffff')}>
+                    白衬衫
+                  </Button>
+                  <Button
+                    size="small"
                     onClick={() => quickAddClothing('bottom', '牛仔裤', '#000080')}
-                  >牛仔裤</Button>
-                  <Button 
-                    size="small" 
+                  >
+                    牛仔裤
+                  </Button>
+                  <Button
+                    size="small"
                     onClick={() => quickAddClothing('bottom', '西裤', '#2c3e50')}
-                  >西裤</Button>
-                  <Button 
-                    size="small" 
+                  >
+                    西裤
+                  </Button>
+                  <Button
+                    size="small"
                     onClick={() => quickAddClothing('shoes', '运动鞋', '#ffffff')}
-                  >运动鞋</Button>
-                  <Button 
-                    size="small" 
-                    onClick={() => quickAddClothing('shoes', '皮鞋', '#000000')}
-                  >皮鞋</Button>
-                  <Button 
-                    size="small" 
+                  >
+                    运动鞋
+                  </Button>
+                  <Button size="small" onClick={() => quickAddClothing('shoes', '皮鞋', '#000000')}>
+                    皮鞋
+                  </Button>
+                  <Button
+                    size="small"
                     onClick={() => quickAddClothing('accessory', '眼镜', '#000000')}
-                  >眼镜</Button>
+                  >
+                    眼镜
+                  </Button>
                 </Space>
               </div>
             </div>
@@ -666,13 +689,13 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
                 <Row gutter={[8, 8]}>
                   {clothingItems.map((item, idx) => (
                     <Col span={6} key={idx}>
-                      <Card 
-                        size="small" 
+                      <Card
+                        size="small"
                         className={styles.clothingItemCard}
                         extra={
-                          <Button 
-                            type="text" 
-                            danger 
+                          <Button
+                            type="text"
+                            danger
                             size="small"
                             onClick={() => handleRemoveClothing(idx)}
                           >
@@ -684,7 +707,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
                           <Tag color="blue">{CLOTHING_TYPE_LABELS[item.type]}</Tag>
                           <Text className="font-bold">{item.name}</Text>
                           <Space>
-                            <div 
+                            <div
                               className={styles.colorSwatch}
                               style={{ backgroundColor: item.color }}
                             />
@@ -710,7 +733,11 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
                 accept="image/*"
               >
                 {avatarUrl ? (
-                  <img src={avatarUrl} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img
+                    src={avatarUrl}
+                    alt="avatar"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
                 ) : (
                   <div>
                     <Upload />
@@ -718,7 +745,10 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
                   </div>
                 )}
               </AntDUpload>
-              <Text type="secondary" style={{ display: 'block', textAlign: 'center', marginTop: 8 }}>
+              <Text
+                type="secondary"
+                style={{ display: 'block', textAlign: 'center', marginTop: 8 }}
+              >
                 角色形象参考图
               </Text>
             </Col>
@@ -754,9 +784,15 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
             <Col span={12}>
               <FormItem label="种子权重配置（高级）">
                 <Space className="flex-col" style={{ width: '100%' }}>
-                  <Text type="secondary">外观权重: <Input type="range" min={0} max={1} step={0.1} /></Text>
-                  <Text type="secondary">声音权重: <Input type="range" min={0} max={1} step={0.1} /></Text>
-                  <Text type="secondary">行为权重: <Input type="range" min={0} max={1} step={0.1} /></Text>
+                  <Text type="secondary">
+                    外观权重: <Input type="range" min={0} max={1} step={0.1} />
+                  </Text>
+                  <Text type="secondary">
+                    声音权重: <Input type="range" min={0} max={1} step={0.1} />
+                  </Text>
+                  <Text type="secondary">
+                    行为权重: <Input type="range" min={0} max={1} step={0.1} />
+                  </Text>
                 </Space>
               </FormItem>
             </Col>
@@ -831,8 +867,8 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
         <div style={{ marginBottom: 16 }}>
           <Space align="center">
             <Text className="font-bold">分类筛选：</Text>
-            <Select 
-              value={templateCategory} 
+            <Select
+              value={templateCategory}
               onChange={(v) => setTemplateCategory(v as string)}
               style={{ width: 150 }}
             >
@@ -842,15 +878,14 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
               <Option value="supporting">配角</Option>
               <Option value="minor">群众角色</Option>
             </Select>
-            <Text type="secondary">
-              选择模板快速创建符合故事类型的角色
-            </Text>
+            <Text type="secondary">选择模板快速创建符合故事类型的角色</Text>
           </Space>
         </div>
 
         <div className={styles.templateGrid}>
-          {getTemplatesByCategory(templateCategory === 'all' ? undefined : templateCategory)
-            .map(renderTemplateCard)}
+          {getTemplatesByCategory(templateCategory === 'all' ? undefined : templateCategory).map(
+            renderTemplateCard
+          )}
         </div>
       </Modal>
 
@@ -873,7 +908,9 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
               <Card>
                 <div className={styles.templatePreview}>
                   <Avatar size={80} src={undefined} icon={<User />} />
-                  <Title level={5} style={{ marginTop: 8 }}>{selectedTemplate.name}</Title>
+                  <Title level={5} style={{ marginTop: 8 }}>
+                    {selectedTemplate.name}
+                  </Title>
                   <Tag color="blue">{selectedTemplate.category}</Tag>
                 </div>
               </Card>
@@ -892,13 +929,15 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
                 <Panel header="服装装备" key="2">
                   <Space className="flex-col">
                     {selectedTemplate.clothing.map((item, idx) => (
-                      <Text key={idx}>{item.type}: {item.name} ({item.color})</Text>
+                      <Text key={idx}>
+                        {item.type}: {item.name} ({item.color})
+                      </Text>
                     ))}
                   </Space>
                 </Panel>
                 <Panel header="标签" key="3">
                   <Space className="flex-wrap">
-                    {selectedTemplate.tags.map(tag => (
+                    {selectedTemplate.tags.map((tag) => (
                       <Tag key={tag}>{tag}</Tag>
                     ))}
                   </Space>
@@ -907,7 +946,7 @@ const CharacterDesigner: React.FC<CharacterDesignerProps> = ({
               <Divider />
               <Form layout="inline">
                 <FormItem label="角色名称">
-                  <Input 
+                  <Input
                     placeholder={selectedTemplate.name}
                     style={{ width: 200 }}
                     onChange={() => {

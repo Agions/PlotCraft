@@ -1,15 +1,9 @@
-import {
-  Plus,
-  Trash2,
-  ZoomIn,
-  ZoomOut,
-  Columns,
-  ChevronsRight
-} from 'lucide-react';
+import { Plus, Trash2, ZoomIn, ZoomOut, Columns, ChevronsRight } from 'lucide-react';
 import React, { useState, useEffect, useRef } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
+import { formatTime } from '@/shared/utils';
 
 import styles from './Timeline.module.less';
 
@@ -36,12 +30,7 @@ interface TimelineProps {
   onTimeUpdate: (time: number) => void;
 }
 
-const Timeline: React.FC<TimelineProps> = ({
-  currentTime,
-  duration,
-  tracks,
-  onTimeUpdate
-}) => {
+const Timeline: React.FC<TimelineProps> = ({ currentTime, duration, tracks, onTimeUpdate }) => {
   const [scale, setScale] = useState(100); // 时间轴缩放比例
   const [trackList, setTrackList] = useState<Track[]>(tracks || []);
   const timelineRef = useRef<HTMLDivElement>(null);
@@ -49,13 +38,6 @@ const Timeline: React.FC<TimelineProps> = ({
   const tracksContainerRef = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef<boolean>(false);
   const [showTimeline, setShowTimeline] = useState<boolean>(true);
-
-  // 时间格式化
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
 
   // 计算时间轴宽度
   const timelineWidth = Math.max(2000, duration * scale); // 每秒100px
@@ -84,7 +66,9 @@ const Timeline: React.FC<TimelineProps> = ({
   }, [playheadPosition]);
 
   // 处理时间轴点击,跳转到指定时间
-  const handleTimelineClick = (e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>) => {
+  const handleTimelineClick = (
+    e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>
+  ) => {
     if (tracksContainerRef.current) {
       const rect = e.currentTarget.getBoundingClientRect();
       const x = 'clientX' in e ? e.clientX - rect.left + tracksContainerRef.current.scrollLeft : 0;
@@ -122,11 +106,11 @@ const Timeline: React.FC<TimelineProps> = ({
 
   // 缩放时间轴
   const handleZoomIn = () => {
-    setScale(prev => Math.min(prev + 20, 300));
+    setScale((prev) => Math.min(prev + 20, 300));
   };
 
   const handleZoomOut = () => {
-    setScale(prev => Math.max(prev - 20, 40));
+    setScale((prev) => Math.max(prev - 20, 40));
   };
 
   // 重置缩放
@@ -140,7 +124,7 @@ const Timeline: React.FC<TimelineProps> = ({
       id: `${type}-${trackList.length + 1}`,
       name: `${type === 'video' ? '视频' : type === 'audio' ? '音频' : '文本'}轨道 ${trackList.length + 1}`,
       type,
-      clips: []
+      clips: [],
     };
 
     setTrackList([...trackList, newTrack]);
@@ -163,31 +147,20 @@ const Timeline: React.FC<TimelineProps> = ({
           className={`${styles.rulerMark} ${isSecondMark ? styles.secondMark : ''}`}
           style={{ left: `${i * smallMarkInterval}px` }}
         >
-          {isSecondMark && (
-            <div className={styles.timeLabel}>{formatTime(time)}</div>
-          )}
+          {isSecondMark && <div className={styles.timeLabel}>{formatTime(time)}</div>}
         </div>
       );
     }
 
-    return (
-      <div className={styles.timeRuler}>
-        {rulerMarks}
-      </div>
-    );
+    return <div className={styles.timeRuler}>{rulerMarks}</div>;
   };
 
   // 渲染轨道
   const renderTracks = () => {
-    return trackList.map(track => (
-      <div
-        key={track.id}
-        className={`${styles.track} ${styles[track.type]}`}
-      >
+    return trackList.map((track) => (
+      <div key={track.id} className={`${styles.track} ${styles[track.type]}`}>
         <div className={styles.trackHeader}>
-          <div className={styles.trackName}>
-            {track.name}
-          </div>
+          <div className={styles.trackName}>{track.name}</div>
           <div className={styles.trackType}>
             {track.type === 'video' ? '视频' : track.type === 'audio' ? '音频' : '文本'}
           </div>
@@ -197,7 +170,7 @@ const Timeline: React.FC<TimelineProps> = ({
                 variant="ghost"
                 size="icon"
                 className={styles.trackAction}
-                onClick={() => setTrackList(trackList.filter(t => t.id !== track.id))}
+                onClick={() => setTrackList(trackList.filter((t) => t.id !== track.id))}
               >
                 <Trash2 />
               </Button>
@@ -205,10 +178,7 @@ const Timeline: React.FC<TimelineProps> = ({
             <TooltipContent>删除轨道</TooltipContent>
           </Tooltip>
         </div>
-        <div
-          className={styles.trackContent}
-          style={{ width: `${timelineWidth}px` }}
-        >
+        <div className={styles.trackContent} style={{ width: `${timelineWidth}px` }}>
           {/* 这里将来会渲染轨道上的片段 */}
         </div>
       </div>
@@ -222,10 +192,7 @@ const Timeline: React.FC<TimelineProps> = ({
           <div className={styles.timelineControls}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  onClick={() => addTrack('video')}
-                >
+                <Button variant="ghost" onClick={() => addTrack('video')}>
                   <Plus /> 视频轨道
                 </Button>
               </TooltipTrigger>
@@ -233,10 +200,7 @@ const Timeline: React.FC<TimelineProps> = ({
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  onClick={() => addTrack('audio')}
-                >
+                <Button variant="ghost" onClick={() => addTrack('audio')}>
                   <Plus /> 音频轨道
                 </Button>
               </TooltipTrigger>
@@ -244,10 +208,7 @@ const Timeline: React.FC<TimelineProps> = ({
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  onClick={() => addTrack('text')}
-                >
+                <Button variant="ghost" onClick={() => addTrack('text')}>
                   <Plus /> 文本轨道
                 </Button>
               </TooltipTrigger>
@@ -258,12 +219,7 @@ const Timeline: React.FC<TimelineProps> = ({
           <div className={styles.zoomControls}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleZoomOut}
-                  disabled={scale <= 40}
-                >
+                <Button variant="ghost" size="icon" onClick={handleZoomOut} disabled={scale <= 40}>
                   <ZoomOut />
                 </Button>
               </TooltipTrigger>
@@ -284,12 +240,7 @@ const Timeline: React.FC<TimelineProps> = ({
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleZoomIn}
-                  disabled={scale >= 300}
-                >
+                <Button variant="ghost" size="icon" onClick={handleZoomIn} disabled={scale >= 300}>
                   <ZoomIn />
                 </Button>
               </TooltipTrigger>
@@ -300,10 +251,7 @@ const Timeline: React.FC<TimelineProps> = ({
         </TooltipProvider>
       </div>
 
-      <div
-        className={styles.timelineContent}
-        ref={tracksContainerRef}
-      >
+      <div className={styles.timelineContent} ref={tracksContainerRef}>
         <div className={styles.timelineFixed}>
           <div className={styles.timelineHeader}>
             <Tooltip>
@@ -314,14 +262,18 @@ const Timeline: React.FC<TimelineProps> = ({
                   onClick={() => setShowTimeline(!showTimeline)}
                   className={styles.toggleButton}
                 >
-                  {showTimeline ? <ChevronsRight /> : <ChevronsRight style={{ transform: 'rotate(180deg)' }} />}
+                  {showTimeline ? (
+                    <ChevronsRight />
+                  ) : (
+                    <ChevronsRight style={{ transform: 'rotate(180deg)' }} />
+                  )}
                 </Button>
               </TooltipTrigger>
               <TooltipContent>{showTimeline ? '隐藏时间轴' : '显示时间轴'}</TooltipContent>
             </Tooltip>
           </div>
           <div className={styles.trackHeaders}>
-            {trackList.map(track => (
+            {trackList.map((track) => (
               <div key={track.id} className={styles.trackHeaderPlaceholder}>
                 {/* 轨道标题的占位,用于保持对齐 */}
               </div>
@@ -330,10 +282,7 @@ const Timeline: React.FC<TimelineProps> = ({
         </div>
 
         <div className={styles.timelineScrollable}>
-          <div
-            className={styles.timelineRulerContainer}
-            style={{ width: `${timelineWidth}px` }}
-          >
+          <div className={styles.timelineRulerContainer} style={{ width: `${timelineWidth}px` }}>
             {renderTimeRuler()}
           </div>
 
@@ -342,13 +291,13 @@ const Timeline: React.FC<TimelineProps> = ({
             className={styles.tracksArea}
             ref={timelineRef}
             onClick={handleTimelineClick}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleTimelineClick(e); }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') handleTimelineClick(e);
+            }}
             role="application"
             aria-label="Timeline tracks"
           >
-            <div className={styles.tracksContainer}>
-              {renderTracks()}
-            </div>
+            <div className={styles.tracksContainer}>{renderTracks()}</div>
 
             <div
               className={styles.playhead}
@@ -357,7 +306,9 @@ const Timeline: React.FC<TimelineProps> = ({
               onMouseDown={handlePlayheadMouseDown}
               role="slider"
               tabIndex={0}
-              onKeyDown={(e) => { if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') handleTimelineClick(e); }}
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') handleTimelineClick(e);
+              }}
               aria-label="timeline playhead"
               aria-valuenow={Math.round(currentTime)}
               aria-valuemin={0}

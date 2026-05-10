@@ -15,10 +15,9 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
-import {
-  Tooltip,
-} from '@/components/ui/tooltip';
+import { Tooltip } from '@/components/ui/tooltip';
 import { message, Tag, TextArea, Text, Title, Option, Select } from '@/components/ui/ui-components';
+import { generatePrefixedId } from '@/shared/utils';
 
 import styles from './StoryboardEditor.module.less';
 
@@ -88,9 +87,7 @@ const StoryboardEditor: React.FC<StoryboardEditorProps> = ({
   }, [focusFrameId, frames, onFrameSelect]);
 
   // 生成唯一ID
-  const generateId = () => {
-    return `frame_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  };
+  const generateId = () => generatePrefixedId('frame');
 
   // 获取选中的分镜
   const selectedFrame = frames.find((f) => f.id === selectedFrameId) || null;
@@ -122,8 +119,7 @@ const StoryboardEditor: React.FC<StoryboardEditorProps> = ({
       setFrames(updatedFrames);
 
       if (selectedFrameId === id) {
-        const newSelected =
-          updatedFrames.length > 0 ? updatedFrames[0].id : null;
+        const newSelected = updatedFrames.length > 0 ? updatedFrames[0].id : null;
         setSelectedFrameId(newSelected);
         onFrameSelect?.(updatedFrames.find((f) => f.id === newSelected) || null);
       }
@@ -137,9 +133,7 @@ const StoryboardEditor: React.FC<StoryboardEditorProps> = ({
   // 更新分镜
   const updateFrame = useCallback(
     (id: string, field: keyof StoryboardFrame, value: string | number) => {
-      const updatedFrames = frames.map((f) =>
-        f.id === id ? { ...f, [field]: value } : f
-      );
+      const updatedFrames = frames.map((f) => (f.id === id ? { ...f, [field]: value } : f));
       setFrames(updatedFrames);
       onChange?.(updatedFrames);
 
@@ -294,26 +288,26 @@ const StoryboardEditor: React.FC<StoryboardEditorProps> = ({
         <div className={styles.formSection}>
           <span className={styles.sectionLabel}>基本信息</span>
           <div className={styles.formRow}>
-            <label className={styles.formLabel} htmlFor="frame-title">分镜标题</label>
+            <label className={styles.formLabel} htmlFor="frame-title">
+              分镜标题
+            </label>
             <Input
               id="frame-title"
               value={selectedFrame.title}
-              onChange={(e) =>
-                updateFrame(selectedFrame.id, 'title', e.target.value)
-              }
+              onChange={(e) => updateFrame(selectedFrame.id, 'title', e.target.value)}
               placeholder="输入分镜标题"
             />
           </div>
           <div className={styles.formRow}>
-            <label className={styles.formLabel} htmlFor="frame-duration">时长（秒）</label>
+            <label className={styles.formLabel} htmlFor="frame-duration">
+              时长（秒）
+            </label>
             <Slider
               id="frame-duration"
               min={1}
               max={30}
               value={selectedFrame.duration}
-              onChange={(value) =>
-                updateFrame(selectedFrame.id, 'duration', value)
-              }
+              onChange={(value) => updateFrame(selectedFrame.id, 'duration', value)}
               marks={{
                 1: '1s',
                 5: '5s',
@@ -329,23 +323,29 @@ const StoryboardEditor: React.FC<StoryboardEditorProps> = ({
         <div className={styles.formSection}>
           <span className={styles.sectionLabel}>画面设置</span>
           <div className={styles.formRow}>
-            <label className={styles.formLabel} htmlFor="frame-scene">场景描述</label>
+            <label className={styles.formLabel} htmlFor="frame-scene">
+              场景描述
+            </label>
             <TextArea
               id="frame-scene"
               value={selectedFrame.sceneDescription}
-              onChange={(e) =>
-                updateFrame(selectedFrame.id, 'sceneDescription', e.target.value)
-              }
+              onChange={(e) => updateFrame(selectedFrame.id, 'sceneDescription', e.target.value)}
               placeholder="描述这个场景的内容"
               rows={3}
             />
           </div>
           <div className={styles.formRow}>
-            <label className={styles.formLabel} htmlFor="frame-composition">构图方式</label>
+            <label className={styles.formLabel} htmlFor="frame-composition">
+              构图方式
+            </label>
             <Select
               value={selectedFrame.composition}
               onChange={(value) =>
-                updateFrame(selectedFrame.id, 'composition', Array.isArray(value) ? value[0] : value)
+                updateFrame(
+                  selectedFrame.id,
+                  'composition',
+                  Array.isArray(value) ? value[0] : value
+                )
               }
               style={{ width: '100%' }}
             >
@@ -357,16 +357,16 @@ const StoryboardEditor: React.FC<StoryboardEditorProps> = ({
             </Select>
           </div>
           <div className={styles.formRow}>
-            <span className={styles.formLabel} aria-label="镜头类型">镜头类型</span>
+            <span className={styles.formLabel} aria-label="镜头类型">
+              镜头类型
+            </span>
             <div style={{ marginTop: 8 }} role="group" aria-label="镜头类型">
               {CAMERA_TYPES.map((type) => (
                 <Tooltip key={type.value} title={type.label}>
                   <Tag
                     color={selectedFrame.cameraType === type.value ? 'blue' : 'default'}
                     style={{ cursor: 'pointer', marginBottom: 8 }}
-                    onClick={() =>
-                      updateFrame(selectedFrame.id, 'cameraType', type.value)
-                    }
+                    onClick={() => updateFrame(selectedFrame.id, 'cameraType', type.value)}
                     icon={type.icon}
                   >
                     {type.label}
@@ -382,9 +382,7 @@ const StoryboardEditor: React.FC<StoryboardEditorProps> = ({
           <div className={styles.formRow}>
             <TextArea
               value={selectedFrame.dialogue}
-              onChange={(e) =>
-                updateFrame(selectedFrame.id, 'dialogue', e.target.value)
-              }
+              onChange={(e) => updateFrame(selectedFrame.id, 'dialogue', e.target.value)}
               placeholder="输入角色台词或旁白"
               rows={4}
               showCount
@@ -404,21 +402,14 @@ const StoryboardEditor: React.FC<StoryboardEditorProps> = ({
           <Title level={5} className={styles.title}>
             分镜列表
           </Title>
-          <Button
-            type="primary"
-            icon={<Plus />}
-            onClick={addFrame}
-            size="small"
-          >
+          <Button type="primary" icon={<Plus />} onClick={addFrame} size="small">
             添加
           </Button>
         </div>
         <div className={styles.frameList}>
-          {frames.length > 0 ? (
-            frames.map((frame, index) => renderFrameItem(frame, index))
-          ) : (
-            renderEmptyFrames()
-          )}
+          {frames.length > 0
+            ? frames.map((frame, index) => renderFrameItem(frame, index))
+            : renderEmptyFrames()}
         </div>
       </div>
 

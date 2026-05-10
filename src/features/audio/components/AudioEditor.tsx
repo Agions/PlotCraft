@@ -16,13 +16,34 @@ import React, { useState, useRef, useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Popconfirm, AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from '@/components/ui/confirm-dialog';
+import {
+  Popconfirm,
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from '@/components/ui/confirm-dialog';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Tabs } from '@/components/ui/tabs';
 import { Tooltip } from '@/components/ui/tooltip';
-import { message, Space, Tag, Row, Col, Table, Empty, Progress } from '@/components/ui/ui-components';
+import {
+  message,
+  Space,
+  Tag,
+  Row,
+  Col,
+  Table,
+  Empty,
+  Progress,
+} from '@/components/ui/ui-components';
 import { logger } from '@/core/utils/logger';
+import { formatTime, generateId } from '@/shared/utils';
 
 import styles from './AudioEditor.module.less';
 
@@ -113,18 +134,6 @@ const PRESET_SFX_LIST = [
   { id: 'sfx-10', name: '雷声', category: '自然' },
 ];
 
-// 格式化时间
-const formatTime = (seconds: number): string => {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-};
-
-// 生成唯一ID
-const generateId = (): string => {
-  return `audio-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-};
-
 const AudioEditor: React.FC<AudioEditorProps> = ({
   initialConfig,
   onConfigChange,
@@ -133,8 +142,12 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
 }) => {
   // ========== State ==========
   const [voiceTracks, setVoiceTracks] = useState<VoiceTrack[]>(initialConfig?.voiceTracks || []);
-  const [backgroundMusic, setBackgroundMusic] = useState<BackgroundMusic | null>(initialConfig?.backgroundMusic || null);
-  const [soundEffects, setSoundEffects] = useState<SoundEffect[]>(initialConfig?.soundEffects || []);
+  const [backgroundMusic, setBackgroundMusic] = useState<BackgroundMusic | null>(
+    initialConfig?.backgroundMusic || null
+  );
+  const [soundEffects, setSoundEffects] = useState<SoundEffect[]>(
+    initialConfig?.soundEffects || []
+  );
   const [masterVolume, setMasterVolume] = useState(initialConfig?.masterVolume ?? 80);
   const [voiceVolume, setVoiceVolume] = useState(initialConfig?.voiceVolume ?? 80);
   const [musicVolume, setMusicVolume] = useState(initialConfig?.musicVolume ?? 50);
@@ -170,7 +183,16 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
         effectVolume,
       });
     }
-  }, [voiceTracks, backgroundMusic, soundEffects, masterVolume, voiceVolume, musicVolume, effectVolume, onConfigChange]);
+  }, [
+    voiceTracks,
+    backgroundMusic,
+    soundEffects,
+    masterVolume,
+    voiceVolume,
+    musicVolume,
+    effectVolume,
+    onConfigChange,
+  ]);
 
   // 清理音频元素
   useEffect(() => {
@@ -193,7 +215,7 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
         audio.src = '';
       });
       // Revoke blob URLs for all voice tracks on unmount to prevent memory leaks
-      voiceTracks.forEach(track => {
+      voiceTracks.forEach((track) => {
         if (track.fileUrl?.startsWith('blob:')) {
           URL.revokeObjectURL(track.fileUrl);
         }
@@ -206,10 +228,12 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
     try {
       const selected = await open({
         multiple: true,
-        filters: [{
-          name: '音频文件',
-          extensions: ['mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac']
-        }]
+        filters: [
+          {
+            name: '音频文件',
+            extensions: ['mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac'],
+          },
+        ],
       });
 
       if (!selected || !Array.isArray(selected)) {
@@ -255,12 +279,12 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
   };
 
   const handleVoiceRemove = (id: string) => {
-    const track = voiceTracks.find(t => t.id === id);
+    const track = voiceTracks.find((t) => t.id === id);
     // Revoke blob URL to prevent memory leak
     if (track?.fileUrl?.startsWith('blob:')) {
       URL.revokeObjectURL(track.fileUrl);
     }
-    setVoiceTracks(voiceTracks.filter(track => track.id !== id));
+    setVoiceTracks(voiceTracks.filter((track) => track.id !== id));
     message.success('配音已移除');
   };
 
@@ -305,15 +329,11 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
   };
 
   const handleVoiceVolumeChange = (id: string, volume: number) => {
-    setVoiceTracks(voiceTracks.map(track =>
-      track.id === id ? { ...track, volume } : track
-    ));
+    setVoiceTracks(voiceTracks.map((track) => (track.id === id ? { ...track, volume } : track)));
   };
 
   const handleVoiceStartTimeChange = (id: string, startTime: number) => {
-    setVoiceTracks(voiceTracks.map(track =>
-      track.id === id ? { ...track, startTime } : track
-    ));
+    setVoiceTracks(voiceTracks.map((track) => (track.id === id ? { ...track, startTime } : track)));
   };
 
   // ========== 背景音乐处理 ==========
@@ -321,10 +341,12 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
     try {
       const selected = await open({
         multiple: false,
-        filters: [{
-          name: '音频文件',
-          extensions: ['mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac']
-        }]
+        filters: [
+          {
+            name: '音频文件',
+            extensions: ['mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac'],
+          },
+        ],
       });
 
       if (!selected || Array.isArray(selected)) {
@@ -429,10 +451,12 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
     try {
       const selected = await open({
         multiple: true,
-        filters: [{
-          name: '音频文件',
-          extensions: ['mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac']
-        }]
+        filters: [
+          {
+            name: '音频文件',
+            extensions: ['mp3', 'wav', 'ogg', 'm4a', 'aac', 'flac'],
+          },
+        ],
       });
 
       if (!selected || !Array.isArray(selected)) {
@@ -476,7 +500,7 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
   };
 
   const handleSfxRemove = (id: string) => {
-    setSoundEffects(soundEffects.filter(effect => effect.id !== id));
+    setSoundEffects(soundEffects.filter((effect) => effect.id !== id));
     message.success('音效已移除');
   };
 
@@ -521,15 +545,15 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
   };
 
   const handleSfxVolumeChange = (id: string, volume: number) => {
-    setSoundEffects(soundEffects.map(effect =>
-      effect.id === id ? { ...effect, volume } : effect
-    ));
+    setSoundEffects(
+      soundEffects.map((effect) => (effect.id === id ? { ...effect, volume } : effect))
+    );
   };
 
   const handleSfxStartTimeChange = (id: string, startTime: number) => {
-    setSoundEffects(soundEffects.map(effect =>
-      effect.id === id ? { ...effect, startTime } : effect
-    ));
+    setSoundEffects(
+      soundEffects.map((effect) => (effect.id === id ? { ...effect, startTime } : effect))
+    );
   };
 
   // ========== 录音功能 ==========
@@ -566,7 +590,7 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
 
         setVoiceTracks([...voiceTracks, newTrack]);
         message.success('录音完成');
-        stream.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach((track) => track.stop());
       };
 
       mediaRecorder.start();
@@ -575,7 +599,7 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
 
       // 录音计时
       const timer = setInterval(() => {
-        setRecordingTime(prev => prev + 1);
+        setRecordingTime((prev) => prev + 1);
       }, 1000);
 
       // 存储timer引用以便清除
@@ -656,7 +680,7 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
           value={startTime}
           onChange={(value) => handleVoiceStartTimeChange(record.id, value)}
           disabled={disabled}
-          tooltip={{ formatter: (value) => value ? formatTime(value) : '00:00' }}
+          tooltip={{ formatter: (value) => (value ? formatTime(value) : '00:00') }}
         />
       ),
     },
@@ -676,7 +700,9 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>取消</AlertDialogCancel>
-              <AlertDialogAction onClick={() => handleVoiceRemove(record.id)}>确认</AlertDialogAction>
+              <AlertDialogAction onClick={() => handleVoiceRemove(record.id)}>
+                确认
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
@@ -748,7 +774,7 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
           value={startTime}
           onChange={(value) => handleSfxStartTimeChange(record.id, value)}
           disabled={disabled}
-          tooltip={{ formatter: (value) => value ? formatTime(value) : '00:00' }}
+          tooltip={{ formatter: (value) => (value ? formatTime(value) : '00:00') }}
         />
       ),
     },
@@ -830,11 +856,7 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
                     >
                       {isRecording ? `停止录音 (${formatTime(recordingTime)})` : '开始录音'}
                     </Button>
-                    <Button
-                      icon={<Upload />}
-                      onClick={handleVoiceImport}
-                      disabled={disabled}
-                    >
+                    <Button icon={<Upload />} onClick={handleVoiceImport} disabled={disabled}>
                       导入配音
                     </Button>
                   </Space>
@@ -876,12 +898,15 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
                         <div className={styles.musicName}>{backgroundMusic.name}</div>
                         <div className={styles.musicMeta}>
                           <span>时长: {formatTime(backgroundMusic.duration)}</span>
-                          <span>循环: <Switch
-                            size="small"
-                            checked={backgroundMusic.loop}
-                            onChange={handleMusicLoopChange}
-                            disabled={disabled}
-                          /></span>
+                          <span>
+                            循环:{' '}
+                            <Switch
+                              size="small"
+                              checked={backgroundMusic.loop}
+                              onChange={handleMusicLoopChange}
+                              disabled={disabled}
+                            />
+                          </span>
                         </div>
                       </div>
 
@@ -926,7 +951,9 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
                             max={10}
                             step={0.5}
                             value={backgroundMusic.fadeIn}
-                            onChange={(value) => setBackgroundMusic({ ...backgroundMusic, fadeIn: value })}
+                            onChange={(value) =>
+                              setBackgroundMusic({ ...backgroundMusic, fadeIn: value })
+                            }
                             disabled={disabled}
                           />
                           <span>{backgroundMusic.fadeIn}s</span>
@@ -938,7 +965,9 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
                             max={10}
                             step={0.5}
                             value={backgroundMusic.fadeOut}
-                            onChange={(value) => setBackgroundMusic({ ...backgroundMusic, fadeOut: value })}
+                            onChange={(value) =>
+                              setBackgroundMusic({ ...backgroundMusic, fadeOut: value })
+                            }
                             disabled={disabled}
                           />
                           <span>{backgroundMusic.fadeOut}s</span>
@@ -962,7 +991,7 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
                       <div className={styles.presetSection}>
                         <div className={styles.presetTitle}>推荐背景音乐</div>
                         <div className={styles.presetList}>
-                          {PRESET_BGM_LIST.map(bgm => (
+                          {PRESET_BGM_LIST.map((bgm) => (
                             <Tag
                               key={bgm.id}
                               className={styles.presetTag}
@@ -993,11 +1022,7 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
               <div className={styles.tabContent}>
                 <div className={styles.toolbar}>
                   <Space>
-                    <Button
-                      icon={<Upload />}
-                      onClick={handleSfxImport}
-                      disabled={disabled}
-                    >
+                    <Button icon={<Upload />} onClick={handleSfxImport} disabled={disabled}>
                       导入音效
                     </Button>
                   </Space>
@@ -1020,7 +1045,7 @@ const AudioEditor: React.FC<AudioEditorProps> = ({
                     <div className={styles.presetSfxSection}>
                       <div className={styles.presetTitle}>预设音效分类</div>
                       <div className={styles.presetList}>
-                        {PRESET_SFX_LIST.map(sfx => (
+                        {PRESET_SFX_LIST.map((sfx) => (
                           <Tag
                             key={sfx.id}
                             className={styles.presetTag}

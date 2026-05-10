@@ -1,24 +1,13 @@
-import {
-  FileDown,
-  Copy,
-  FileText,
-  Clock,
-  ListOrdered,
-  Calendar
-} from 'lucide-react';
+import { FileDown, Copy, FileText, Clock, ListOrdered, Calendar } from 'lucide-react';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
-
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { logger } from '@/core/utils/logger';
+import { formatTime } from '@/shared/utils';
 import type { Script } from '@/types';
 
 import styles from './ScriptPreview.module.less';
@@ -32,20 +21,12 @@ interface ScriptPreviewProps {
 const ScriptPreview: React.FC<ScriptPreviewProps> = ({ script, onEdit, onExport }) => {
   const [_copying, setCopying] = useState(false);
 
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
-
   const copyToClipboard = () => {
     setCopying(true);
     const text = script.segments
       .map(
         (segment) =>
-          `[${formatTime(segment.startTime)} - ${formatTime(segment.endTime)}] ${
-            segment.content
-          }`
+          `[${formatTime(segment.startTime)} - ${formatTime(segment.endTime)}] ${segment.content}`
       )
       .join('\n\n');
 
@@ -68,7 +49,7 @@ const ScriptPreview: React.FC<ScriptPreviewProps> = ({ script, onEdit, onExport 
   );
 
   const getSegmentTypeInfo = (type: string) => {
-    switch(type) {
+    switch (type) {
       case 'narration':
         return { color: 'default', text: '旁白' };
       case 'dialogue':
@@ -120,12 +101,7 @@ const ScriptPreview: React.FC<ScriptPreviewProps> = ({ script, onEdit, onExport 
             >
               <Copy /> 复制全文
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onExport}
-              className={styles.actionButton}
-            >
+            <Button variant="outline" size="sm" onClick={onExport} className={styles.actionButton}>
               <FileDown /> 导出 PDF
             </Button>
             <Button
@@ -144,19 +120,14 @@ const ScriptPreview: React.FC<ScriptPreviewProps> = ({ script, onEdit, onExport 
           {script.segments.map((segment, index) => {
             const typeInfo = getSegmentTypeInfo(segment.type);
             return (
-              <div
-                key={segment.id}
-                className={styles.segment}
-              >
+              <div key={segment.id} className={styles.segment}>
                 <div className={styles.segmentHeader}>
                   <span className={styles.timeCode}>
                     {formatTime(segment.startTime)} - {formatTime(segment.endTime)}
                   </span>
                   <Badge variant="outline">{typeInfo.text}</Badge>
                 </div>
-                <p className={styles.content}>
-                  {segment.content}
-                </p>
+                <p className={styles.content}>{segment.content}</p>
                 {index < script.segments.length - 1 && <div className={styles.divider} />}
               </div>
             );

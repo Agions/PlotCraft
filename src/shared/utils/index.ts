@@ -43,7 +43,9 @@ export function throttle<T extends GenericFunction>(
     if (!inThrottle) {
       func(...args);
       inThrottle = true;
-      setTimeout(() => { inThrottle = false; }, limit);
+      setTimeout(() => {
+        inThrottle = false;
+      }, limit);
     }
   };
 }
@@ -54,7 +56,7 @@ export function throttle<T extends GenericFunction>(
 export function deepClone<T>(obj: T): T {
   if (obj === null || typeof obj !== 'object') return obj;
   if (obj instanceof Date) return new Date(obj.getTime()) as unknown as T;
-  if (Array.isArray(obj)) return obj.map(item => deepClone(item)) as unknown as T;
+  if (Array.isArray(obj)) return obj.map((item) => deepClone(item)) as unknown as T;
 
   const cloned = {} as T;
   for (const key in obj) {
@@ -81,12 +83,22 @@ export function generateId(): string {
 }
 
 /**
+ * 生成带前缀的唯一ID
+ * @param prefix ID前缀，如 'scene', 'char', 'comp'
+ * @example generatePrefixedId('scene') => 'scene_1a2b3c4d_x5y6z7'
+ */
+export function generatePrefixedId(prefix: string): string {
+  const timestamp = Date.now().toString(36);
+  const randomPart = Math.random().toString(36).substring(2, 10);
+  return `${prefix}_${timestamp}_${randomPart}`;
+}
+
+/**
  * 下载文件
  */
 export function downloadFile(content: string | Blob, filename: string, type?: string): void {
-  const blob = content instanceof Blob
-    ? content
-    : new Blob([content], { type: type || 'text/plain' });
+  const blob =
+    content instanceof Blob ? content : new Blob([content], { type: type || 'text/plain' });
 
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
@@ -172,7 +184,7 @@ export function getContrastColor(hexColor: string): string {
   const r = parseInt(hexColor.substring(1, 3), 16);
   const g = parseInt(hexColor.substring(3, 5), 16);
   const b = parseInt(hexColor.substring(5, 7), 16);
-  const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
   return yiq >= 128 ? '#000000' : '#FFFFFF';
 }
 
@@ -226,11 +238,7 @@ export function uniqueArray<T>(array: T[]): T[] {
 /**
  * 数组排序
  */
-export function sortBy<T>(
-  array: T[],
-  key: keyof T,
-  order: 'asc' | 'desc' = 'asc'
-): T[] {
+export function sortBy<T>(array: T[], key: keyof T, order: 'asc' | 'desc' = 'asc'): T[] {
   return [...array].sort((a, b) => {
     const aVal = a[key];
     const bVal = b[key];
@@ -275,17 +283,13 @@ export function mapObject<T, U>(
  * 延迟
  */
 export function delay(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
  * 重试
  */
-export async function retry<T>(
-  fn: () => Promise<T>,
-  attempts = 3,
-  delayMs = 1000
-): Promise<T> {
+export async function retry<T>(fn: () => Promise<T>, attempts = 3, delayMs = 1000): Promise<T> {
   let lastError: Error;
 
   for (let i = 0; i < attempts; i++) {
@@ -309,14 +313,33 @@ export function detectFileType(filename: string): string {
   const ext = filename.split('.').pop()?.toLowerCase() || '';
 
   const typeMap: Record<string, string> = {
-    mp4: 'video', mov: 'video', avi: 'video', mkv: 'video',
-    webm: 'video', flv: 'video', wmv: 'video',
-    mp3: 'audio', wav: 'audio', flac: 'audio', aac: 'audio',
-    jpg: 'image', jpeg: 'image', png: 'image', gif: 'image',
-    webp: 'image', svg: 'image',
-    pdf: 'document', doc: 'document', docx: 'document',
-    txt: 'text', json: 'code', js: 'code', ts: 'code',
-    srt: 'subtitle', vtt: 'subtitle', ass: 'subtitle'
+    mp4: 'video',
+    mov: 'video',
+    avi: 'video',
+    mkv: 'video',
+    webm: 'video',
+    flv: 'video',
+    wmv: 'video',
+    mp3: 'audio',
+    wav: 'audio',
+    flac: 'audio',
+    aac: 'audio',
+    jpg: 'image',
+    jpeg: 'image',
+    png: 'image',
+    gif: 'image',
+    webp: 'image',
+    svg: 'image',
+    pdf: 'document',
+    doc: 'document',
+    docx: 'document',
+    txt: 'text',
+    json: 'code',
+    js: 'code',
+    ts: 'code',
+    srt: 'subtitle',
+    vtt: 'subtitle',
+    ass: 'subtitle',
   };
 
   return typeMap[ext] || 'unknown';
@@ -361,7 +384,7 @@ export async function computeHash(data: string): Promise<string> {
   const buffer = encoder.encode(data);
   const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 // ========== Formatting Utilities ==========
@@ -469,8 +492,12 @@ const defaultRetryCondition = (error: unknown): boolean => {
   if (error instanceof Response) return error.status >= 500 || error.status === 429;
   if (error instanceof Error) {
     const message = error.message.toLowerCase();
-    return message.includes('network') || message.includes('fetch') || 
-           message.includes('timeout') || message.includes('econnrefused');
+    return (
+      message.includes('network') ||
+      message.includes('fetch') ||
+      message.includes('timeout') ||
+      message.includes('econnrefused')
+    );
   }
   return false;
 };
@@ -484,7 +511,7 @@ export const retryRequest = async <T>(
     delay = 1000,
     backoff = 'exponential',
     retryCondition = defaultRetryCondition,
-    onRetry
+    onRetry,
   } = options;
 
   let lastError: unknown;
@@ -501,7 +528,7 @@ export const retryRequest = async <T>(
         else if (backoff === 'linear') actualDelay = delay * (attempt + 1);
 
         if (onRetry) onRetry(attempt + 1, error);
-        await new Promise(resolve => setTimeout(resolve, actualDelay));
+        await new Promise((resolve) => setTimeout(resolve, actualDelay));
       } else {
         throw error;
       }
@@ -520,7 +547,7 @@ export const withTimeout = <T>(
     promise,
     new Promise<never>((_, reject) =>
       setTimeout(() => reject(timeoutError ?? new Error(`请求超时: ${timeoutMs}ms`)), timeoutMs)
-    )
+    ),
   ]);
 };
 
@@ -529,7 +556,7 @@ export const retryWithTimeout = async <T>(
   retryOptions: Partial<RetryOptions> = {},
   timeoutMs?: number
 ): Promise<T> => {
-  const execute = () => timeoutMs ? withTimeout(fn(), timeoutMs) : fn();
+  const execute = () => (timeoutMs ? withTimeout(fn(), timeoutMs) : fn());
   return retryRequest(execute, retryOptions);
 };
 
@@ -544,7 +571,9 @@ export const createCancellableRequest = <T>(
     return result;
   })();
 
-  const cancel = () => { cancelled = true; };
+  const cancel = () => {
+    cancelled = true;
+  };
   return { request, cancel };
 };
 
@@ -631,7 +660,7 @@ export class RequestCache {
     this.cache.forEach((_, key) => {
       if (key.startsWith(prefix)) keysToDelete.push(key);
     });
-    keysToDelete.forEach(key => this.cache.delete(key));
+    keysToDelete.forEach((key) => this.cache.delete(key));
   }
 
   size(): number {
@@ -689,13 +718,13 @@ export function runWhenIdle(task: () => void, options: IdleRunOptions = {}): () 
 export const transitions = {
   fast: { duration: 0.15 },
   normal: { duration: 0.25 },
-  slow: { duration: 0.35 }
+  slow: { duration: 0.35 },
 };
 
 export const easings = {
   standard: [0.4, 0, 0.2, 1],
   decelerate: [0, 0, 0.2, 1],
-  accelerate: [0.4, 0, 1, 1]
+  accelerate: [0.4, 0, 1, 1],
 };
 
 export const pageVariants: Variants = {
@@ -703,31 +732,31 @@ export const pageVariants: Variants = {
   animate: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.25, ease: easings.standard as unknown as Easing }
+    transition: { duration: 0.25, ease: easings.standard as unknown as Easing },
   },
   exit: {
     opacity: 0,
     y: -20,
-    transition: { duration: 0.2, ease: easings.accelerate as unknown as Easing }
-  }
+    transition: { duration: 0.2, ease: easings.accelerate as unknown as Easing },
+  },
 };
 
 export const fadeInVariants: Variants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  exit: { opacity: 0 }
+  exit: { opacity: 0 },
 };
 
 export const slideUpVariants: Variants = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -20 }
+  exit: { opacity: 0, y: -20 },
 };
 
 export const scaleInVariants: Variants = {
   initial: { opacity: 0, scale: 0.95 },
   animate: { opacity: 1, scale: 1 },
-  exit: { opacity: 0, scale: 0.95 }
+  exit: { opacity: 0, scale: 0.95 },
 };
 
 export const listItemVariants: Variants = {
@@ -735,8 +764,8 @@ export const listItemVariants: Variants = {
   animate: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.05, duration: 0.25, ease: easings.standard as unknown as Easing }
-  })
+    transition: { delay: i * 0.05, duration: 0.25, ease: easings.standard as unknown as Easing },
+  }),
 };
 
 export const cardHoverVariants: Variants = {
@@ -744,39 +773,42 @@ export const cardHoverVariants: Variants = {
   hover: {
     y: -5,
     boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
-    transition: { duration: 0.2, ease: easings.standard as unknown as Easing }
-  }
+    transition: { duration: 0.2, ease: easings.standard as unknown as Easing },
+  },
 };
 
 export const buttonTapVariants: Variants = {
   rest: { scale: 1 },
-  tap: { scale: 0.98 }
+  tap: { scale: 0.98 },
 };
 
 export const skeletonVariants: Variants = {
   initial: { opacity: 0.5 },
   animate: {
     opacity: 1,
-    transition: { repeat: Infinity, repeatType: 'reverse' as const, duration: 1 }
-  }
+    transition: { repeat: Infinity, repeatType: 'reverse' as const, duration: 1 },
+  },
 };
 
-export const createPageTransition = (customTransitions?: { duration?: number; ease?: number[] }) => ({
+export const createPageTransition = (customTransitions?: {
+  duration?: number;
+  ease?: number[];
+}) => ({
   ...pageVariants,
   animate: {
     ...pageVariants.animate,
     transition: {
       ...(pageVariants.animate as any).transition,
       duration: customTransitions?.duration,
-      ease: customTransitions?.ease as unknown as Easing | undefined
-    }
-  }
+      ease: customTransitions?.ease as unknown as Easing | undefined,
+    },
+  },
 });
 
 export const createStaggerChildren = (delay: number = 0.05) => ({
   animate: {
-    transition: { staggerChildren: delay }
-  }
+    transition: { staggerChildren: delay },
+  },
 });
 
 // ========== Platform Utilities ==========
@@ -836,7 +868,7 @@ export const platformUtils = {
   isMobile,
   isIOS,
   isAndroid,
-  storage: getStorageAdapter()
+  storage: getStorageAdapter(),
 };
 
 // ========== i18n ==========
@@ -875,7 +907,7 @@ const translations: Translations = {
     'theme.dark': 'Dark',
     'theme.auto': 'Auto',
     'settings.title': 'Settings',
-  }
+  },
 };
 
 const getBrowserLanguage = (): Language => {
@@ -885,33 +917,50 @@ const getBrowserLanguage = (): Language => {
 
 export function useTranslation() {
   const [language, setLanguage] = useState<Language>(
-    localStorage.getItem('app_language') as Language || getBrowserLanguage()
+    (localStorage.getItem('app_language') as Language) || getBrowserLanguage()
   );
-  
+
   useEffect(() => {
     localStorage.setItem('app_language', language);
   }, [language]);
-  
-  const t = useCallback((key: string, params?: Record<string, string | number>): string => {
-    let text = translations[language]?.[key] || key;
-    if (params) {
-      Object.entries(params).forEach(([paramKey, paramValue]) => {
-        text = text.replace(new RegExp(`{${paramKey}}`, 'g'), String(paramValue));
-      });
-    }
-    return text;
-  }, [language]);
-  
+
+  const t = useCallback(
+    (key: string, params?: Record<string, string | number>): string => {
+      let text = translations[language]?.[key] || key;
+      if (params) {
+        Object.entries(params).forEach(([paramKey, paramValue]) => {
+          text = text.replace(new RegExp(`{${paramKey}}`, 'g'), String(paramValue));
+        });
+      }
+      return text;
+    },
+    [language]
+  );
+
   const changeLanguage = useCallback((newLang: Language) => {
     setLanguage(newLang);
   }, []);
-  
+
   return { t, language, changeLanguage };
 }
 
 // ========== React Hooks Re-exports ==========
 
-export { useLocalStorage, useDebounce, useThrottle, useWindowSize, useClickOutside,
-         useCountdown, useAsync, usePrevious, useMounted, useUpdateEffect,
-         useKeyPress, useOnlineStatus, useMediaQuery, useScrollPosition,
-         useVisibility, useAutoSave } from '@/core/utils/hooks';
+export {
+  useLocalStorage,
+  useDebounce,
+  useThrottle,
+  useWindowSize,
+  useClickOutside,
+  useCountdown,
+  useAsync,
+  usePrevious,
+  useMounted,
+  useUpdateEffect,
+  useKeyPress,
+  useOnlineStatus,
+  useMediaQuery,
+  useScrollPosition,
+  useVisibility,
+  useAutoSave,
+} from '@/core/utils/hooks';
