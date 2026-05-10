@@ -448,6 +448,17 @@ export const formatFileSize = (bytes: number): string => {
 };
 
 /**
+ * 格式化MB值为友好的文件大小显示
+ * @param mb 文件大小（MB）
+ */
+export const formatSizeMB = (mb: number): string => {
+  if (mb < 0.001) return '< 1 KB';
+  if (mb < 1) return `${Math.round(mb * 1000)} KB`;
+  if (mb >= 1024) return `${(mb / 1024).toFixed(1)} GB`;
+  return `${mb.toFixed(1)} MB`;
+};
+
+/**
  * 格式化时长为友好显示（例如：2小时30分钟）
  */
 export const formatFriendlyDuration = (seconds: number): string => {

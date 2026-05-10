@@ -1,20 +1,21 @@
 import {
-  Upload as LucideUpload, MoreHorizontal, Video, FileImage, FileText, Mic
+  Upload as LucideUpload,
+  MoreHorizontal,
+  Video,
+  FileImage,
+  FileText,
+  Mic,
 } from 'lucide-react';
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dropdown, Upload as AntUpload } from '@/components/ui/ui-components';
 import { logger } from '@/core/utils/logger';
-import { EmptyState , toast } from '@/shared/components/ui';
+import { EmptyState, toast } from '@/shared/components/ui';
 import { assetService, Asset } from '@/shared/services/asset.service';
-import { formatDuration, formatSizeMB } from '@/utils/format';
+import { formatDuration, formatSizeMB } from '@/shared/utils';
 
 import styles from './AssetPanel.module.less';
 
@@ -44,11 +45,10 @@ const AssetPanel: React.FC<AssetPanelProps> = ({ projectId }) => {
 
   useEffect(() => {
     loadAssets();
-     
   }, [loadAssets]);
 
   // 过滤显示的素材
-  const filteredAssets = assets.filter(asset => {
+  const filteredAssets = assets.filter((asset) => {
     if (activeTab !== 'all' && asset.type !== activeTab) {
       return false;
     }
@@ -61,7 +61,7 @@ const AssetPanel: React.FC<AssetPanelProps> = ({ projectId }) => {
   // 删除素材
   const handleDelete = (id: string) => {
     if (assetService.delete(id)) {
-      setAssets(prev => prev.filter(asset => asset.id !== id));
+      setAssets((prev) => prev.filter((asset) => asset.id !== id));
       toast.success('素材已删除');
     }
   };
@@ -110,23 +110,26 @@ const AssetPanel: React.FC<AssetPanelProps> = ({ projectId }) => {
   // 上传素材处理
   const handleUpload = async (info: { file: File }) => {
     const file = info.file;
-    
+
     try {
-      const type = file.type.startsWith('video/') ? 'video' 
-        : file.type.startsWith('audio/') ? 'audio'
-        : file.type.startsWith('image/') ? 'image'
-        : 'text';
-      
+      const type = file.type.startsWith('video/')
+        ? 'video'
+        : file.type.startsWith('audio/')
+          ? 'audio'
+          : file.type.startsWith('image/')
+            ? 'image'
+            : 'text';
+
       const asset = assetService.add({
         name: file.name,
         type,
         src: URL.createObjectURL(file),
         size: file.size / (1024 * 1024),
         tags: [],
-        projectId
+        projectId,
       });
 
-      setAssets(prev => [asset, ...prev]);
+      setAssets((prev) => [asset, ...prev]);
       toast.success('素材上传成功');
     } catch (error) {
       logger.error('Upload failed', error);
@@ -139,27 +142,27 @@ const AssetPanel: React.FC<AssetPanelProps> = ({ projectId }) => {
     {
       key: '1',
       label: '重命名',
-      onClick: () => logger.info('重命名', id)
+      onClick: () => logger.info('重命名', id),
     },
     {
       key: '2',
       label: '下载',
-      onClick: () => logger.info('下载', id)
+      onClick: () => logger.info('下载', id),
     },
     {
       key: '3',
       label: '复制',
-      onClick: () => logger.info('复制', id)
+      onClick: () => logger.info('复制', id),
     },
     {
-      type: 'divider' as const
+      type: 'divider' as const,
     },
     {
       key: '4',
       label: '删除',
       danger: true,
-      onClick: () => handleDelete(id)
-    }
+      onClick: () => handleDelete(id),
+    },
   ];
 
   return (
@@ -183,11 +186,7 @@ const AssetPanel: React.FC<AssetPanelProps> = ({ projectId }) => {
       </Tabs>
 
       <div className={styles.uploadContainer}>
-        <AntUpload
-          multiple
-          showUploadList={false}
-          customRequest={handleUpload}
-        >
+        <AntUpload multiple showUploadList={false} customRequest={handleUpload}>
           <Button variant="outline" className="w-full">
             <LucideUpload className="h-4 w-4 mr-2" />
             上传素材
@@ -197,39 +196,44 @@ const AssetPanel: React.FC<AssetPanelProps> = ({ projectId }) => {
 
       <div className={styles.assetList}>
         {loading ? (
-          <EmptyState
-            title="加载中..."
-            description="正在获取素材数据"
-          />
+          <EmptyState title="加载中..." description="正在获取素材数据" />
         ) : filteredAssets.length > 0 ? (
-          filteredAssets.map(asset => (
+          filteredAssets.map((asset) => (
             <div key={asset.id} className={styles.assetItem}>
               <div
                 className={styles.assetContent}
                 onClick={() => addToTimeline(asset)}
-                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") addToTimeline(asset); }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') addToTimeline(asset);
+                }}
                 role="button"
                 tabIndex={0}
               >
                 <div className={styles.assetPreview}>
                   {renderThumbnail(asset)}
                   {asset.duration && (
-                    <div className={styles.assetDuration}>
-                      {formatDuration(asset.duration)}
-                    </div>
+                    <div className={styles.assetDuration}>{formatDuration(asset.duration)}</div>
                   )}
                 </div>
                 <div className={styles.assetInfo}>
-                  <div className={styles.assetName} title={asset.name}>{asset.name}</div>
+                  <div className={styles.assetName} title={asset.name}>
+                    {asset.name}
+                  </div>
                   <div className={styles.assetDetails}>
                     <span className={styles.assetSize}>{formatSizeMB(asset.size)}</span>
-                    {asset.tags.map(tag => (
-                      <span key={tag} className={styles.assetTag}>{tag}</span>
+                    {asset.tags.map((tag) => (
+                      <span key={tag} className={styles.assetTag}>
+                        {tag}
+                      </span>
                     ))}
                   </div>
                 </div>
               </div>
-              <Dropdown menu={{ items: getAssetMenuItems(asset.id) }} trigger={['click']} placement="bottomRight">
+              <Dropdown
+                menu={{ items: getAssetMenuItems(asset.id) }}
+                trigger={['click']}
+                placement="bottomRight"
+              >
                 <Button
                   variant="ghost"
                   className={styles.assetMenuButton}
@@ -243,12 +247,12 @@ const AssetPanel: React.FC<AssetPanelProps> = ({ projectId }) => {
           <EmptyState
             title={
               searchQuery
-                ? "没有找到匹配的素材"
+                ? '没有找到匹配的素材'
                 : activeTab === 'all'
-                  ? "没有素材"
+                  ? '没有素材'
                   : `没有${activeTab === 'video' ? '视频' : activeTab === 'audio' ? '音频' : activeTab === 'image' ? '图片' : '文本'}素材`
             }
-            description={searchQuery ? "请尝试其他搜索词" : "点击上方按钮上传素材"}
+            description={searchQuery ? '请尝试其他搜索词' : '点击上方按钮上传素材'}
           />
         )}
       </div>
