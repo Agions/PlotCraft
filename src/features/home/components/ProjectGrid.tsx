@@ -1,11 +1,4 @@
-import {
-  Video,
-  Plus,
-  Edit,
-  Trash2,
-  Play,
-  ImageIcon
-} from 'lucide-react';
+import { Video, Plus, Edit, Trash2, Play, ImageIcon } from 'lucide-react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,7 +23,7 @@ interface ProjectGridProps {
  * 展示项目列表，支持创建、查看、编辑、删除操作
  */
 
-const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, loading, onRefresh }) => {
+function ProjectGrid({ projects, loading, onRefresh }: ProjectGridProps) {
   const navigate = useNavigate();
   const { isDarkMode } = useTheme();
 
@@ -59,9 +52,7 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, loading, onRefresh 
   };
 
   return (
-    <Card
-      className={`${styles.sectionCard} ${isDarkMode ? styles.darkCard : ''}`}
-    >
+    <Card className={`${styles.sectionCard} ${isDarkMode ? styles.darkCard : ''}`}>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="flex items-center gap-2 text-lg">
           <Video className="h-5 w-5" />
@@ -89,16 +80,16 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, loading, onRefresh 
               <Card
                 key={project.id}
                 className={cn(
-                  "cursor-pointer hover:shadow-lg transition-shadow",
-                  isDarkMode ? styles.darkProjectCard : ""
+                  'cursor-pointer hover:shadow-lg transition-shadow',
+                  isDarkMode ? styles.darkProjectCard : ''
                 )}
                 onClick={() => handleViewProject(project.id)}
               >
                 {project.thumbnail && (
                   <div className={styles.projectThumbnail}>
-                    <img 
-                      alt={project.name} 
-                      src={project.thumbnail} 
+                    <img
+                      alt={project.name}
+                      src={project.thumbnail}
                       className="w-full h-32 object-cover rounded-t-lg"
                     />
                   </div>
@@ -152,6 +143,6 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, loading, onRefresh 
       </CardContent>
     </Card>
   );
-};
+}
 
 export default ProjectGrid;

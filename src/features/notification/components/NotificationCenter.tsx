@@ -2,12 +2,7 @@ import { Bell } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/components/ui/button';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { EmptyState } from '@/shared/components/ui';
 import { useAppStore } from '@/shared/stores';
 
@@ -18,7 +13,7 @@ interface NotificationCenterProps {
   onClose?: () => void;
 }
 
-const NotificationCenter: React.FC<NotificationCenterProps> = ({ open, onClose }) => {
+function NotificationCenter({ open, onClose }: NotificationCenterProps) {
   const { notifications, clearAllNotifications } = useAppStore();
 
   const mockNotifications = [
@@ -41,9 +36,9 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({ open, onClose }
       <SheetContent side="right" className="w-[320px]">
         <SheetHeader>
           <SheetTitle>通知中心</SheetTitle>
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={clearAllNotifications}
             disabled={!notifications}
           >
@@ -67,16 +62,13 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({ open, onClose }
           ) : (
             <div className={styles.emptyContainer}>
               <Bell className="h-12 w-12 text-muted-foreground" />
-              <EmptyState
-                title="暂无通知"
-                description="这里会显示您的系统通知"
-              />
+              <EmptyState title="暂无通知" description="这里会显示您的系统通知" />
             </div>
           )}
         </div>
       </SheetContent>
     </Sheet>
   );
-};
+}
 
 export default NotificationCenter;

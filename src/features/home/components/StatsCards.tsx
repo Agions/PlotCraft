@@ -15,11 +15,11 @@ interface StatsCardsProps {
   projects: ProjectData[];
 }
 
-const StatsCards: React.FC<StatsCardsProps> = ({ projects }) => {
+function StatsCards({ projects }: StatsCardsProps) {
   const { isDarkMode } = useTheme();
 
-  const completedCount = projects.filter(p => p.status === 'completed').length;
-  const processingCount = projects.filter(p => p.status === 'processing').length;
+  const completedCount = projects.filter((p) => p.status === 'completed').length;
+  const processingCount = projects.filter((p) => p.status === 'processing').length;
 
   const stats = [
     { title: '项目总数', value: projects.length, icon: Video, color: '#6366f1' },
@@ -30,10 +30,7 @@ const StatsCards: React.FC<StatsCardsProps> = ({ projects }) => {
   return (
     <div className={`grid grid-cols-1 sm:grid-cols-3 gap-6 ${styles.stats}`}>
       {stats.map((stat, index) => (
-        <Card
-          key={index}
-          className={`${styles.statsCard} ${isDarkMode ? styles.darkCard : ''}`}
-        >
+        <Card key={index} className={`${styles.statsCard} ${isDarkMode ? styles.darkCard : ''}`}>
           <div className="flex items-center gap-4">
             <stat.icon className="h-8 w-8" style={{ color: stat.color }} />
             <div>
@@ -45,6 +42,6 @@ const StatsCards: React.FC<StatsCardsProps> = ({ projects }) => {
       ))}
     </div>
   );
-};
+}
 
 export default StatsCards;

@@ -13,7 +13,11 @@ interface SubtitleEditorViewProps {
   onSave?: (subtitleData: unknown) => void;
 }
 
-const SubtitleEditorView: React.FC<SubtitleEditorViewProps> = ({ projectId: _projectId, videoPath: _videoPath, onSave: _onSave }) => {
+function SubtitleEditorView({
+  projectId: _projectId,
+  videoPath: _videoPath,
+  onSave: _onSave,
+}: SubtitleEditorViewProps) {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -24,6 +28,6 @@ const SubtitleEditorView: React.FC<SubtitleEditorViewProps> = ({ projectId: _pro
       <SubtitleEditor subtitles={[]} onChange={() => {}} />
     </div>
   );
-};
+}
 
 export default SubtitleEditorView;

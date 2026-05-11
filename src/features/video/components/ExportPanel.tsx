@@ -63,7 +63,7 @@ const generateTxtContent = (script: ScriptData): string => {
     script.scenes.forEach((scene, index) => {
       lines.push(`\n[场景 ${index + 1}] ${scene.description || ''}`);
       if (scene.dialogues) {
-        scene.dialogues.forEach(d => {
+        scene.dialogues.forEach((d) => {
           lines.push(`  ${d.character}: ${d.text}`);
         });
       }
@@ -85,7 +85,7 @@ const generateSrtContent = (script: ScriptData): string => {
   if (script.scenes) {
     script.scenes.forEach((scene) => {
       if (scene.dialogues) {
-        scene.dialogues.forEach(d => {
+        scene.dialogues.forEach((d) => {
           const startTime = formatSrtTime(scene.startTime || 0);
           const endTime = formatSrtTime((scene.startTime || 0) + (d.duration || 3));
           subtitles.push(`${index}`);
@@ -143,16 +143,32 @@ const generateHtmlContent = (script: ScriptData): string => {
 <body>
   <h1>${script.title || '脚本'}</h1>
   <p class="meta">导出时间: ${new Date().toLocaleString()}</p>
-  ${script.scenes ? script.scenes.map((scene, i) => `
+  ${
+    script.scenes
+      ? script.scenes
+          .map(
+            (scene, i) => `
     <div class="scene">
       <div class="scene-title">场景 ${i + 1}: ${scene.description || ''}</div>
-      ${scene.dialogues ? scene.dialogues.map(d => `
+      ${
+        scene.dialogues
+          ? scene.dialogues
+              .map(
+                (d) => `
         <div class="dialogue">
           <span class="character">${d.character}:</span> ${d.text}
         </div>
-      `).join('') : ''}
+      `
+              )
+              .join('')
+          : ''
+      }
     </div>
-  `).join('') : `<pre>${script.content || ''}</pre>`}
+  `
+          )
+          .join('')
+      : `<pre>${script.content || ''}</pre>`
+  }
 </body>
 </html>`;
   return html;
@@ -194,7 +210,7 @@ interface ExportPanelProps {
   script: ScriptData;
 }
 
-const ExportPanel: React.FC<ExportPanelProps> = ({ script }) => {
+function ExportPanel({ script }: ExportPanelProps) {
   const [exportFormat, setExportFormat] = useState<ExportFormat>('txt');
   const [filename, setFilename] = useState<string>(`脚本_${script.id || 'draft'}`);
   const [exporting, setExporting] = useState(false);
@@ -244,7 +260,9 @@ const ExportPanel: React.FC<ExportPanelProps> = ({ script }) => {
     >
       <div className={styles.content}>
         <div className={styles.filenameSection}>
-          <label htmlFor="filename" className={styles.label}>文件名:</label>
+          <label htmlFor="filename" className={styles.label}>
+            文件名:
+          </label>
           <Input
             id="filename"
             value={filename}
@@ -257,32 +275,47 @@ const ExportPanel: React.FC<ExportPanelProps> = ({ script }) => {
         <div className={styles.formatSection}>
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label className={styles.label}>导出格式:</label>
-          <RadioGroup value={exportFormat} onChange={(value) => setExportFormat(value as ExportFormat)}>
+          <RadioGroup
+            value={exportFormat}
+            onChange={(value) => setExportFormat(value as ExportFormat)}
+          >
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <RadioGroupItem value="txt" id="txt" />
-                <label htmlFor="txt" style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                <label
+                  htmlFor="txt"
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}
+                >
                   <FileText size={16} /> 纯文本 (.txt)
                   <span className={styles.formatDesc}>- 简单文本格式，适合通用场景</span>
                 </label>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <RadioGroupItem value="srt" id="srt" />
-                <label htmlFor="srt" style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                <label
+                  htmlFor="srt"
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}
+                >
                   <FileText size={16} /> 字幕文件 (.srt)
                   <span className={styles.formatDesc}>- 标准字幕格式，可导入视频编辑软件</span>
                 </label>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <RadioGroupItem value="pdf" id="pdf" />
-                <label htmlFor="pdf" style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                <label
+                  htmlFor="pdf"
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}
+                >
                   <FileType size={16} /> PDF文档 (.pdf)
                   <span className={styles.formatDesc}>- 带格式的PDF文档，适合打印或分享</span>
                 </label>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <RadioGroupItem value="html" id="html" />
-                <label htmlFor="html" style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                <label
+                  htmlFor="html"
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}
+                >
                   <Globe size={16} /> 网页 (.html)
                   <span className={styles.formatDesc}>- 可在浏览器中打开的网页格式</span>
                 </label>
@@ -293,6 +326,6 @@ const ExportPanel: React.FC<ExportPanelProps> = ({ script }) => {
       </div>
     </Card>
   );
-};
+}
 
 export default ExportPanel;

@@ -16,15 +16,8 @@ import {
 import React, { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
-import {
-  Button,
-} from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -36,12 +29,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Text } from '@/components/ui/typography';
 
 import styles from './SubtitleEditor.module.less';
@@ -53,7 +41,7 @@ interface ColorPickerProps {
   disabled?: boolean;
 }
 
-const ColorPicker: React.FC<ColorPickerProps> = ({ value = '#ffffff', onChange, disabled }) => {
+function ColorPicker({ value = '#ffffff', onChange, disabled }: ColorPickerProps) {
   return (
     <input
       type="color"
@@ -62,14 +50,14 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value = '#ffffff', onChange, 
       onChange={(e) => {
         if (onChange) {
           onChange({
-            toHexString: () => e.target.value
+            toHexString: () => e.target.value,
           });
         }
       }}
       className="h-9 w-14 rounded border border-input cursor-pointer"
     />
   );
-};
+}
 
 // ============================================
 // 类型定义
@@ -179,9 +167,7 @@ export const SubtitleEditor: React.FC<SubtitleEditorProps> = ({
 
   // 更新字幕列表
   const updateSubtitle = (id: string, updates: Partial<SubtitleItem>) => {
-    const newSubtitles = subtitles.map((s) =>
-      s.id === id ? { ...s, ...updates } : s
-    );
+    const newSubtitles = subtitles.map((s) => (s.id === id ? { ...s, ...updates } : s));
     onChange(newSubtitles);
   };
 
@@ -260,7 +246,8 @@ export const SubtitleEditor: React.FC<SubtitleEditorProps> = ({
     if (!active) return null;
 
     const style = active.style || previewStyle;
-    const positionY = style.position === 'top' ? '10%' : style.position === 'middle' ? '50%' : '90%';
+    const positionY =
+      style.position === 'top' ? '10%' : style.position === 'middle' ? '50%' : '90%';
     const textAlign = style.alignment;
 
     return (
@@ -286,270 +273,288 @@ export const SubtitleEditor: React.FC<SubtitleEditorProps> = ({
 
   return (
     <TooltipProvider>
-    <div className={`${styles.container} ${className || ''}`}>
-      {/* 预览区域 */}
-      {showPreview && (
-        <div className={styles.previewArea}>
-          <div
-            className={styles.preview}
-            style={{
-              width: videoWidth,
-              height: videoHeight,
-              maxWidth: '100%',
-              maxHeight: 300,
-            }}
-          >
-            {/* 预览背景 */}
-            <div className={styles.previewBg}>
-              <Text type="secondary">视频预览区域</Text>
+      <div className={`${styles.container} ${className || ''}`}>
+        {/* 预览区域 */}
+        {showPreview && (
+          <div className={styles.previewArea}>
+            <div
+              className={styles.preview}
+              style={{
+                width: videoWidth,
+                height: videoHeight,
+                maxWidth: '100%',
+                maxHeight: 300,
+              }}
+            >
+              {/* 预览背景 */}
+              <div className={styles.previewBg}>
+                <Text type="secondary">视频预览区域</Text>
+              </div>
+              {/* 字幕渲染 */}
+              {renderPreview()}
             </div>
-            {/* 字幕渲染 */}
-            {renderPreview()}
           </div>
-        </div>
-      )}
+        )}
 
-      <div className={styles.editorArea}>
-        {/* 字幕列表 */}
-        <Card
-          className={styles.subtitleList}
-        >
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Text strong>字幕列表</Text>
-                <Badge variant="info">{subtitles.length}</Badge>
-              </div>
-              {!readonly && (
-                <Button size="sm" variant="default" onClick={addSubtitle}>
-                  <Plus /> 添加字幕
-                </Button>
-              )}
-            </div>
-          </CardHeader>
-          <CardContent>
-            {subtitles.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">暂无字幕，点击添加</div>
-            ) : (
-              <div className="flex flex-col gap-1">
-                {subtitles.map((subtitle) => (
-                  <div
-                    key={subtitle.id}
-                    className={`${styles.subtitleItem} flex items-center justify-between px-3 py-2 rounded-md cursor-pointer border transition-colors ${
-                      selectedId === subtitle.id ? 'border-primary bg-primary/5' : 'border-transparent hover:bg-muted/50'
-                    } ${
-                      currentTime >= subtitle.startTime && currentTime <= subtitle.endTime ? 'bg-primary/10' : ''
-                    }`}
-                    onClick={() => handleSelect(subtitle)}
-                  >
-                    <div className={styles.subtitleInfo}>
-                      <Badge variant="outline">{formatTime(subtitle.startTime)}</Badge>
-                      <span className={styles.subtitleText}>{subtitle.text}</span>
-                      <Badge variant="outline">{formatTime(subtitle.endTime)}</Badge>
-                    </div>
-                    {!readonly && (
-                      <div className="flex items-center gap-1">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                duplicateSubtitle(subtitle);
-                              }}
-                            >
-                              <Copy />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>复制</TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                deleteSubtitle(subtitle.id);
-                              }}
-                            >
-                              <Trash2 />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>删除</TooltipContent>
-                        </Tooltip>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* 字幕编辑 */}
-        {selectedSubtitle && (
-          <Card className={styles.subtitleEditor}>
+        <div className={styles.editorArea}>
+          {/* 字幕列表 */}
+          <Card className={styles.subtitleList}>
             <CardHeader>
-              <CardTitle>字幕编辑</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-4">
-              {/* 时间设置 */}
-              <div className={styles.timeRow}>
-                <Text type="secondary">时间:</Text>
-                <Input
-                  type="number"
-                  value={selectedSubtitle.startTime}
-                  onChange={(e) => updateSubtitle(selectedSubtitle.id, { startTime: Number(e.target.value) })}
-                  style={{ width: 80 }}
-                  step={0.1}
-                  min={0}
-                  disabled={readonly}
-                />
-                <Text> - </Text>
-                <Input
-                  type="number"
-                  value={selectedSubtitle.endTime}
-                  onChange={(e) => updateSubtitle(selectedSubtitle.id, { endTime: Number(e.target.value) })}
-                  style={{ width: 80 }}
-                  step={0.1}
-                  min={0}
-                  disabled={readonly}
-                />
-                <Text type="secondary" style={{ marginLeft: 8 }}>
-                  ({formatTime(selectedSubtitle.endTime - selectedSubtitle.startTime)})
-                </Text>
-              </div>
-
-              {/* 文本编辑 */}
-              <div>
-                <Text type="secondary">文本内容:</Text>
-                <Textarea
-                  value={editingText}
-                  onChange={(e) => {
-                    setEditingText(e.target.value);
-                    updateSubtitle(selectedSubtitle.id, { text: e.target.value });
-                  }}
-                  rows={2}
-                  placeholder="输入字幕文本"
-                  disabled={readonly}
-                />
-              </div>
-
-              <Separator />
-
-              {/* 字体设置 */}
-              <div className={styles.styleRow}>
-                <Text type="secondary">
-                  <Type /> 字体:
-                </Text>
-                <Select
-                  value={previewStyle.fontFamily}
-                  onValueChange={(value) => updateStyle({ fontFamily: value })}
-                >
-                  <SelectTrigger style={{ width: 150 }}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {fontFamilyOptions.map(opt => (
-                      <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Text type="secondary">大小:</Text>
-                <Slider
-                  min={12}
-                  max={72}
-                  value={previewStyle.fontSize}
-                  onValueChange={(value) => updateStyle({ fontSize: Array.isArray(value) ? value[0] : value })}
-                  style={{ width: 100 }}
-                  disabled={readonly}
-                />
-                <Text>{previewStyle.fontSize}px</Text>
-              </div>
-
-              {/* 颜色设置 */}
-              <div className={styles.styleRow}>
-                <Text type="secondary">
-                  <Palette /> 颜色:
-                </Text>
-                <ColorPicker
-                  value={previewStyle.color}
-                  onChange={(color) => updateStyle({ color: color.toHexString() })}
-                  disabled={readonly}
-                />
-                <Text type="secondary" style={{ marginLeft: 16 }}>背景:</Text>
-                <ColorPicker
-                  value={previewStyle.backgroundColor}
-                  onChange={(color) => updateStyle({ backgroundColor: color.toHexString() })}
-                  disabled={readonly}
-                />
-              </div>
-
-              {/* 描边设置 */}
-              <div className={styles.styleRow}>
-                <Text type="secondary">描边:</Text>
-                <Select
-                  value={previewStyle.outline ? 'outline' : 'none'}
-                  onValueChange={(value) => updateStyle({ outline: value === 'outline' })}
-                >
-                  <SelectTrigger style={{ width: 80 }}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">无</SelectItem>
-                    <SelectItem value="outline">描边</SelectItem>
-                  </SelectContent>
-                </Select>
-                {previewStyle.outline && (
-                  <>
-                    <Text type="secondary">描边颜色:</Text>
-                    <ColorPicker
-                      value={previewStyle.outlineColor}
-                      onChange={(color) => updateStyle({ outlineColor: color.toHexString() })}
-                      disabled={readonly}
-                    />
-                  </>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Text strong>字幕列表</Text>
+                  <Badge variant="info">{subtitles.length}</Badge>
+                </div>
+                {!readonly && (
+                  <Button size="sm" variant="default" onClick={addSubtitle}>
+                    <Plus /> 添加字幕
+                  </Button>
                 )}
               </div>
-
-              {/* 位置和对齐 */}
-              <div className={styles.styleRow}>
-                <Text type="secondary">位置:</Text>
-                <Select
-                  value={previewStyle.position}
-                  onValueChange={(value) => updateStyle({ position: value as any })}
-                >
-                  <SelectTrigger style={{ width: 80 }}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {positionOptions.map(opt => (
-                      <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Text type="secondary" style={{ marginLeft: 16 }}>对齐:</Text>
-                <Select
-                  value={previewStyle.alignment}
-                  onValueChange={(value) => updateStyle({ alignment: value as any })}
-                >
-                  <SelectTrigger style={{ width: 80 }}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {alignmentOptions.map(opt => (
-                      <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            </CardHeader>
+            <CardContent>
+              {subtitles.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">暂无字幕，点击添加</div>
+              ) : (
+                <div className="flex flex-col gap-1">
+                  {subtitles.map((subtitle) => (
+                    <div
+                      key={subtitle.id}
+                      className={`${styles.subtitleItem} flex items-center justify-between px-3 py-2 rounded-md cursor-pointer border transition-colors ${
+                        selectedId === subtitle.id
+                          ? 'border-primary bg-primary/5'
+                          : 'border-transparent hover:bg-muted/50'
+                      } ${
+                        currentTime >= subtitle.startTime && currentTime <= subtitle.endTime
+                          ? 'bg-primary/10'
+                          : ''
+                      }`}
+                      onClick={() => handleSelect(subtitle)}
+                    >
+                      <div className={styles.subtitleInfo}>
+                        <Badge variant="outline">{formatTime(subtitle.startTime)}</Badge>
+                        <span className={styles.subtitleText}>{subtitle.text}</span>
+                        <Badge variant="outline">{formatTime(subtitle.endTime)}</Badge>
+                      </div>
+                      {!readonly && (
+                        <div className="flex items-center gap-1">
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  duplicateSubtitle(subtitle);
+                                }}
+                              >
+                                <Copy />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>复制</TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteSubtitle(subtitle.id);
+                                }}
+                              >
+                                <Trash2 />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>删除</TooltipContent>
+                          </Tooltip>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
-        )}
+
+          {/* 字幕编辑 */}
+          {selectedSubtitle && (
+            <Card className={styles.subtitleEditor}>
+              <CardHeader>
+                <CardTitle>字幕编辑</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                {/* 时间设置 */}
+                <div className={styles.timeRow}>
+                  <Text type="secondary">时间:</Text>
+                  <Input
+                    type="number"
+                    value={selectedSubtitle.startTime}
+                    onChange={(e) =>
+                      updateSubtitle(selectedSubtitle.id, { startTime: Number(e.target.value) })
+                    }
+                    style={{ width: 80 }}
+                    step={0.1}
+                    min={0}
+                    disabled={readonly}
+                  />
+                  <Text> - </Text>
+                  <Input
+                    type="number"
+                    value={selectedSubtitle.endTime}
+                    onChange={(e) =>
+                      updateSubtitle(selectedSubtitle.id, { endTime: Number(e.target.value) })
+                    }
+                    style={{ width: 80 }}
+                    step={0.1}
+                    min={0}
+                    disabled={readonly}
+                  />
+                  <Text type="secondary" style={{ marginLeft: 8 }}>
+                    ({formatTime(selectedSubtitle.endTime - selectedSubtitle.startTime)})
+                  </Text>
+                </div>
+
+                {/* 文本编辑 */}
+                <div>
+                  <Text type="secondary">文本内容:</Text>
+                  <Textarea
+                    value={editingText}
+                    onChange={(e) => {
+                      setEditingText(e.target.value);
+                      updateSubtitle(selectedSubtitle.id, { text: e.target.value });
+                    }}
+                    rows={2}
+                    placeholder="输入字幕文本"
+                    disabled={readonly}
+                  />
+                </div>
+
+                <Separator />
+
+                {/* 字体设置 */}
+                <div className={styles.styleRow}>
+                  <Text type="secondary">
+                    <Type /> 字体:
+                  </Text>
+                  <Select
+                    value={previewStyle.fontFamily}
+                    onValueChange={(value) => updateStyle({ fontFamily: value })}
+                  >
+                    <SelectTrigger style={{ width: 150 }}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {fontFamilyOptions.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Text type="secondary">大小:</Text>
+                  <Slider
+                    min={12}
+                    max={72}
+                    value={previewStyle.fontSize}
+                    onValueChange={(value) =>
+                      updateStyle({ fontSize: Array.isArray(value) ? value[0] : value })
+                    }
+                    style={{ width: 100 }}
+                    disabled={readonly}
+                  />
+                  <Text>{previewStyle.fontSize}px</Text>
+                </div>
+
+                {/* 颜色设置 */}
+                <div className={styles.styleRow}>
+                  <Text type="secondary">
+                    <Palette /> 颜色:
+                  </Text>
+                  <ColorPicker
+                    value={previewStyle.color}
+                    onChange={(color) => updateStyle({ color: color.toHexString() })}
+                    disabled={readonly}
+                  />
+                  <Text type="secondary" style={{ marginLeft: 16 }}>
+                    背景:
+                  </Text>
+                  <ColorPicker
+                    value={previewStyle.backgroundColor}
+                    onChange={(color) => updateStyle({ backgroundColor: color.toHexString() })}
+                    disabled={readonly}
+                  />
+                </div>
+
+                {/* 描边设置 */}
+                <div className={styles.styleRow}>
+                  <Text type="secondary">描边:</Text>
+                  <Select
+                    value={previewStyle.outline ? 'outline' : 'none'}
+                    onValueChange={(value) => updateStyle({ outline: value === 'outline' })}
+                  >
+                    <SelectTrigger style={{ width: 80 }}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">无</SelectItem>
+                      <SelectItem value="outline">描边</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {previewStyle.outline && (
+                    <>
+                      <Text type="secondary">描边颜色:</Text>
+                      <ColorPicker
+                        value={previewStyle.outlineColor}
+                        onChange={(color) => updateStyle({ outlineColor: color.toHexString() })}
+                        disabled={readonly}
+                      />
+                    </>
+                  )}
+                </div>
+
+                {/* 位置和对齐 */}
+                <div className={styles.styleRow}>
+                  <Text type="secondary">位置:</Text>
+                  <Select
+                    value={previewStyle.position}
+                    onValueChange={(value) => updateStyle({ position: value as any })}
+                  >
+                    <SelectTrigger style={{ width: 80 }}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {positionOptions.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Text type="secondary" style={{ marginLeft: 16 }}>
+                    对齐:
+                  </Text>
+                  <Select
+                    value={previewStyle.alignment}
+                    onValueChange={(value) => updateStyle({ alignment: value as any })}
+                  >
+                    <SelectTrigger style={{ width: 80 }}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {alignmentOptions.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
       </div>
-    </div>
     </TooltipProvider>
   );
 };

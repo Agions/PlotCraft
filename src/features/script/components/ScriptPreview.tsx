@@ -18,7 +18,7 @@ interface ScriptPreviewProps {
   onExport: () => void;
 }
 
-const ScriptPreview: React.FC<ScriptPreviewProps> = ({ script, onEdit, onExport }) => {
+function ScriptPreview({ script, onEdit, onExport }: ScriptPreviewProps) {
   const [_copying, setCopying] = useState(false);
 
   const copyToClipboard = () => {
@@ -136,6 +136,6 @@ const ScriptPreview: React.FC<ScriptPreviewProps> = ({ script, onEdit, onExport 
       </CardContent>
     </Card>
   );
-};
+}
 
 export default ScriptPreview;

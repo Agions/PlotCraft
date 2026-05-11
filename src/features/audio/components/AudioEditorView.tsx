@@ -12,7 +12,7 @@ interface AudioEditorViewProps {
   onSave?: (config: unknown) => void;
 }
 
-const AudioEditorView: React.FC<AudioEditorViewProps> = ({ projectId, onSave }) => {
+function AudioEditorView({ projectId, onSave }: AudioEditorViewProps) {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -23,6 +23,6 @@ const AudioEditorView: React.FC<AudioEditorViewProps> = ({ projectId, onSave }) 
       <AudioEditor projectId={projectId} onSave={onSave} />
     </div>
   );
-};
+}
 
 export default AudioEditorView;

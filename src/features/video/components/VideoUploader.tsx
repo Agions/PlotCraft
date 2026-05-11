@@ -22,7 +22,7 @@ interface CustomRequestOptions {
   onError?: (error: Error) => void;
 }
 
-const VideoUploader: React.FC<VideoUploaderProps> = ({ onUploadSuccess, initialValue }) => {
+function VideoUploader({ onUploadSuccess, initialValue }: VideoUploaderProps) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [videoUrl, setVideoUrl] = useState<string | undefined>(initialValue);
@@ -113,11 +113,7 @@ const VideoUploader: React.FC<VideoUploaderProps> = ({ onUploadSuccess, initialV
       {videoUrl ? (
         <div className={styles.videoPreview}>
           <div className={styles.videoWrapper}>
-            <video
-              src={videoUrl}
-              controls
-              className={styles.video}
-            />
+            <video src={videoUrl} controls className={styles.video} />
           </div>
           <div className={styles.videoActions}>
             <Button
@@ -165,14 +161,12 @@ const VideoUploader: React.FC<VideoUploaderProps> = ({ onUploadSuccess, initialV
               </Button>
             </>
           )}
-          <p className={styles.uploadTip}>
-            支持MP4、MOV、AVI或MKV格式，最大文件大小500MB
-          </p>
+          <p className={styles.uploadTip}>支持MP4、MOV、AVI或MKV格式，最大文件大小500MB</p>
           {uploading && <Progress percent={progress} status="active" />}
         </div>
       )}
     </div>
   );
-};
+}
 
 export default VideoUploader;
