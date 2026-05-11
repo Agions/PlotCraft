@@ -425,17 +425,6 @@ export const formatTime = (seconds: number): string => {
 };
 
 /**
- * 将秒数格式化为 HH:MM:SS 时间格式（小时版本）
- */
-export const formatTimeHMS = (seconds: number): string => {
-  if (isNaN(seconds) || seconds < 0) return '00:00:00';
-  const hrs = Math.floor(seconds / 3600);
-  const mins = Math.floor((seconds % 3600) / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-};
-
-/**
  * 将秒数格式化为 MM:SS.s 时间格式（带1位小数毫秒）
  */
 export const formatTimeWithMs = (seconds: number): string => {

@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Slider } from '@/components/ui/slider';
 import { Tooltip } from '@/components/ui/tooltip';
+import { formatTime } from '@/shared/utils';
 
 import styles from './EnhancedVideoControls.module.less';
 
@@ -69,27 +70,9 @@ export interface VideoControlsProps {
 const defaultPlaybackRates = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
 // ============================================
-// 工具函数
-// ============================================
-
-/**
- * 格式化时间
- */
-const formatTime = (time: number): string => {
-  if (isNaN(time) || time < 0) return '00:00';
-
-  const hours = Math.floor(time / 3600);
-  const minutes = Math.floor((time % 3600) / 60);
-  const seconds = Math.floor(time % 60);
-
-  if (hours > 0) {
-    return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  }
-  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-};
 
 // ============================================
-// 视频控制条组件
+// 类型定义
 // ============================================
 
 /**
