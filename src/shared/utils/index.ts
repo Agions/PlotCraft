@@ -3,13 +3,8 @@
  * Consolidated utilities from src/utils and src/core/utils
  */
 
-import { open } from '@tauri-apps/plugin-dialog';
-import * as fs from '@tauri-apps/plugin-fs';
 import { Variants, Easing } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
-
-import { logger } from '@/core/utils/logger';
-import { exportScriptToPDF } from '@/core/utils/pdf-export';
 
 // ========== General Utilities ==========
 
