@@ -60,3 +60,4 @@ AS_ANY_AUDIT.md
 N8N_REMOVAL_REPORT.md
 REPORT.md
 docs/.vitepress/cache/
+.tsbuildinfo
