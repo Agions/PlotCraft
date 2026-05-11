@@ -471,6 +471,9 @@ export const formatSRTTime = (seconds: number): string => {
 /**
  * 将秒数格式化为hh:mm:ss的时间格式
  */
+/**
+ * Format duration in hh:mm:ss (hours omitted if 0)
+ */
 export const formatDuration = (seconds: number): string => {
   if (isNaN(seconds) || seconds < 0) return '00:00:00';
   const hours = Math.floor(seconds / 3600);
@@ -478,6 +481,16 @@ export const formatDuration = (seconds: number): string => {
   const secs = Math.floor(seconds % 60);
   const hoursStr = hours > 0 ? `${hours.toString().padStart(2, '0')}:` : '';
   return `${hoursStr}${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+};
+
+/**
+ * Format duration in mm:ss (short format, hours always omitted)
+ */
+export const formatDurationShort = (seconds?: number): string => {
+  if (seconds == null || isNaN(seconds) || seconds < 0) return '未知';
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins.toString()}:${secs.toString().padStart(2, '0')}`;
 };
 
 /**

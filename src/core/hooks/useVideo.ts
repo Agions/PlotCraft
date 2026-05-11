@@ -7,6 +7,7 @@ import { useState, useCallback, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import type { VideoInfo, VideoAnalysis, TaskStatus } from '@/core/types';
+import { formatDurationShort } from '@/shared/utils';
 
 export interface UseVideoReturn {
   // 视频信息
@@ -219,7 +220,7 @@ export function useVideo(): UseVideoReturn {
         keyframes: generateMockKeyframes(video.duration!),
         objects: [],
         emotions: [],
-        summary: `视频时长 ${formatDuration(video.duration!)}，分辨率 ${video.width!}x${video.height!}，包含 ${Math.floor(video.duration! / 30)} 个场景。`,
+        summary: `视频时长 ${formatDurationShort(video.duration!)}，分辨率 ${video.width!}x${video.height!}，包含 ${Math.floor(video.duration! / 30)} 个场景。`,
         createdAt: new Date().toISOString()
       };
       
@@ -305,12 +306,6 @@ export function useVideo(): UseVideoReturn {
 }
 
 // 辅助函数
-function formatDuration(seconds: number): string {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs.toString().padStart(2, '0')}`;
-}
-
 function generateMockScenes(duration: number) {
   const scenes = [];
   const sceneCount = Math.floor(duration / 30);

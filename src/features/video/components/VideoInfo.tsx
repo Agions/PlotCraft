@@ -2,6 +2,7 @@ import { Video, Clock, FileVideo } from 'lucide-react';
 import React from 'react';
 
 import { Card } from '@/components/ui/card';
+import { formatDurationShort } from '@/shared/utils';
 
 import styles from './VideoInfo.module.less';
 
@@ -26,15 +27,6 @@ const VideoInfo: React.FC<VideoInfoProps> = ({
   path,
   metadata 
 }) => {
-  // 格式化时间为分:秒
-  const formatDuration = (seconds?: number): string => {
-    if (!seconds) return '未知';
-    
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-  
   // 格式化路径，只显示最后的文件名部分
   const formatPath = (path: string): string => {
     const parts = path.split(/[/\\]/);
@@ -56,7 +48,7 @@ const VideoInfo: React.FC<VideoInfoProps> = ({
           <div style={{ color: 'rgba(0,0,0,0.45)', fontSize: 14, marginBottom: 4 }}>时长</div>
           <div style={{ fontSize: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
             <Clock size={16} />
-            {formatDuration(duration)}
+            {formatDurationShort(duration)}
           </div>
         </div>
         

@@ -34,13 +34,7 @@ import type { ScriptData, ScriptMetadata } from '@/core/types';
 import { logger } from '@/core/utils/logger';
 
 import styles from './ScriptEditor.module.less';
-
-// 格式化时长 mm:ss（短时长用，如音频片段）
-const formatDurationShort = (seconds: number): string => {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs.toString().padStart(2, '0')}`;
-};
+import { formatDurationShort } from '@/shared/utils';
 
 // 定义 VideoSegment 类型（兼容旧接口）
 interface VideoSegment {

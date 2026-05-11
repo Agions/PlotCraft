@@ -9,15 +9,9 @@ import { toast } from '@/components/ui/sonner';
 import { tauriService } from '@/core/services';
 import { logger } from '@/core/utils/logger';
 import { VideoMetadata } from '@/shared/types';
+import { formatDurationShort } from '@/shared/utils';
 
 import styles from './VideoSelector.module.less';
-
-// 格式化时长 mm:ss
-const formatDuration = (seconds: number): string => {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs.toString().padStart(2, '0')}`;
-};
 
 // 格式化分辨率
 const formatResolution = (width: number, height: number): string => `${width}x${height}`;
@@ -140,7 +134,7 @@ const VideoSelector: React.FC<VideoSelectorProps> = ({
             {metadata && (
               <Card className={styles.metadataCard} title="视频信息">
                 <p><strong>文件名:</strong> {videoPath.split('/').pop()}</p>
-                <p><strong>时长:</strong> {formatDuration(metadata.duration)}</p>
+                <p><strong>时长:</strong> {formatDurationShort(metadata.duration)}</p>
                 <p><strong>分辨率:</strong> {formatResolution(metadata.width, metadata.height)}</p>
                 <p><strong>帧率:</strong> {metadata.fps} fps</p>
                 <p><strong>编码:</strong> {metadata.codec}</p>
