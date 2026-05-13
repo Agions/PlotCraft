@@ -25,17 +25,11 @@ const HeroSection: React.FC = () => {
     <div className={styles.hero}>
       <div className={styles.heroContent}>
         <h1 className={styles.title}>
-          PanelFlow AI <span className={styles.highlight}>AI视频脚本创作</span>
+          gapanel-flow AI <span className={styles.highlight}>AI视频脚本创作</span>
         </h1>
-        <p className={styles.subtitle}>
-          AI赋能的短视频创作工具，让视频制作更简单、更高效
-        </p>
+        <p className={styles.subtitle}>AI赋能的短视频创作工具，让视频制作更简单、更高效</p>
         <div className={styles.heroButtons}>
-          <Button
-            size="lg"
-            onClick={handleCreateProject}
-            className={styles.primaryButton}
-          >
+          <Button size="lg" onClick={handleCreateProject} className={styles.primaryButton}>
             <Plus className="mr-2 h-4 w-4" />
             创建新项目
           </Button>

@@ -2,7 +2,11 @@
  * 合成服务测试 - Composition Service Tests
  */
 
-import { CompositionService, getCompositionService, resetCompositionService } from '@/core/services/composition.service';
+import {
+  CompositionService,
+  getCompositionService,
+  resetCompositionService,
+} from '@/core/services/composition.service';
 import type { StoryboardFrame } from '@/features/storyboard/components/StoryboardEditor';
 
 // Mock uuid
@@ -292,7 +296,9 @@ describe('CompositionService', () => {
       // 重置 mock 以便只计算后续调用
       listener.mockClear();
 
-      service.initializeFromStoryboard(service.getByProjectId('project-1')!.id, [createTestFrame({ id: 'frame-1' })]);
+      service.initializeFromStoryboard(service.getByProjectId('project-1')!.id, [
+        createTestFrame({ id: 'frame-1' }),
+      ]);
 
       expect(listener).toHaveBeenCalledTimes(1);
     });
@@ -824,7 +830,7 @@ describe('CompositionService', () => {
           updatedAt: new Date().toISOString(),
         },
       ];
-      localStorageMock.data['PanelFlow-compositions'] = JSON.stringify(storedData);
+      localStorageMock.data['gapanel-flow-compositions'] = JSON.stringify(storedData);
 
       const service = new CompositionService();
       const composition = service.getById('stored-id');
@@ -834,7 +840,7 @@ describe('CompositionService', () => {
     });
 
     it('应该处理 localStorage 解析错误', () => {
-      localStorageMock.data['PanelFlow-compositions'] = 'invalid json';
+      localStorageMock.data['gapanel-flow-compositions'] = 'invalid json';
 
       const service = new CompositionService();
 

@@ -1,6 +1,6 @@
 /**
- * PanelFlow Pipeline 统一入口
- * 
+ * gapanel-flow Pipeline 统一入口
+ *
  * 提供流水线创建、执行、状态查询的统一接口
  */
 
@@ -12,7 +12,6 @@ import {
   PipelineExecutionMode,
   PipelineStatus,
   type PipelineConfig,
-
   type PipelineExecutionState,
 } from './pipeline.types';
 import { createAnalysisStep } from './step-analysis';
@@ -45,7 +44,7 @@ export class PipelineService {
         createImportStep(),
         createAnalysisStep(),
         createScriptStep(),
-        createAudioSynthesisStep(),  // 生成配音 + BGM（在渲染之前）
+        createAudioSynthesisStep(), // 生成配音 + BGM（在渲染之前）
         createCharacterStep(),
         createStoryboardStep(),
         createRenderStep(),
@@ -58,7 +57,7 @@ export class PipelineService {
     this.engines.set(workflowId, engine);
 
     logger.info(`[PipelineService] Created default pipeline: ${workflowId}`, {
-      steps: config.steps.map(s => s.stepId),
+      steps: config.steps.map((s) => s.stepId),
     });
 
     return engine;
@@ -73,7 +72,7 @@ export class PipelineService {
     projectId?: string
   ): Promise<Map<PipelineStepId, unknown>> {
     const engine = this.createDefaultPipeline(workflowId, projectId);
-    
+
     engine.onEvents({
       onStepProgress: (stepId, progress, message) => {
         logger.debug(`[Pipeline] ${stepId} ${progress}% ${message ?? ''}`);
@@ -89,11 +88,11 @@ export class PipelineService {
     });
 
     const results = await engine.run(initialData);
-    
+
     // 转换为通用类型
     const output = new Map<PipelineStepId, unknown>();
     output.set(PipelineStepId.IMPORT, results);
-    
+
     return output;
   }
 
@@ -121,7 +120,7 @@ export class PipelineService {
     if (!engine) {
       throw new Error(`Pipeline ${workflowId} not found`);
     }
-    
+
     const results = await engine.resume();
     const output = new Map<PipelineStepId, unknown>();
     output.set(PipelineStepId.IMPORT, results);

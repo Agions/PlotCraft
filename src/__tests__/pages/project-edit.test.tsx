@@ -16,13 +16,23 @@ jest.mock('react-router-dom', () => ({
 }));
 
 jest.mock('@/features/script/components/ScriptEditor', () => () => <div>ScriptEditor</div>);
-jest.mock('@/components/business/CostDashboard', () => () => <div data-testid="mock-cost-dashboard">CostDashboard</div>);
-jest.mock('@/features/storyboard/components/StoryboardEditor', ({ onFrameSelect }: { initialFrames: Array<{ id: string; title: string }>; onFrameSelect?: (frame: { id: string; title: string }) => void }) => {
-  React.useEffect(() => {
-    if (onFrameSelect) onFrameSelect({ id: 'frame-1', title: '镜头1' });
-  }, [onFrameSelect]);
-  return <div>StoryboardEditor</div>;
-});
+jest.mock('@/components/business/CostDashboard', () => () => (
+  <div data-testid="mock-cost-dashboard">CostDashboard</div>
+));
+jest.mock(
+  '@/features/storyboard/components/StoryboardEditor',
+  ({
+    onFrameSelect,
+  }: {
+    initialFrames: Array<{ id: string; title: string }>;
+    onFrameSelect?: (frame: { id: string; title: string }) => void;
+  }) => {
+    React.useEffect(() => {
+      if (onFrameSelect) onFrameSelect({ id: 'frame-1', title: '镜头1' });
+    }, [onFrameSelect]);
+    return <div>StoryboardEditor</div>;
+  }
+);
 
 jest.mock('@/core/services', () => ({
   tauriService: {
@@ -55,25 +65,29 @@ describe('ProjectEdit collaboration regression', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.clear();
-    mockLoadProjectFromFile.mockResolvedValue(JSON.stringify({
-      id: 'p-edit-1',
-      name: '编辑测试项目',
-      description: 'desc',
-      content: '小说内容',
-      script: '已有剧本',
-      evaluationSummary: {
-        consistency: 86,
-        pacing: 80,
-        readability: 82,
-        cost: 78,
-        overall: 82,
-      },
-      storyboardFrames: [{ id: 'frame-1', title: '镜头1', sceneDescription: '开场', duration: 5 }],
-      storyboardComments: [],
-      storyboardVersions: [],
-      createdAt: '2026-03-08T09:00:00.000Z',
-      updatedAt: '2026-03-08T09:00:00.000Z',
-    }));
+    mockLoadProjectFromFile.mockResolvedValue(
+      JSON.stringify({
+        id: 'p-edit-1',
+        name: '编辑测试项目',
+        description: 'desc',
+        content: '小说内容',
+        script: '已有剧本',
+        evaluationSummary: {
+          consistency: 86,
+          pacing: 80,
+          readability: 82,
+          cost: 78,
+          overall: 82,
+        },
+        storyboardFrames: [
+          { id: 'frame-1', title: '镜头1', sceneDescription: '开场', duration: 5 },
+        ],
+        storyboardComments: [],
+        storyboardVersions: [],
+        createdAt: '2026-03-08T09:00:00.000Z',
+        updatedAt: '2026-03-08T09:00:00.000Z',
+      })
+    );
   });
 
   it('adds collaboration data and persists on save', async () => {
@@ -93,16 +107,15 @@ describe('ProjectEdit collaboration regression', () => {
     await waitFor(() => {
       expect(mockSaveProjectToFile).toHaveBeenCalled();
     });
-    const [, savedText] = mockSaveProjectToFile.mock.calls[mockSaveProjectToFile.mock.calls.length - 1];
+    const [, savedText] =
+      mockSaveProjectToFile.mock.calls[mockSaveProjectToFile.mock.calls.length - 1];
     const savedPayload = JSON.parse(savedText);
     expect(savedPayload.storyboardComments?.length).toBeGreaterThan(0);
     expect(savedPayload.storyboardVersions?.length).toBeGreaterThan(0);
   });
 
   it('exports review notes from edit header action', async () => {
-    mockInvoke
-      .mockResolvedValueOnce('/tmp/edit-review.md')
-      .mockResolvedValueOnce(undefined);
+    mockInvoke.mockResolvedValueOnce('/tmp/edit-review.md').mockResolvedValueOnce(undefined);
 
     render(<ProjectEdit />);
 
@@ -112,13 +125,18 @@ describe('ProjectEdit collaboration regression', () => {
       expect(mockInvoke).toHaveBeenCalledWith('save_file_dialog', expect.any(Object));
     });
     await waitFor(() => {
-      expect(mockInvoke).toHaveBeenCalledWith('write_text_file', expect.objectContaining({
-        path: '/tmp/edit-review.md',
-      }));
+      expect(mockInvoke).toHaveBeenCalledWith(
+        'write_text_file',
+        expect.objectContaining({
+          path: '/tmp/edit-review.md',
+        })
+      );
     });
-    const writeCall = mockInvoke.mock.calls.find(call => call[0] === 'write_text_file');
+    const writeCall = mockInvoke.mock.calls.find((call) => call[0] === 'write_text_file');
     expect(String(writeCall?.[1]?.content ?? '')).toContain('- 综合: 82.0');
-    const activities = JSON.parse(localStorage.getItem('PanelFlow_review_export_activities') ?? '[]');
+    const activities = JSON.parse(
+      localStorage.getItem('gapanel-flow_review_export_activities') ?? '[]'
+    );
     expect(activities[0]).toMatchObject({
       projectId: 'p-edit-1',
       projectName: '编辑测试项目',

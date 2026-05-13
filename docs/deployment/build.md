@@ -1,6 +1,6 @@
 # 构建与部署
 
-PanelFlow 构建和部署指南。
+gapanel-flow 构建和部署指南。
 
 ## 构建命令
 

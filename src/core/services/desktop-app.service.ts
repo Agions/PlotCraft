@@ -4,7 +4,11 @@
  */
 
 import { getCurrentWindow, LogicalSize, LogicalPosition } from '@tauri-apps/api/window';
-import { sendNotification, isPermissionGranted, requestPermission } from '@tauri-apps/plugin-notification';
+import {
+  sendNotification,
+  isPermissionGranted,
+  requestPermission,
+} from '@tauri-apps/plugin-notification';
 
 import { logger } from '@/core/utils/logger';
 
@@ -67,20 +71,21 @@ class DesktopAppService {
   async getWindowState(): Promise<WindowState> {
     const window = getCurrentWindow();
 
-    const [isMaximized, isMinimized, isFullscreen, isFocused, title, size, position] = await Promise.all([
-      window.isMaximized(),
-      window.isMinimized(),
-      window.isFullscreen(),
-      window.isFocused(),
-      window.title(),
-      window.innerSize(),
-      window.innerPosition(),
-    ]);
+    const [isMaximized, isMinimized, isFullscreen, isFocused, title, size, position] =
+      await Promise.all([
+        window.isMaximized(),
+        window.isMinimized(),
+        window.isFullscreen(),
+        window.isFocused(),
+        window.title(),
+        window.innerSize(),
+        window.innerPosition(),
+      ]);
 
     // isAlwaysOnTop may not be available in all Tauri versions
     let isAlwaysOnTop = false;
     try {
-      isAlwaysOnTop = await (window as any).isAlwaysOnTop?.() ?? false;
+      isAlwaysOnTop = (await (window as any).isAlwaysOnTop?.()) ?? false;
     } catch {
       // Ignore error, default to false
     }
@@ -152,7 +157,7 @@ class DesktopAppService {
     // isAlwaysOnTop may not be available in all Tauri versions
     let isOnTop = false;
     try {
-      isOnTop = await (window as any).isAlwaysOnTop?.() ?? false;
+      isOnTop = (await (window as any).isAlwaysOnTop?.()) ?? false;
     } catch {
       // Ignore error, default to false
     }
@@ -431,7 +436,7 @@ class DesktopAppService {
    * 获取应用名称
    */
   getAppName(): string {
-    return 'PanelFlow AI';
+    return 'gapanel-flow AI';
   }
 
   /**

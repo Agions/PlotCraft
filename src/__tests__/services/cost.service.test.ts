@@ -44,7 +44,7 @@ describe('costService enhancements', () => {
   describe('getModelSuggestion', () => {
     it('should suggest cheap model for simple tasks with low budget', () => {
       const suggestion = service.getModelSuggestion('simple', 'low');
-      
+
       expect(suggestion.model).toBeDefined();
       expect(suggestion.provider).toBeDefined();
       expect(suggestion.estimatedCost).toBeGreaterThanOrEqual(0);
@@ -52,21 +52,21 @@ describe('costService enhancements', () => {
 
     it('should suggest expensive model for complex tasks with high budget', () => {
       const suggestion = service.getModelSuggestion('complex', 'high');
-      
+
       expect(suggestion.model).toBeDefined();
       expect(suggestion.provider).toBeDefined();
     });
 
     it('should return balanced suggestion by default', () => {
       const suggestion = service.getModelSuggestion('standard');
-      
+
       expect(suggestion.model).toBeDefined();
       expect(suggestion.provider).toBeDefined();
     });
 
     it('should handle creative complexity', () => {
       const suggestion = service.getModelSuggestion('creative', 'medium');
-      
+
       expect(suggestion.model).toBeDefined();
     });
   });
@@ -74,7 +74,7 @@ describe('costService enhancements', () => {
   describe('getOptimizationSuggestions', () => {
     it('should return message when no data', () => {
       const suggestions = service.getOptimizationSuggestions();
-      
+
       expect(Array.isArray(suggestions)).toBe(true);
       expect(suggestions.length).toBeGreaterThan(0);
     });
@@ -84,10 +84,10 @@ describe('costService enhancements', () => {
       for (let i = 0; i < 20; i++) {
         service.recordLLMCost('openai', 'gpt-5', 100, 100, { projectId: 'p1' });
       }
-      
+
       const suggestions = service.getOptimizationSuggestions();
-      const hasLLMSuggestion = suggestions.some(s => s.includes('LLM'));
-      
+      const hasLLMSuggestion = suggestions.some((s) => s.includes('LLM'));
+
       expect(hasLLMSuggestion).toBe(true);
     });
 
@@ -96,7 +96,7 @@ describe('costService enhancements', () => {
       for (let i = 0; i < 10; i++) {
         service.recordStorageCost('video-export', 500, { projectId: 'p1' });
       }
-      
+
       const suggestions = service.getOptimizationSuggestions();
       // Just verify it returns valid suggestions
       expect(Array.isArray(suggestions)).toBe(true);
@@ -106,11 +106,11 @@ describe('costService enhancements', () => {
   describe('exportReport', () => {
     it('should export valid markdown report', () => {
       service.recordLLMCost('alibaba', 'qwen-plus', 100, 100, { projectId: 'p1' });
-      
+
       const report = service.exportReport();
-      
+
       expect(typeof report).toBe('string');
-      expect(report).toContain('PanelFlow');
+      expect(report).toContain('gapanel-flow');
       expect(report).toContain('成本报告');
       expect(report).toContain('总计');
     });
@@ -118,9 +118,9 @@ describe('costService enhancements', () => {
     it('should include budget utilization in report', () => {
       service.setBudget({ daily: 0.001, weekly: 0.01, monthly: 0.05 });
       service.recordLLMCost('alibaba', 'qwen-plus', 100, 100, { projectId: 'p1' });
-      
+
       const report = service.exportReport();
-      
+
       expect(report).toContain('今日');
       expect(report).toContain('本周');
       expect(report).toContain('本月');

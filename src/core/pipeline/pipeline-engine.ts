@@ -88,7 +88,7 @@ export class PipelineEngine {
   async resume(input?: StepInput): Promise<StepOutput> {
     this.status = PipelineStatus.RUNNING;
     this.abortController = new AbortController();
-    
+
     const resumeInput = input || {};
     return this.runInternal(resumeInput, true);
   }
@@ -117,10 +117,10 @@ export class PipelineEngine {
   async run(input: StepInput): Promise<StepOutput> {
     this.status = PipelineStatus.RUNNING;
     this.abortController = new AbortController();
-    
+
     logger.info('[PipelineEngine] Starting pipeline', {
       workflowId: this.options.workflowId,
-      steps: this.steps.map(s => s.id),
+      steps: this.steps.map((s) => s.id),
     });
 
     return this.runInternal(input, false);
@@ -134,7 +134,7 @@ export class PipelineEngine {
     const enableCheckpoint = this.options.enableCheckpoint && this.options.workflowId;
 
     // Run pipeline start middlewares
-    this.options.middlewares?.forEach(m => m.onPipelineStart?.());
+    this.options.middlewares?.forEach((m) => m.onPipelineStart?.());
 
     try {
       for (const step of this.steps) {
@@ -145,11 +145,11 @@ export class PipelineEngine {
 
         // Check if paused - would need external handling to resume
         while (this.status === PipelineStatus.PAUSED) {
-          await new Promise(resolve => setTimeout(resolve, 100));
+          await new Promise((resolve) => setTimeout(resolve, 100));
         }
 
         // Run step start middlewares
-        this.options.middlewares?.forEach(m => m.onStepStart?.(step.id, context));
+        this.options.middlewares?.forEach((m) => m.onStepStart?.(step.id, context));
 
         // Try to restore from checkpoint on resume
         if (isResume && enableCheckpoint) {
@@ -175,10 +175,10 @@ export class PipelineEngine {
         try {
           this.eventHandler?.onStepStart?.(step.id);
           this.options.onProgress?.(step.id, 0);
-          
+
           const result = await step.process(context);
           context = { ...context, ...result };
-          
+
           // Save checkpoint
           if (enableCheckpoint) {
             await saveCheckpoint(step.id, result);
@@ -188,35 +188,33 @@ export class PipelineEngine {
           this.eventHandler?.onStepComplete?.(step.id, result);
 
           // Run step complete middlewares
-          this.options.middlewares?.forEach(m => m.onStepComplete?.(step.id, result));
-
+          this.options.middlewares?.forEach((m) => m.onStepComplete?.(step.id, result));
         } catch (error) {
           this.options.onError?.(step.id, error as Error);
           this.eventHandler?.onStepFail?.(step.id, (error as Error).message);
-          
+
           // Run error middlewares
-          this.options.middlewares?.forEach(m => m.onStepError?.(step.id, error as Error));
-          
+          this.options.middlewares?.forEach((m) => m.onStepError?.(step.id, error as Error));
+
           throw error;
         }
       }
 
       this.status = PipelineStatus.COMPLETED;
       this.options.onComplete?.(context as StepOutput);
-      
+
       // Run pipeline complete middlewares
-      this.options.middlewares?.forEach(m => m.onPipelineComplete?.(context as StepOutput));
+      this.options.middlewares?.forEach((m) => m.onPipelineComplete?.(context as StepOutput));
 
       logger.info('[PipelineEngine] Pipeline completed successfully');
       return context as StepOutput;
-
     } catch (error) {
       this.status = PipelineStatus.FAILED;
       this.eventHandler?.onStepFail?.('pipeline', (error as Error).message);
-      
+
       // Run pipeline error middlewares
-      this.options.middlewares?.forEach(m => m.onPipelineError?.(error as Error));
-      
+      this.options.middlewares?.forEach((m) => m.onPipelineError?.(error as Error));
+
       logger.error('[PipelineEngine] Pipeline failed:', error);
       throw error;
     }
@@ -288,25 +286,27 @@ export const LoggerMiddleware: PipelineMiddleware = {
 /**
  * Metrics Middleware - 指标中间件
  */
-interface PanelFlowMetrics {
+interface GapanelFlowMetrics {
   steps: Record<string, { completedAt: number; success: boolean }>;
   completedAt?: number;
 }
 
 declare global {
   interface Window {
-    __PANELFLOW_METRICS__?: PanelFlowMetrics;
+    __GAPANELFLOW_METRICS__?: GapanelFlowMetrics;
   }
 }
 
 export const MetricsMiddleware: PipelineMiddleware = {
   name: 'metrics',
   onStepComplete: (stepId, _output) => {
-    const metrics = window.__PANELFLOW_METRICS__ || (window.__PANELFLOW_METRICS__ = { steps: {} });
+    const metrics =
+      window.__GAPANELFLOW_METRICS__ || (window.__GAPANELFLOW_METRICS__ = { steps: {} });
     metrics.steps[stepId] = { completedAt: Date.now(), success: true };
   },
   onPipelineComplete: () => {
-    const metrics = window.__PANELFLOW_METRICS__ || (window.__PANELFLOW_METRICS__ = { steps: {} });
+    const metrics =
+      window.__GAPANELFLOW_METRICS__ || (window.__GAPANELFLOW_METRICS__ = { steps: {} });
     metrics.completedAt = Date.now();
   },
 };

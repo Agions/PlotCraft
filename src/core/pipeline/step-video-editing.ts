@@ -13,7 +13,12 @@ import type {
   StepProgressEvent,
   RetryPolicy,
 } from './pipeline.types';
-import { PipelineStepId, StepStatus, QualityGateDecision , PipelineExecutionMode } from './pipeline.types';
+import {
+  PipelineStepId,
+  StepStatus,
+  QualityGateDecision,
+  PipelineExecutionMode,
+} from './pipeline.types';
 
 // ========== 类型定义 ==========
 
@@ -21,15 +26,15 @@ export interface VideoClip {
   id: string;
   path: string;
   type: 'image' | 'video';
-  startTime: number;   // 在最终视频中的起始时间
-  duration: number;    // 持续时长（秒）
+  startTime: number; // 在最终视频中的起始时间
+  duration: number; // 持续时长（秒）
   sourceStart?: number; // 对于视频片段：源素材的起始点
-  sourceEnd?: number;   // 对于视频片段：源素材的结束点
+  sourceEnd?: number; // 对于视频片段：源素材的结束点
 }
 
 export interface Transition {
   type: 'fade' | 'dissolve' | 'slide_left' | 'slide_right' | 'zoom' | 'blur';
-  duration: number;    // 秒
+  duration: number; // 秒
   easing: 'linear' | 'ease_in' | 'ease_out' | 'ease_in_out';
 }
 
@@ -55,9 +60,9 @@ export interface AudioTrack {
   path: string;
   startTime: number;
   duration: number;
-  volume: number;        // 0.0 - 1.0
-  fadeIn?: number;        // 秒
-  fadeOut?: number;       // 秒
+  volume: number; // 0.0 - 1.0
+  fadeIn?: number; // 秒
+  fadeOut?: number; // 秒
 }
 
 export interface VideoEditingOutput {
@@ -142,8 +147,18 @@ export class VideoEditor {
   }
 
   // 获取所有转场点
-  getTransitionPoints(): Array<{ clipId1: string; clipId2: string; transition: Transition; time: number }> {
-    const points: Array<{ clipId1: string; clipId2: string; transition: Transition; time: number }> = [];
+  getTransitionPoints(): Array<{
+    clipId1: string;
+    clipId2: string;
+    transition: Transition;
+    time: number;
+  }> {
+    const points: Array<{
+      clipId1: string;
+      clipId2: string;
+      transition: Transition;
+      time: number;
+    }> = [];
     for (let i = 0; i < this.clips.length - 1; i++) {
       const curr = this.clips[i];
       const next = this.clips[i + 1];
@@ -158,7 +173,7 @@ export class VideoEditor {
 
   // 获取指定时间点的可见字幕
   getSubtitlesAtTime(time: number): SubtitleBlock[] {
-    return this.subtitles.filter(sub => time >= sub.startTime && time <= sub.endTime);
+    return this.subtitles.filter((sub) => time >= sub.startTime && time <= sub.endTime);
   }
 
   // 获取指定时间点的音频混合音量
@@ -295,11 +310,16 @@ export class VideoEditingStep implements PipelineStep {
 
     try {
       // 1. 收集渲染好的帧和音频数据
-      const renderedFrames = context.getVariable<Array<{ frameId: string; imageUrl: string }>>('renderedFrames') ?? [];
-      const dialogueAudio = context.getVariable<{ audioUrl: string; duration: number }[]>('dialogueAudio') ?? [];
+      const renderedFrames =
+        context.getVariable<Array<{ frameId: string; imageUrl: string }>>('renderedFrames') ?? [];
+      const dialogueAudio =
+        context.getVariable<{ audioUrl: string; duration: number }[]>('dialogueAudio') ?? [];
       const bgmPath = context.getVariable<string>('selectedBgm') ?? '';
       const subtitles = context.getVariable<SubtitleBlock[]>('generatedSubtitles') ?? [];
-      const transitions = context.getVariable<Array<{ from: string; to: string; type: string; duration: number }>>('transitions') ?? [];
+      const transitions =
+        context.getVariable<Array<{ from: string; to: string; type: string; duration: number }>>(
+          'transitions'
+        ) ?? [];
 
       if (renderedFrames.length === 0) {
         throw new Error('No rendered frames available for video editing');
@@ -326,7 +346,9 @@ export class VideoEditingStep implements PipelineStep {
 
       // 2.2 添加转场效果
       for (let i = 0; i < clips.length - 1; i++) {
-        const transCfg = transitions.find(t => t.from === clips[i].id && t.to === clips[i + 1].id);
+        const transCfg = transitions.find(
+          (t) => t.from === clips[i].id && t.to === clips[i + 1].id
+        );
         if (transCfg) {
           editor.setTransition(clips[i].id, clips[i + 1].id, {
             type: transCfg.type as Transition['type'],
@@ -354,7 +376,7 @@ export class VideoEditingStep implements PipelineStep {
         editor.addAudioTrack({
           type: 'dialogue',
           path: audio.audioUrl,
-          startTime: i * FRAME_DURATION,  // 假设每段对话对应一个场景
+          startTime: i * FRAME_DURATION, // 假设每段对话对应一个场景
           duration: audio.duration,
           volume: 0.9,
           fadeIn: 0.1,
@@ -394,7 +416,9 @@ export class VideoEditingStep implements PipelineStep {
       context.setVariable('finalVideoResolution', { width: 1920, height: 1080 });
 
       const totalMs = Date.now() - startTime;
-      logger.success(`[VideoEditingStep] Video editing completed in ${(totalMs / 1000).toFixed(1)}s`);
+      logger.success(
+        `[VideoEditingStep] Video editing completed in ${(totalMs / 1000).toFixed(1)}s`
+      );
 
       return {
         stepId: this.stepId,
@@ -404,7 +428,7 @@ export class VideoEditingStep implements PipelineStep {
           duration: editor.getDuration(),
           resolution: { width: 1920, height: 1080 },
           format: 'mp4' as const,
-          clips: clips.map(c => ({ id: c.id, startTime: c.startTime, duration: c.duration })),
+          clips: clips.map((c) => ({ id: c.id, startTime: c.startTime, duration: c.duration })),
           transitionsCount: transitions.length,
           audioTracksCount: dialogueAudio.length + (bgmPath ? 1 : 0),
           subtitlesCount: subtitles.length,
@@ -418,7 +442,6 @@ export class VideoEditingStep implements PipelineStep {
         endTime: Date.now(),
         retryCount: 0,
       };
-
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : String(error);
       logger.error(`[VideoEditingStep] Video editing failed: ${errorMsg}`);
@@ -446,11 +469,13 @@ export class VideoEditingStep implements PipelineStep {
     // 模拟 Tauri 后端调用
     if (this.isTauriEnvironment()) {
       // TODO: 真实视频合成待 Tauri 后端实现
-      // 追踪 issue: https://github.com/Agions/PanelFlow/issues/Y
+      // 追踪 issue: https://github.com/Agions/gapanel-flow/issues/Y
       // await tauriInvoke('export_video', { config: editor.exportConfig(), outputPath });
     }
 
-    logger.info(`[VideoEditingStep] Export configured: ${outputPath}, ${clips.length} clips, ${duration}s`);
+    logger.info(
+      `[VideoEditingStep] Export configured: ${outputPath}, ${clips.length} clips, ${duration}s`
+    );
 
     // 返回配置的输出路径（实际合成由 Tauri 后端完成）
     return outputPath;

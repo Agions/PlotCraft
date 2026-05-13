@@ -2,7 +2,11 @@
  * 分镜服务测试 - Storyboard Service Tests
  */
 
-import { StoryboardService, resetStoryboardService, getStoryboardService } from '@/core/services/storyboard.service';
+import {
+  StoryboardService,
+  resetStoryboardService,
+  getStoryboardService,
+} from '@/core/services/storyboard.service';
 import type { StoryboardFrame } from '@/features/storyboard/components/StoryboardEditor';
 
 // Mock uuid
@@ -77,7 +81,9 @@ const createTestScript = () => ({
 
 // Helper to get mock functions
 const getMockGenerate = () => require('@/core/services/ai.service').aiService.generate as jest.Mock;
-const getMockGenerateImage = () => require('@/core/services/image-generation.service').imageGenerationService.generateImage as jest.Mock;
+const getMockGenerateImage = () =>
+  require('@/core/services/image-generation.service').imageGenerationService
+    .generateImage as jest.Mock;
 
 describe('StoryboardService', () => {
   beforeEach(() => {
@@ -130,7 +136,7 @@ describe('StoryboardService', () => {
         title: '分镜1',
         sceneDescription: '场景1',
       });
-      
+
       expect(service.getAll()).toHaveLength(1);
       expect(service.getAll()[0].id).toBe(frame.id);
     });
@@ -138,17 +144,17 @@ describe('StoryboardService', () => {
     it('不同 projectId 应该使用不同的存储', () => {
       const service1 = new StoryboardService({ projectId: 'project-1' });
       const service2 = new StoryboardService({ projectId: 'project-2' });
-      
+
       service1.create({
         title: '分镜1',
         sceneDescription: '场景1',
       });
-      
+
       service2.create({
         title: '分镜2',
         sceneDescription: '场景2',
       });
-      
+
       expect(service1.getAll()).toHaveLength(1);
       expect(service2.getAll()).toHaveLength(1);
       expect(service1.getAll()[0].title).toBe('分镜1');
@@ -163,7 +169,7 @@ describe('StoryboardService', () => {
         title: '新分镜',
         sceneDescription: '场景描述',
       });
-      
+
       expect(frame).toMatchObject({
         title: '新分镜',
         sceneDescription: '场景描述',
@@ -182,7 +188,7 @@ describe('StoryboardService', () => {
         title: '新分镜',
         sceneDescription: '场景描述',
       });
-      
+
       expect(frame.id).toBe('custom-id');
     });
 
@@ -197,7 +203,7 @@ describe('StoryboardService', () => {
         duration: 10,
         imageUrl: 'https://example.com/image.jpg',
       });
-      
+
       expect(frame.composition).toBe('三分法');
       expect(frame.cameraType).toBe('wide');
       expect(frame.dialogue).toBe('对话');
@@ -209,12 +215,12 @@ describe('StoryboardService', () => {
       const service = new StoryboardService();
       const listener = jest.fn();
       service.subscribe(listener);
-      
+
       service.create({
         title: '新分镜',
         sceneDescription: '场景描述',
       });
-      
+
       expect(listener).toHaveBeenCalledTimes(1);
     });
 
@@ -224,7 +230,7 @@ describe('StoryboardService', () => {
         title: '新分镜',
         sceneDescription: '场景描述',
       });
-      
+
       expect(localStorage.setItem).toHaveBeenCalled();
     });
   });
@@ -236,12 +242,12 @@ describe('StoryboardService', () => {
         title: '原始标题',
         sceneDescription: '原始描述',
       });
-      
+
       const updated = service.update(frame.id, {
         title: '新标题',
         duration: 10,
       });
-      
+
       expect(updated).toMatchObject({
         title: '新标题',
         sceneDescription: '原始描述',
@@ -259,14 +265,14 @@ describe('StoryboardService', () => {
       const service = new StoryboardService();
       const listener = jest.fn();
       service.subscribe(listener);
-      
+
       const frame = service.create({
         title: '分镜',
         sceneDescription: '场景',
       });
-      
+
       service.update(frame.id, { title: '更新后的标题' });
-      
+
       expect(listener).toHaveBeenCalledTimes(2);
     });
   });
@@ -278,11 +284,11 @@ describe('StoryboardService', () => {
         title: '要删除的分镜',
         sceneDescription: '场景',
       });
-      
+
       expect(service.getAll()).toHaveLength(1);
-      
+
       const result = service.delete(frame.id);
-      
+
       expect(result).toBe(true);
       expect(service.getAll()).toHaveLength(0);
     });
@@ -297,14 +303,14 @@ describe('StoryboardService', () => {
       const service = new StoryboardService();
       const listener = jest.fn();
       service.subscribe(listener);
-      
+
       const frame = service.create({
         title: '分镜',
         sceneDescription: '场景',
       });
-      
+
       service.delete(frame.id);
-      
+
       expect(listener).toHaveBeenCalledTimes(2);
     });
   });
@@ -317,7 +323,7 @@ describe('StoryboardService', () => {
         { title: '分镜2', sceneDescription: '场景2' },
         { title: '分镜3', sceneDescription: '场景3' },
       ]);
-      
+
       expect(frames).toHaveLength(3);
       expect(service.getAll()).toHaveLength(3);
     });
@@ -325,14 +331,14 @@ describe('StoryboardService', () => {
     it('应该使用提供的默认值', () => {
       const service = new StoryboardService();
       const frames = service.bulkCreate([
-        { 
-          title: '分镜1', 
+        {
+          title: '分镜1',
           sceneDescription: '场景1',
           composition: '三分法',
           cameraType: 'wide',
         },
       ]);
-      
+
       expect(frames[0].composition).toBe('三分法');
       expect(frames[0].cameraType).toBe('wide');
     });
@@ -345,11 +351,11 @@ describe('StoryboardService', () => {
         { title: '分镜1', sceneDescription: '场景1' },
         { title: '分镜2', sceneDescription: '场景2' },
       ]);
-      
+
       expect(service.getAll()).toHaveLength(2);
-      
+
       service.clear();
-      
+
       expect(service.getAll()).toHaveLength(0);
     });
 
@@ -357,13 +363,11 @@ describe('StoryboardService', () => {
       const service = new StoryboardService();
       const listener = jest.fn();
       service.subscribe(listener);
-      
-      service.bulkCreate([
-        { title: '分镜1', sceneDescription: '场景1' },
-      ]);
-      
+
+      service.bulkCreate([{ title: '分镜1', sceneDescription: '场景1' }]);
+
       service.clear();
-      
+
       expect(listener).toHaveBeenCalledTimes(2);
     });
   });
@@ -373,12 +377,12 @@ describe('StoryboardService', () => {
       const service = new StoryboardService();
       const listener = jest.fn();
       const unsubscribe = service.subscribe(listener);
-      
+
       service.create({
         title: '分镜',
         sceneDescription: '场景',
       });
-      
+
       expect(listener).toHaveBeenCalledTimes(1);
     });
 
@@ -386,14 +390,14 @@ describe('StoryboardService', () => {
       const service = new StoryboardService();
       const listener = jest.fn();
       const unsubscribe = service.subscribe(listener);
-      
+
       unsubscribe();
-      
+
       service.create({
         title: '分镜',
         sceneDescription: '场景',
       });
-      
+
       expect(listener).not.toHaveBeenCalled();
     });
 
@@ -401,15 +405,15 @@ describe('StoryboardService', () => {
       const service = new StoryboardService();
       const listener1 = jest.fn();
       const listener2 = jest.fn();
-      
+
       service.subscribe(listener1);
       service.subscribe(listener2);
-      
+
       service.create({
         title: '分镜',
         sceneDescription: '场景',
       });
-      
+
       expect(listener1).toHaveBeenCalledTimes(1);
       expect(listener2).toHaveBeenCalledTimes(1);
     });
@@ -426,10 +430,10 @@ describe('StoryboardService', () => {
         title: '分镜2',
         sceneDescription: '场景2',
       });
-      
+
       const json = service.export();
       const parsed = JSON.parse(json);
-      
+
       expect(parsed).toHaveLength(2);
     });
 
@@ -439,9 +443,9 @@ describe('StoryboardService', () => {
         createTestFrame({ id: 'frame-1', title: '导入分镜1' }),
         createTestFrame({ id: 'frame-2', title: '导入分镜2' }),
       ];
-      
+
       const imported = service.import(JSON.stringify(framesToImport));
-      
+
       expect(imported).toHaveLength(2);
       expect(service.getAll()).toHaveLength(2);
     });
@@ -452,16 +456,16 @@ describe('StoryboardService', () => {
         { title: '缺少 id' } as any,
         { id: 'valid-id', title: '有效分镜', sceneDescription: '场景描述' },
       ];
-      
+
       const imported = service.import(JSON.stringify(invalidFrames));
-      
+
       expect(imported).toHaveLength(1);
     });
 
     it('import 无效 JSON 应该返回空数组', () => {
       const service = new StoryboardService();
       const imported = service.import('invalid json');
-      
+
       expect(imported).toHaveLength(0);
     });
 
@@ -469,10 +473,10 @@ describe('StoryboardService', () => {
       const service = new StoryboardService();
       const listener = jest.fn();
       service.subscribe(listener);
-      
+
       const validFrames = [createTestFrame({ id: 'frame-1' })];
       service.import(JSON.stringify(validFrames));
-      
+
       expect(listener).toHaveBeenCalledTimes(1);
     });
   });
@@ -480,13 +484,29 @@ describe('StoryboardService', () => {
   describe('AI 生成 - generateFromScript', () => {
     it('应该从剧本生成分镜', async () => {
       const service = new StoryboardService();
-      getMockGenerate().mockResolvedValue(JSON.stringify([
-        { title: 'AI分镜1', sceneDescription: 'AI场景1', composition: '三分法', cameraType: 'wide', dialogue: '对话1', duration: 5 },
-        { title: 'AI分镜2', sceneDescription: 'AI场景2', composition: '中心构图', cameraType: 'medium', dialogue: '对话2', duration: 10 },
-      ]));
-      
+      getMockGenerate().mockResolvedValue(
+        JSON.stringify([
+          {
+            title: 'AI分镜1',
+            sceneDescription: 'AI场景1',
+            composition: '三分法',
+            cameraType: 'wide',
+            dialogue: '对话1',
+            duration: 5,
+          },
+          {
+            title: 'AI分镜2',
+            sceneDescription: 'AI场景2',
+            composition: '中心构图',
+            cameraType: 'medium',
+            dialogue: '对话2',
+            duration: 10,
+          },
+        ])
+      );
+
       const frames = await service.generateFromScript(createTestScript());
-      
+
       expect(frames).toHaveLength(2);
       expect(frames[0].title).toBe('AI分镜1');
       expect(frames[1].cameraType).toBe('medium');
@@ -495,35 +515,33 @@ describe('StoryboardService', () => {
     it('应该使用自定义选项', async () => {
       const service = new StoryboardService();
       getMockGenerate().mockResolvedValue('[]');
-      
+
       await service.generateFromScript(createTestScript(), {
         provider: 'openai',
         model: 'gpt-4',
         frameCount: 4,
       });
-      
+
       expect(getMockGenerate()).toHaveBeenCalled();
     });
 
     it('AI 返回无效 JSON 应该使用 fallback', async () => {
       const service = new StoryboardService();
       getMockGenerate().mockResolvedValue('不是有效的 JSON');
-      
+
       const frames = await service.generateFromScript({
         title: '测试剧本',
         content: '段落1\n段落2\n段落3',
       });
-      
+
       expect(frames.length).toBeGreaterThan(0);
     });
 
     it('AI 生成失败应该抛出错误', async () => {
       const service = new StoryboardService();
       getMockGenerate().mockRejectedValue(new Error('API Error'));
-      
-      await expect(
-        service.generateFromScript(createTestScript())
-      ).rejects.toThrow('API Error');
+
+      await expect(service.generateFromScript(createTestScript())).rejects.toThrow('API Error');
     });
   });
 
@@ -534,20 +552,20 @@ describe('StoryboardService', () => {
         title: '分镜',
         sceneDescription: '场景',
       });
-      
+
       getMockGenerateImage().mockResolvedValue({ url: 'https://example.com/generated.jpg' });
-      
+
       const url = await service.generateFrameImage(frame.id);
-      
+
       expect(url).toBe('https://example.com/generated.jpg');
       expect(getMockGenerateImage()).toHaveBeenCalled();
     });
 
     it('分镜不存在应该返回 null', async () => {
       const service = new StoryboardService();
-      
+
       const url = await service.generateFrameImage('non-existent');
-      
+
       expect(url).toBeNull();
     });
 
@@ -557,11 +575,11 @@ describe('StoryboardService', () => {
         title: '分镜',
         sceneDescription: '场景',
       });
-      
+
       getMockGenerateImage().mockResolvedValue({ url: null });
-      
+
       const url = await service.generateFrameImage(frame.id);
-      
+
       expect(url).toBeNull();
     });
 
@@ -571,11 +589,11 @@ describe('StoryboardService', () => {
         title: '分镜',
         sceneDescription: '场景',
       });
-      
+
       getMockGenerateImage().mockResolvedValue({ url: 'https://example.com/new-image.jpg' });
-      
+
       await service.generateFrameImage(frame.id);
-      
+
       const updated = service.getById(frame.id);
       expect(updated?.imageUrl).toBe('https://example.com/new-image.jpg');
     });
@@ -588,12 +606,12 @@ describe('StoryboardService', () => {
         { title: '分镜1', sceneDescription: '场景1' },
         { title: '分镜2', sceneDescription: '场景2' },
       ]);
-      
+
       getMockGenerateImage().mockResolvedValue({ url: 'https://example.com/img.jpg' });
-      
+
       const onProgress = jest.fn();
       const results = await service.generateAllFrameImages({}, onProgress);
-      
+
       expect(results.size).toBe(2);
       expect(onProgress).toHaveBeenCalledTimes(2);
     });
@@ -604,11 +622,11 @@ describe('StoryboardService', () => {
         { title: '分镜1', sceneDescription: '场景1', imageUrl: 'https://existing.com/img.jpg' },
         { title: '分镜2', sceneDescription: '场景2' },
       ]);
-      
+
       getMockGenerateImage().mockResolvedValue({ url: 'https://example.com/img.jpg' });
-      
+
       const results = await service.generateAllFrameImages();
-      
+
       expect(results.size).toBe(2);
       expect(results.get(frames[0].id)).toBe('https://existing.com/img.jpg');
       expect(getMockGenerateImage()).toHaveBeenCalledTimes(1);
@@ -621,12 +639,12 @@ describe('StoryboardService', () => {
         { title: '分镜2', sceneDescription: '场景2' },
         { title: '分镜3', sceneDescription: '场景3' },
       ]);
-      
+
       getMockGenerateImage().mockResolvedValue({ url: 'https://example.com/img.jpg' });
-      
+
       const onProgress = jest.fn();
       await service.generateAllFrameImages({}, onProgress);
-      
+
       expect(onProgress).toHaveBeenNthCalledWith(1, 1, 3);
       expect(onProgress).toHaveBeenNthCalledWith(2, 2, 3);
       expect(onProgress).toHaveBeenNthCalledWith(3, 3, 3);
@@ -636,39 +654,39 @@ describe('StoryboardService', () => {
   describe('持久化', () => {
     it('autoSave: false 时不应保存到 localStorage', () => {
       const service = new StoryboardService({ autoSave: false });
-      
+
       service.create({
         title: '分镜',
         sceneDescription: '场景',
       });
-      
+
       expect(localStorage.setItem).not.toHaveBeenCalled();
     });
 
     it('应该从 localStorage 加载数据', () => {
       const storedFrames = [createTestFrame({ id: 'stored-frame' })];
-      localStorageMock.data['PanelFlow-storyboards'] = JSON.stringify(storedFrames);
-      
+      localStorageMock.data['gapanel-flow-storyboards'] = JSON.stringify(storedFrames);
+
       const service = new StoryboardService();
-      
+
       expect(service.getAll()).toHaveLength(1);
       expect(service.getById('stored-frame')).toBeDefined();
     });
 
     it('不同 projectId 使用不同的存储键', () => {
       const storedFrames = [createTestFrame({ id: 'project-frame' })];
-      localStorageMock.data['PanelFlow-storyboards-project-1'] = JSON.stringify(storedFrames);
-      
+      localStorageMock.data['gapanel-flow-storyboards-project-1'] = JSON.stringify(storedFrames);
+
       const service = new StoryboardService({ projectId: 'project-1' });
-      
+
       expect(service.getAll()).toHaveLength(1);
     });
 
     it('损坏的存储数据不应该抛出错误', () => {
-      localStorageMock.data['PanelFlow-storyboards'] = 'invalid json';
-      
+      localStorageMock.data['gapanel-flow-storyboards'] = 'invalid json';
+
       const service = new StoryboardService();
-      
+
       expect(service.getAll()).toEqual([]);
     });
   });
@@ -681,7 +699,7 @@ describe('StoryboardService', () => {
         composition: '三分法',
         cameraType: 'wide',
       });
-      
+
       // 通过生成图像来测试提示词构建
       getMockGenerateImage().mockImplementation(async (prompt: string) => {
         expect(prompt).toContain('场景：美丽的风景');
@@ -689,7 +707,7 @@ describe('StoryboardService', () => {
         expect(prompt).toContain('镜头：全景镜头');
         return { url: 'https://example.com/img.jpg' };
       });
-      
+
       service.create(frame);
       service.generateFrameImage(frame.id);
     });
@@ -708,7 +726,7 @@ describe('getStoryboardService 单例', () => {
   it('应该返回单例', () => {
     const service1 = getStoryboardService();
     const service2 = getStoryboardService();
-    
+
     expect(service1).toBe(service2);
   });
 
@@ -716,7 +734,7 @@ describe('getStoryboardService 单例', () => {
     const service1 = getStoryboardService();
     resetStoryboardService();
     const service2 = getStoryboardService();
-    
+
     expect(service1).not.toBe(service2);
   });
 });

@@ -1,6 +1,6 @@
 # 项目结构
 
-PanelFlow 的详细文件组织。
+gapanel-flow 的详细文件组织。
 
 ## 根目录结构
 

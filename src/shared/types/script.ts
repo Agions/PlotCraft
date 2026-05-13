@@ -1,5 +1,5 @@
 /**
- * PanelFlow Script Types
+ * gapanel-flow Script Types
  * Extracted from src/shared/types/index.ts
  * Script and narrative content types
  */

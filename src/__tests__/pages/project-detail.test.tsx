@@ -39,20 +39,39 @@ jest.mock('@/core/services', () => ({
     diffVersions: jest.fn(),
     rollback: jest.fn(),
   },
-  costService: { getBudget: jest.fn(), getProjectStats: jest.fn(), getRecords: jest.fn().mockReturnValue([]) },
-  reviewExportService: { exportNotes: jest.fn(), saveMarkdownToFile: jest.fn().mockResolvedValue(true) },
+  costService: {
+    getBudget: jest.fn(),
+    getProjectStats: jest.fn(),
+    getRecords: jest.fn().mockReturnValue([]),
+  },
+  reviewExportService: {
+    exportNotes: jest.fn(),
+    saveMarkdownToFile: jest.fn().mockResolvedValue(true),
+  },
 }));
 
 jest.mock('@tauri-apps/api', () => ({
   invoke: (...args: unknown[]) => mockInvoke(...args),
 }));
 
-jest.mock('@/components/business/CostDashboard', () => () => <div data-testid="mock-cost-dashboard">CostDashboard</div>);
-jest.mock('@/features/script/components/ScriptEditor', () => () => <div data-testid="mock-script-editor">ScriptEditor</div>);
-jest.mock('@/components/business/RenderCenter', () => () => <div data-testid="mock-render-center">RenderCenter</div>);
-jest.mock('@/features/character/components/CharacterDesigner', () => () => <div data-testid="mock-character-designer">CharacterDesigner</div>);
-jest.mock('@/components/business/CompositionStudio', () => () => <div data-testid="mock-composition-studio">CompositionStudio</div>);
-jest.mock('@/features/audio/components/AudioEditor', () => () => <div data-testid="mock-audio-editor">AudioEditor</div>);
+jest.mock('@/components/business/CostDashboard', () => () => (
+  <div data-testid="mock-cost-dashboard">CostDashboard</div>
+));
+jest.mock('@/features/script/components/ScriptEditor', () => () => (
+  <div data-testid="mock-script-editor">ScriptEditor</div>
+));
+jest.mock('@/components/business/RenderCenter', () => () => (
+  <div data-testid="mock-render-center">RenderCenter</div>
+));
+jest.mock('@/features/character/components/CharacterDesigner', () => () => (
+  <div data-testid="mock-character-designer">CharacterDesigner</div>
+));
+jest.mock('@/components/business/CompositionStudio', () => () => (
+  <div data-testid="mock-composition-studio">CompositionStudio</div>
+));
+jest.mock('@/features/audio/components/AudioEditor', () => () => (
+  <div data-testid="mock-audio-editor">AudioEditor</div>
+));
 
 describe('ProjectDetail page collaboration regression', () => {
   beforeEach(() => {
@@ -146,9 +165,7 @@ describe('ProjectDetail page collaboration regression', () => {
   });
 
   it('exports review notes from cost quick action', async () => {
-    mockInvoke
-      .mockResolvedValueOnce('/tmp/review.md')
-      .mockResolvedValueOnce(undefined);
+    mockInvoke.mockResolvedValueOnce('/tmp/review.md').mockResolvedValueOnce(undefined);
 
     render(<ProjectDetail />);
 
@@ -160,13 +177,18 @@ describe('ProjectDetail page collaboration regression', () => {
       expect(mockInvoke).toHaveBeenCalledWith('save_file_dialog', expect.any(Object));
     });
     await waitFor(() => {
-      expect(mockInvoke).toHaveBeenCalledWith('write_text_file', expect.objectContaining({
-        path: '/tmp/review.md',
-      }));
+      expect(mockInvoke).toHaveBeenCalledWith(
+        'write_text_file',
+        expect.objectContaining({
+          path: '/tmp/review.md',
+        })
+      );
     });
-    const writeCall = mockInvoke.mock.calls.find(call => call[0] === 'write_text_file');
+    const writeCall = mockInvoke.mock.calls.find((call) => call[0] === 'write_text_file');
     expect(String(writeCall?.[1]?.content ?? '')).toContain('- 综合: 80.0');
-    const activities = JSON.parse(localStorage.getItem('PanelFlow_review_export_activities') ?? '[]');
+    const activities = JSON.parse(
+      localStorage.getItem('gapanel-flow_review_export_activities') ?? '[]'
+    );
     expect(activities[0]).toMatchObject({
       projectId: 'p-detail-1',
       projectName: '测试项目',

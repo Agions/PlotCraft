@@ -1,6 +1,6 @@
 # Docker
 
-PanelFlow 的 Docker 部署。
+gapanel-flow 的 Docker 部署。
 
 ## 快速开始
 

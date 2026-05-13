@@ -1,6 +1,6 @@
 /**
- * PanelFlow Pipeline 核心类型定义
- * 
+ * gapanel-flow Pipeline 核心类型定义
+ *
  * 定义流水线步骤的标准化接口、数据契约和质量门控
  */
 
@@ -24,10 +24,10 @@ export enum PipelineStepId {
 // ========== 流水线执行模式 ==========
 
 export enum PipelineExecutionMode {
-  SEQUENCE = 'sequence',     // 严格顺序执行
-  PARALLEL = 'parallel',     // 全部并行
-  DAG = 'dag',               // 有向无环图（条件分支）
-  LOOP = 'loop',             // 循环（批量场景迭代）
+  SEQUENCE = 'sequence', // 严格顺序执行
+  PARALLEL = 'parallel', // 全部并行
+  DAG = 'dag', // 有向无环图（条件分支）
+  LOOP = 'loop', // 循环（批量场景迭代）
 }
 
 // ========== 流水线状态枚举 ==========
@@ -56,10 +56,10 @@ export enum StepStatus {
 // ========== 质量门控决策 ==========
 
 export enum QualityGateDecision {
-  PASS = 'pass',           // 通过，可继续
-  FAIL = 'fail',           // 失败，终止
-  WARN = 'warn',           // 警告但可继续
-  BLOCK = 'block',         // 必须修复才可继续
+  PASS = 'pass', // 通过，可继续
+  FAIL = 'fail', // 失败，终止
+  WARN = 'warn', // 警告但可继续
+  BLOCK = 'block', // 必须修复才可继续
 }
 
 // ========== 步骤输入/输出契约 ==========
@@ -121,7 +121,7 @@ export interface PipelineContext {
   projectId?: string;
   episodeId?: string;
   variables: Map<string, unknown>;
-  
+
   getVariable: <T>(key: string) => T | undefined;
   setVariable: <T>(key: string, value: T) => void;
   log: (msg: string, level?: 'debug' | 'info' | 'warn' | 'error') => void;
@@ -133,7 +133,13 @@ export interface PipelineContext {
 // ========== Pipeline 事件 ==========
 
 export interface PipelineEvent {
-  type: 'step_start' | 'step_progress' | 'step_complete' | 'step_fail' | 'quality_gate' | 'checkpoint';
+  type:
+    | 'step_start'
+    | 'step_progress'
+    | 'step_complete'
+    | 'step_fail'
+    | 'quality_gate'
+    | 'checkpoint';
   workflowId: string;
   stepId?: PipelineStepId;
   progress?: number;
@@ -158,14 +164,14 @@ export interface PipelineStep {
 
   /** 标准化入口 */
   execute(input: StepInput): Promise<StepOutput>;
-  
+
   /** 进度回调 */
   onProgress?: (event: StepProgressEvent) => void;
 }
 
 export interface StepProgressEvent {
   stepId: PipelineStepId;
-  progress: number;       // 0-100
+  progress: number; // 0-100
   message: string;
   detail?: string;
 }

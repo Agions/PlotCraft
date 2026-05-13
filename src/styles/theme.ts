@@ -1,19 +1,19 @@
 /**
- * PanelFlowAI 设计系统
+ * gapanel-flow AI 设计系统
  * 统一的设计令牌和 Ant Design 主题配置
  */
 
 export const theme = {
   // 品牌色
   colors: {
-    primary: '#6366f1',        // 主色 (靛蓝)
+    primary: '#6366f1', // 主色 (靛蓝)
     primaryHover: '#4f46e5',
     primaryLight: '#e0e7ff',
     primaryDark: '#4338ca',
-    secondary: '#ec4899',      // 副色 (粉红)
+    secondary: '#ec4899', // 副色 (粉红)
     secondaryHover: '#db2777',
     secondaryLight: '#fce7f3',
-    accent: '#14b8a6',         // 强调色 (青色)
+    accent: '#14b8a6', // 强调色 (青色)
     accentHover: '#0d9488',
     accentLight: '#ccfbf1',
 
@@ -275,7 +275,7 @@ export const darkTheme = {
   ...theme,
   colors: {
     ...theme.colors,
-    primary: '#818cf8',        // 暗色模式主色稍亮
+    primary: '#818cf8', // 暗色模式主色稍亮
   },
   backgrounds: {
     ...theme.backgrounds,

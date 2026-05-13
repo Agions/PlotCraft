@@ -5,14 +5,7 @@ import { useProjectStore } from '@/shared/stores/project.store';
 
 import styles from './Home.module.less';
 
-import {
-  HeroSection,
-  StatsCards,
-  ProjectGrid,
-  Features,
-  WorkflowSteps,
-  CTASection
-} from '.';
+import { HeroSection, StatsCards, ProjectGrid, Features, WorkflowSteps, CTASection } from '.';
 
 /**
  * 首页视图组件
@@ -37,11 +30,7 @@ const HomeView: React.FC = () => {
       <StatsCards projects={projects} />
 
       {/* 项目列表 */}
-      <ProjectGrid
-        projects={projects}
-        loading={false}
-        onRefresh={handleProjectRefresh}
-      />
+      <ProjectGrid projects={projects} loading={false} onRefresh={handleProjectRefresh} />
 
       {/* 特性展示 */}
       <Features />
@@ -56,7 +45,7 @@ const HomeView: React.FC = () => {
       <div className={styles.footer}>
         <Separator />
         <div className="flex items-center gap-2">
-          <span className="text-muted-foreground text-sm">© 2025 PanelFlow AI</span>
+          <span className="text-muted-foreground text-sm">© 2025 gapanel-flow AI</span>
           <Separator orientation="vertical" className="h-4" />
           <span className="text-muted-foreground text-sm">基于 Tauri 和 React 构建</span>
           <Separator orientation="vertical" className="h-4" />
