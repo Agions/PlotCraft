@@ -443,6 +443,17 @@ export const formatTimeHMS = (seconds: number): string => {
 };
 
 /**
+ * 格式化时间 MM:SS.XX（百分之一秒，SubtitleEditor 使用）
+ */
+export const formatTimeWithCentiseconds = (seconds: number): string => {
+  if (isNaN(seconds) || seconds < 0) return '00:00.00';
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  const cs = Math.floor((seconds % 1) * 100);
+  return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}.${String(cs).padStart(2, '0')}`;
+};
+
+/**
  * 格式化 ASS 字幕时间 (H:MM:SS.cc，百分之一秒)
  */
 export const formatASSTime = (seconds: number): string => {

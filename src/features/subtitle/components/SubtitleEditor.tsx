@@ -31,6 +31,7 @@ import { Slider } from '@/components/ui/slider';
 import { Textarea } from '@/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Text } from '@/components/ui/typography';
+import { formatTimeWithCentiseconds } from '@/shared/utils';
 
 import styles from './SubtitleEditor.module.less';
 
@@ -232,14 +233,6 @@ export function SubtitleEditor({
     setPreviewStyle(subtitle.style || defaultStyle);
   };
 
-  // 格式化时间
-  const formatTime = (time: number): string => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    const milliseconds = Math.floor((time % 1) * 100);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(2, '0')}`;
-  };
-
   // 字幕预览渲染
   const renderPreview = () => {
     const active = activeSubtitle || selectedSubtitle;
@@ -332,9 +325,9 @@ export function SubtitleEditor({
                       onClick={() => handleSelect(subtitle)}
                     >
                       <div className={styles.subtitleInfo}>
-                        <Badge variant="outline">{formatTime(subtitle.startTime)}</Badge>
+                        <Badge variant="outline">{formatTimeWithCentiseconds(subtitle.startTime)}</Badge>
                         <span className={styles.subtitleText}>{subtitle.text}</span>
-                        <Badge variant="outline">{formatTime(subtitle.endTime)}</Badge>
+                        <Badge variant="outline">{formatTimeWithCentiseconds(subtitle.endTime)}</Badge>
                       </div>
                       {!readonly && (
                         <div className="flex items-center gap-1">
@@ -411,7 +404,7 @@ export function SubtitleEditor({
                     disabled={readonly}
                   />
                   <Text type="secondary" style={{ marginLeft: 8 }}>
-                    ({formatTime(selectedSubtitle.endTime - selectedSubtitle.startTime)})
+                    ({formatTimeWithCentiseconds(selectedSubtitle.endTime - selectedSubtitle.startTime)})
                   </Text>
                 </div>
 
