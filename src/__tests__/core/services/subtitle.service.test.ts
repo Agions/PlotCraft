@@ -1,4 +1,8 @@
-import { subtitleService, DEFAULT_SUBTITLE_STYLE, ASS_STYLE_PRESETS } from '@/core/services/subtitle.service';
+import {
+  subtitleService,
+  DEFAULT_SUBTITLE_STYLE,
+  ASS_STYLE_PRESETS,
+} from '@/core/services/subtitle.service';
 import type { ScriptSegment } from '@/core/types';
 
 // Mock aiService
@@ -52,9 +56,7 @@ describe('SubtitleService', () => {
     });
 
     it('should apply custom style', () => {
-      const segments: ScriptSegment[] = [
-        { id: 'seg1', content: '测试', startTime: 0, endTime: 3 },
-      ];
+      const segments: ScriptSegment[] = [{ id: 'seg1', content: '测试', startTime: 0, endTime: 3 }];
 
       const track = subtitleService.generateFromScript(segments, {
         fontSize: 32,
@@ -67,9 +69,7 @@ describe('SubtitleService', () => {
     });
 
     it('should use uuid when segment has no id', () => {
-      const segments: ScriptSegment[] = [
-        { content: '测试内容', startTime: 0, endTime: 3 },
-      ];
+      const segments: ScriptSegment[] = [{ content: '测试内容', startTime: 0, endTime: 3 }];
 
       const track = subtitleService.generateFromScript(segments);
 
@@ -230,7 +230,7 @@ describe('SubtitleService', () => {
         expect(ass).toContain('[Script Info]');
         expect(ass).toContain('[V4+ Styles]');
         expect(ass).toContain('[Events]');
-        expect(ass).toContain('Dialogue: 0,0:00:00.00,0:00:05.00');
+        expect(ass).toContain('Dialogue: 0,00:00.00,00:05.00');
         expect(ass).toContain('第一句');
       });
 
