@@ -368,12 +368,21 @@ export class MangaPipelineController extends BasePipelineController {
         return null;
       }
 
-      // 收集角色参考（从 pipeline 的 characterReferences，如果 pipeline 传递了的话）
-      // 目前从 keyframeResult 中无法直接获取 characterReferences，
-      // 降级使用启发式评分（基于 prompt 关键词密度）
+      // 使用 StoryboardPipeline 输出的 characterReferences 进行真实的视觉一致性评估
       const result = await visualConsistencyScorer.evaluate({
         frameUrls,
-        characterReferences: [], // 暂不传，降级到启发式
+        characterReferences: (this.result.characterConstraints ?? []).map((c) => ({
+          characterId: c.characterId,
+          name: c.name,
+          referencePrompt: c.referencePrompt,
+          referenceImageUrls: c.referenceImageUrls
+            ? {
+                front: c.referenceImageUrls.front,
+                side: c.referenceImageUrls.side,
+                fullBody: c.referenceImageUrls.fullBody,
+              }
+            : undefined,
+        })),
       });
 
       return result;
