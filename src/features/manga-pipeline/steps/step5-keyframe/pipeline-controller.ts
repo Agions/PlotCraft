@@ -370,25 +370,52 @@ export class KeyframePipeline extends BasePipelineController {
     const sceneCount = scenes.length;
     const progressBase = 0;
 
-    this.updateProgress(5, `生成关键帧（0/${sceneCount}）`);
+    const SEMAPHORE_CONCURRENCY = 3;
+    let completedCount = 0;
+
+    const semaphore = {
+      count: 0,
+      queue: [] as (() => void)[],
+      async acquire() {
+        if (this.count < SEMAPHORE_CONCURRENCY) {
+          this.count++;
+          return;
+        }
+        await new Promise<void>((resolve) => this.queue.push(resolve));
+      },
+      release() {
+        this.count--;
+        const next = this.queue.shift();
+        if (next) {
+          this.count++;
+          next();
+        }
+      },
+    };
 
     const keyframeScenePromises = scenes.map((scene, index) =>
-      createKeyframeScene(scene, {
-        frameCount: 2,
-        defaultDuration: 3,
-        style,
-        aspectRatio,
-        imageOptions: { model: 'seedream-5.0' },
-        characterReferences,
-        dialogueSegments,
-      }).then((result) => {
-        // 更新进度
-        this.updateProgress(
-          5 + ((index + 1) / sceneCount) * 35,
-          `生成关键帧（${index + 1}/${sceneCount}）`
-        );
-        return result;
-      })
+      (async () => {
+        await semaphore.acquire();
+        try {
+          const result = await createKeyframeScene(scene, {
+            frameCount: 2,
+            defaultDuration: 3,
+            style,
+            aspectRatio,
+            imageOptions: { model: 'seedream-5.0' },
+            characterReferences,
+            dialogueSegments,
+          });
+          completedCount++;
+          this.updateProgress(
+            5 + (completedCount / sceneCount) * 35,
+            `生成关键帧（${completedCount}/${sceneCount}）`
+          );
+          return result;
+        } finally {
+          semaphore.release();
+        }
+      })()
     );
 
     const keyframeSceneResults = await Promise.allSettled(keyframeScenePromises);

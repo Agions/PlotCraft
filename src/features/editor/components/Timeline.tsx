@@ -37,7 +37,21 @@ function Timeline({ currentTime, duration, tracks, onTimeUpdate }: TimelineProps
   const playheadRef = useRef<HTMLDivElement>(null);
   const tracksContainerRef = useRef<HTMLDivElement>(null);
   const isDraggingRef = useRef<boolean>(false);
+  // Store document-level event handlers in a ref so cleanup useEffect can remove them
+  const handlersRef = useRef<{ move: ((e: MouseEvent) => void) | null; up: (() => void) | null }>({
+    move: null,
+    up: null,
+  });
   const [showTimeline, setShowTimeline] = useState<boolean>(true);
+
+  // Clean up document event listeners on unmount (prevents memory leaks if unmounted mid-drag)
+  useEffect(() => {
+    return () => {
+      if (handlersRef.current.move)
+        document.removeEventListener('mousemove', handlersRef.current.move);
+      if (handlersRef.current.up) document.removeEventListener('mouseup', handlersRef.current.up);
+    };
+  }, []);
 
   // 计算时间轴宽度
   const timelineWidth = Math.max(2000, duration * scale); // 每秒100px
@@ -98,8 +112,12 @@ function Timeline({ currentTime, duration, tracks, onTimeUpdate }: TimelineProps
       isDraggingRef.current = false;
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
+      handlersRef.current.move = null;
+      handlersRef.current.up = null;
     };
 
+    handlersRef.current.move = handleMouseMove;
+    handlersRef.current.up = handleMouseUp;
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
   };
