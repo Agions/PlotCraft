@@ -47,6 +47,11 @@ fn validate_temp_path(path: &str) -> Result<PathBuf, String> {
         std::env::temp_dir().join("mangaai_keyframes"),
         std::env::temp_dir().join("mangaai_thumbnails"),
         std::env::temp_dir().join("mangaai_preview"),
+        std::env::temp_dir().join("blazecut"),
+        std::env::temp_dir().join("blazecut_temp"),
+        std::env::temp_dir().join("blazecut_preview"),
+        std::env::temp_dir().join("blazecut_keyframes"),
+        std::env::temp_dir().join("blazecut_thumbnails"),
     ];
     let file_path = PathBuf::from(path);
     let canonical_path = file_path.canonicalize().map_err(|e| {
@@ -584,11 +589,29 @@ fn clean_temp_file(params: CleanFileParams) -> Result<(), String> {
 
 #[command]
 fn list_app_data_files(directory: String, app_handle: tauri::AppHandle) -> Result<Vec<String>, String> {
+    // Validate directory name to prevent path traversal and null byte injection
+    if directory.is_empty() || directory.len() > 64 {
+        return Err("无效的目录名".into());
+    }
+    if !directory.chars().all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_' || c == '/') {
+        return Err("目录名包含非法字符".into());
+    }
+    if directory.contains("..") || directory.contains('\0') {
+        return Err("无效的目录名".into());
+    }
+
     let app_data_dir = app_handle.path().app_data_dir()
         .map_err(|e| format!("无法获取应用数据目录: {}", e))?;
 
     let target_dir = app_data_dir.join(directory);
-    
+
+    // Security check: ensure resolved path is within app_data_dir
+    let canonical_target = target_dir.canonicalize().map_err(|e| format!("目录无效: {}", e))?;
+    let canonical_app_data = app_data_dir.canonicalize().map_err(|e| format!("应用数据目录无效: {}", e))?;
+    if !canonical_target.starts_with(&canonical_app_data) {
+        return Err("禁止访问该目录".into());
+    }
+
     if !target_dir.exists() {
         match fs::create_dir_all(&target_dir) {
             Ok(_) => (),
@@ -618,13 +641,18 @@ fn list_app_data_files(directory: String, app_handle: tauri::AppHandle) -> Resul
 
 #[command]
 fn delete_project_file(project_id: String, app_handle: tauri::AppHandle) -> Result<(), String> {
+    // Validate project_id format to prevent path traversal attacks
+    if !project_id.chars().all(|c| c.is_alphanumeric() || c == '-' || c == '_') {
+        return Err("无效的项目ID格式".into());
+    }
+
     let app_data_dir = app_handle.path().app_data_dir()
         .map_err(|e| format!("无法获取应用数据目录: {}", e))?;
 
     let file_path = app_data_dir.join("blazecut").join(format!("{}.json", project_id));
     
     if !file_path.exists() {
-        return Err(format!("项目文件不存在: {}", file_path.display()));
+        return Err("项目文件不存在".into());
     }
 
     match fs::remove_file(&file_path) {
