@@ -19,7 +19,7 @@ import {
 import { logger } from '@/core/utils/logger';
 
 import { BasePipelineController } from '../../base/BasePipelineController';
-import type { DialogueSegment } from '../../step4-voice-synthesis/services/dialogue-tts-generator';
+import type { DialogueSegment } from '../../types/dialogue';
 
 export enum MotionType {
   FADE = 'fade', // 淡入淡出
