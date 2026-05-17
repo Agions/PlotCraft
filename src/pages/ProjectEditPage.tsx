@@ -182,7 +182,6 @@ const ProjectEdit = () => {
   // 初始化 - 加载项目数据（如果是编辑现有项目）
   useEffect(() => {
     if (projectId) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setInitialLoading(true);
       setIsNewProject(false);
 

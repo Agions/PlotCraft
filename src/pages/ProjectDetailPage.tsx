@@ -172,15 +172,12 @@ const ProjectDetail = () => {
 
     const currentProject = projects.find((p) => p.id === id) as ProjectData | undefined;
     if (currentProject) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setProject(currentProject);
-      // 如果有剧本，设置第一个为活动剧本
-      if (currentProject.scripts && currentProject.scripts.length > 0) {
+      if (currentProject.scripts?.length) {
         setActiveScript(currentProject.scripts[0]);
       }
-      // 如果有小说元数据，加载它
       if (currentProject.novelMetadata) {
-        setNovelMetadata((currentProject.novelMetadata ?? null) as NovelMetadata);
+        setNovelMetadata(currentProject.novelMetadata as NovelMetadata);
       }
       if (
         Array.isArray(currentProject.storyboardComments) ||
@@ -204,14 +201,13 @@ const ProjectDetail = () => {
 
   useEffect(() => {
     if (storyboardFrames.length === 0) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedFrameId(undefined);
       return;
     }
     if (!selectedFrameId || !storyboardFrames.some((frame) => frame.id === selectedFrameId)) {
       setSelectedFrameId(storyboardFrames[0].id);
     }
-  }, [storyboardFrames, selectedFrameId]);
+  }, [storyboardFrames, selectedFrameId, setSelectedFrameId]);
 
   const handleAddStoryboardComment = () => {
     if (!project?.id || !selectedFrame || !commentDraft.trim()) return;
