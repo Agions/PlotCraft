@@ -3,7 +3,7 @@
  * 提供基于关键词的情感分析功能
  */
 
-import { EmotionType, type NovelScene, type SceneEmotion } from '@/core/types/novel.types';
+import { EmotionType, type NovelScene, type SceneEmotion } from '@/shared/types';
 
 /**
  * 情感检测器

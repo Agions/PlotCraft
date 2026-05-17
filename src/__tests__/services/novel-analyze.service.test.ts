@@ -4,7 +4,7 @@
 
 import { aiService } from '@/core/services/ai.service';
 import { novelAnalyzer } from '@/core/services/novel-analyze.service';
-import { EmotionType } from '@/core/types/novel.types';
+import { EmotionType } from '@/shared/types';
 
 // Mock AI 服务
 jest.mock('@/core/services/ai.service', () => ({
@@ -168,9 +168,7 @@ describe('NovelAnalyzer', () => {
 
   describe('错误处理', () => {
     it('应该在 AI 解析失败时使用默认元数据', async () => {
-      (aiService.generate as jest.Mock).mockRejectedValueOnce(
-        new Error('API Error')
-      );
+      (aiService.generate as jest.Mock).mockRejectedValueOnce(new Error('API Error'));
 
       const result = await novelAnalyzer.parseNovelContent(sampleNovelContent);
 

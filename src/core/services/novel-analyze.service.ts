@@ -4,6 +4,7 @@
  */
 
 import { emotionDetector } from '@/core/domains/novel/services/emotion-detector.service';
+import { logger } from '@/core/utils/logger';
 import {
   EmotionType,
   type NovelMetadata,
@@ -14,8 +15,7 @@ import {
   type AnalyzeResult,
   type NovelStatistics,
   type SceneDescription,
-} from '@/core/types/novel.types';
-import { logger } from '@/core/utils/logger';
+} from '@/shared/types';
 
 import { aiService } from './ai.service';
 import {
@@ -575,6 +575,7 @@ ${content.slice(0, 5000)}
 
           // 更新角色的对话列表
           if (matchedCharacter) {
+            matchedCharacter.dialogues ??= [];
             matchedCharacter.dialogues.push(dialog.content);
           }
         }
