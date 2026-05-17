@@ -12,7 +12,7 @@ import {
   PauseCircle,
   PlayCircle,
 } from 'lucide-react';
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -34,6 +34,7 @@ import {
 } from '@/components/ui/ui-components';
 import { tauriService } from '@/core/services';
 import { logger } from '@/core/utils/logger';
+import { useProjectStore } from '@/shared/stores';
 import { formatTimeHMS } from '@/shared/utils';
 
 import styles from './VideoEditor.module.less';
@@ -52,6 +53,7 @@ const { Content } = Layout;
 
 const VideoEditor = () => {
   const { projectId } = useParams<{ projectId: string }>();
+  const { loadProject: loadProjectFromStore } = useProjectStore();
 
   // 状态管理
   const [videoSrc, setVideoSrc] = useState<string>('');
@@ -70,23 +72,36 @@ const VideoEditor = () => {
   const [outputFormat, setOutputFormat] = useState<string>('mp4');
   const [videoQuality, setVideoQuality] = useState<string>('medium');
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [projectData, setProjectData] = useState<{ id: string; name: string }>({
+    id: projectId || 'new',
+    name: '未命名项目',
+  });
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
 
-  // 模拟项目数据
-  const projectData = {
-    id: projectId || 'new',
-    name: '未命名项目',
-    videoPath: '',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    segmentCount: segments.length,
-    duration: 0,
-    width: 1920,
-    height: 1080,
-    fps: 30,
-  };
+  // 加载真实项目数据
+  useEffect(() => {
+    if (!projectId) return;
+    const loadProjectData = async () => {
+      try {
+        const projectText = await tauriService.readText(projectId);
+        const data = JSON.parse(projectText);
+        setProjectData({ id: data.id, name: data.name });
+        if (data.keyFrames) setKeyframes(data.keyFrames);
+        if (data.videos && data.videos.length > 0) {
+          const first = data.videos[0];
+          if (first.path) {
+            setVideoSrc(`file://${first.path}`);
+            setDuration(first.duration || 0);
+          }
+        }
+      } catch (err) {
+        logger.warn('未找到关联项目，使用空白编辑器');
+      }
+    };
+    void loadProjectData();
+  }, [projectId]);
 
   // 加载视频文件
   // eslint-disable react-hooks/purity
