@@ -34,6 +34,7 @@ import {
   CardMeta,
   type CardMetaProps,
 } from '@/components/ui/card';
+import { Collapse, CollapsePanel } from '@/components/ui/collapse';
 import { ColorPicker, type ColorPickerProps } from '@/components/ui/color-picker';
 import {
   Dialog,
@@ -42,6 +43,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
+import { Divider } from '@/components/ui/divider';
 import { Dropdown as LegacyDropdown } from '@/components/ui/dropdown';
 import {
   DropdownMenu as DropdownMenuRoot,
@@ -52,6 +54,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Empty as ShadcnEmpty } from '@/components/ui/empty';
 import { Row, Col, type RowProps, type ColProps } from '@/components/ui/grid';
+import { InputNumber } from '@/components/ui/input-number';
 import { List as ShadcnList, ListItem } from '@/components/ui/list';
 import { message } from '@/components/ui/message';
 import { Modal, type ModalProps } from '@/components/ui/modal';
@@ -66,6 +69,7 @@ import {
   SelectValue,
   AntDSelect,
 } from '@/components/ui/select';
+import { Space, SpaceItem } from '@/components/ui/space';
 import { Tag as ShadcnTag } from '@/components/ui/tag';
 import { TextArea, Textarea, type TextAreaProps } from '@/components/ui/textarea';
 import {
@@ -424,75 +428,6 @@ interface SpaceProps {
   compact?: boolean;
 }
 
-const Space = (({
-  direction = 'horizontal',
-  size = 'small',
-  align,
-  className,
-  children,
-  wrap,
-  style,
-  block,
-  compact,
-}: SpaceProps) => {
-  const gapMap: Record<string, string> = {
-    small: '0.25rem',
-    middle: '0.5rem',
-    large: '1rem',
-  };
-  const gap = typeof size === 'number' ? `${size}px` : gapMap[size] || '0.5rem';
-
-  return (
-    <div
-      className={cn(
-        'flex',
-        direction === 'vertical' ? 'flex-col' : 'flex-row',
-        wrap && 'flex-wrap',
-        block && 'w-full',
-        className
-      )}
-      style={{
-        gap: compact ? 0 : gap,
-        alignItems:
-          align === 'start'
-            ? 'flex-start'
-            : align === 'end'
-              ? 'flex-end'
-              : align === 'baseline'
-                ? 'baseline'
-                : 'center',
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
-}) as unknown as any & {
-  Item: (props: { children?: React.ReactNode; className?: string }) => JSX.Element;
-  Compact: (props: SpaceCompactProps) => JSX.Element;
-};
-
-function SpaceItem({ children, className }: { children?: React.ReactNode; className?: string }) {
-  return <div className={cn('flex-1 min-w-0', className)}>{children}</div>;
-}
-(Space as any).Item = SpaceItem;
-
-// Space.Compact - a compact mode where items are joined together
-interface SpaceCompactProps {
-  block?: boolean;
-  children?: React.ReactNode;
-  className?: string;
-}
-
-function SpaceCompact({ block, children, className }: SpaceCompactProps) {
-  return (
-    <div className={cn('flex', block && 'w-full', className)} style={{ gap: 0 }}>
-      {children}
-    </div>
-  );
-}
-(Space as any).Compact = SpaceCompact;
-
 // ============================================================
 // AntD-compatible Spin (loading spinner)
 // ============================================================
@@ -848,46 +783,6 @@ interface InputNumberProps {
   disabled?: boolean;
 }
 
-const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
-  ({ value, defaultValue, onChange, min, max, step, size, style, className, ...props }, ref) => {
-    const [internalValue, setInternalValue] = React.useState<number | undefined>(
-      defaultValue ?? value
-    );
-
-    React.useEffect(() => {
-      if (value !== undefined) setInternalValue(value);
-    }, [value]);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const val = e.target.value === '' ? null : parseFloat(e.target.value);
-      setInternalValue(val ?? undefined);
-      onChange?.(val);
-    };
-
-    const sizeClass = size === 'large' ? 'h-11' : size === 'small' ? 'h-8' : 'h-10';
-
-    return (
-      <input
-        ref={ref}
-        type="number"
-        value={internalValue ?? ''}
-        onChange={handleChange}
-        min={min}
-        max={max}
-        step={step}
-        className={cn(
-          'flex w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
-          sizeClass,
-          className
-        )}
-        style={style}
-        {...props}
-      />
-    );
-  }
-);
-InputNumber.displayName = 'InputNumber';
-
 // ============================================================
 // Divider component
 // ============================================================
@@ -896,22 +791,6 @@ interface DividerProps {
   orientation?: 'left' | 'right' | 'center';
   className?: string;
   children?: React.ReactNode;
-}
-
-function Divider({ orientation: _orientation = 'left', className, children }: DividerProps) {
-  if (children) {
-    return (
-      <div className={cn('relative my-4', className)}>
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border" />
-        </div>
-        <div className="relative flex justify-center">
-          <span className="bg-background px-2 text-xs text-muted-foreground">{children}</span>
-        </div>
-      </div>
-    );
-  }
-  return <div className={cn('my-4 border-t border-border', className)} />;
 }
 
 // ============================================================
@@ -939,93 +818,6 @@ interface CollapsePanelProps {
   header?: React.ReactNode;
   children?: React.ReactNode;
 }
-
-function CollapsePanel({ header: _header, children: _children }: CollapsePanelProps) {
-  return null;
-}
-
-function CollapseBase({
-  activeKey,
-  defaultActiveKey,
-  onChange,
-  accordion,
-  className,
-  children,
-  items,
-  ghost,
-}: CollapseProps) {
-  const getDefaultActiveKey = () => {
-    if (defaultActiveKey === undefined) return [];
-    return Array.isArray(defaultActiveKey) ? defaultActiveKey : [defaultActiveKey];
-  };
-
-  const [activeKeys, setActiveKeys] = React.useState<Set<string>>(new Set(getDefaultActiveKey()));
-
-  React.useEffect(() => {
-    if (activeKey !== undefined) {
-      setActiveKeys(new Set(Array.isArray(activeKey) ? activeKey : [activeKey]));
-    }
-  }, [activeKey]);
-
-  const toggleKey = (key: string) => {
-    let newKeys: Set<string>;
-    if (accordion) {
-      newKeys = activeKeys.has(key) ? new Set() : new Set([key]);
-    } else {
-      newKeys = new Set(activeKeys);
-      if (newKeys.has(key)) newKeys.delete(key);
-      else newKeys.add(key);
-    }
-    setActiveKeys(newKeys);
-    const result = accordion ? [...newKeys][0] || '' : [...newKeys];
-    onChange?.(
-      newKeys.size === 0 ? ((Array.isArray(activeKey) ? [] : '') as any) : (result as any)
-    );
-  };
-
-  // Parse children to extract panels OR use items prop
-  const panels: { key: string; header: React.ReactNode; children: React.ReactNode }[] = [];
-  if (items) {
-    panels.push(
-      ...items.map((item) => ({ key: item.key, header: item.label, children: item.children }))
-    );
-  } else {
-    React.Children.forEach(children, (child) => {
-      if (child && React.isValidElement(child) && child.props?.key) {
-        panels.push({
-          key: String(child.props.key),
-          header: child.props.header,
-          children: child.props.children,
-        });
-      }
-    });
-  }
-
-  return (
-    <div className={cn('flex flex-col rounded-md', ghost ? '' : 'border', className)}>
-      {panels.map((panel) => {
-        const isOpen = activeKeys.has(panel.key);
-        return (
-          <div key={panel.key} className="border-b last:border-b-0">
-            <button
-              type="button"
-              onClick={() => toggleKey(panel.key)}
-              className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-medium hover:underline bg-background"
-            >
-              <span>{panel.header}</span>
-              <span className={cn('transition-transform', isOpen ? 'rotate-180' : '')}>▼</span>
-            </button>
-            {isOpen && <div className="px-4 pb-4 text-sm">{panel.children}</div>}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-(CollapseBase as any).Panel = CollapsePanel;
-const Collapse = CollapseBase as unknown as ((props: CollapseProps) => JSX.Element) & {
-  Panel: (props: CollapsePanelProps) => JSX.Element;
-};
 
 // ============================================================
 // AntD-compatible Dropdown (wraps DropdownMenu)

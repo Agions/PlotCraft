@@ -76,11 +76,12 @@ interface SpaceCompactProps {
   block?: boolean;
   children?: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-function SpaceCompact({ block, children, className }: SpaceCompactProps) {
+function SpaceCompact({ block, children, className, style }: SpaceCompactProps) {
   return (
-    <div className={cn('flex', block && 'w-full', className)} style={{ gap: 0 }}>
+    <div className={cn('flex', block && 'w-full', className)} style={{ gap: 0, ...style }}>
       {children}
     </div>
   );
