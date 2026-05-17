@@ -11,7 +11,7 @@ import styles from '../../ProjectEdit.module.less';
 
 const NovelImporter = lazy(() => import('@/features/script/components/NovelImporter'));
 
-export interface StepContentImportProps {
+export interface StepImportProps {
   content: string;
   loading: boolean;
   onContentLoad: (
@@ -22,13 +22,7 @@ export interface StepContentImportProps {
   onNext: () => void;
 }
 
-function StepContentImport({
-  content,
-  loading,
-  onContentLoad,
-  onRemove,
-  onNext,
-}: StepContentImportProps) {
+function StepImport({ content, loading, onContentLoad, onRemove, onNext }: StepImportProps) {
   return (
     <Card className={styles.stepCard}>
       <CardHeader>
@@ -57,4 +51,4 @@ function StepContentImport({
   );
 }
 
-export default StepContentImport;
+export default StepImport;

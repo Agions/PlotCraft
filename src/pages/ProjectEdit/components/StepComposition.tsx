@@ -13,7 +13,7 @@ import styles from '../../ProjectEdit.module.less';
 
 const CompositionStudio = lazy(() => import('@/components/business/CompositionStudio'));
 
-export interface StepContentCompositionProps {
+export interface StepCompositionProps {
   storyboardFrames: StoryboardFrame[];
   projectId: string | undefined;
   onCompositionChange: (comp: CompositionProject) => void;
@@ -21,13 +21,13 @@ export interface StepContentCompositionProps {
   onNext: () => void;
 }
 
-function StepContentComposition({
+function StepComposition({
   storyboardFrames,
   projectId,
   onCompositionChange,
   onPrev,
   onNext,
-}: StepContentCompositionProps) {
+}: StepCompositionProps) {
   return (
     <Card className={styles.stepCard}>
       <CardHeader>
@@ -60,4 +60,4 @@ function StepContentComposition({
   );
 }
 
-export default StepContentComposition;
+export default StepComposition;

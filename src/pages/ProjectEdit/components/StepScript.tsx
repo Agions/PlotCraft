@@ -11,14 +11,14 @@ import styles from '../../ProjectEdit.module.less';
 
 const ScriptEditor = lazy(() => import('@/features/script/components/ScriptEditor'));
 
-export interface StepContentScriptProps {
+export interface StepScriptProps {
   onExport: (format: string) => void;
   onSave: (segments: unknown) => void;
   onPrev: () => void;
   onNext: () => void;
 }
 
-function StepContentScript({ onExport, onPrev, onNext, onSave }: StepContentScriptProps) {
+function StepScript({ onExport, onPrev, onNext, onSave }: StepScriptProps) {
   return (
     <Card className={styles.stepCard}>
       <CardHeader>
@@ -49,4 +49,4 @@ function StepContentScript({ onExport, onPrev, onNext, onSave }: StepContentScri
   );
 }
 
-export default StepContentScript;
+export default StepScript;

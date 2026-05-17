@@ -16,7 +16,7 @@ import QualityGateAlert from './QualityGateAlert';
 
 const VideoExporter = lazy(() => import('@/features/video/components/VideoExporter'));
 
-export interface StepContentExportProps {
+export interface StepExportProps {
   exportPreset: '9:16' | '16:9' | '1:1';
   exportSettings: Partial<ExportSettings>;
   projectId: string | undefined;
@@ -32,7 +32,7 @@ export interface StepContentExportProps {
   onPrev: () => void;
 }
 
-function StepContentExport({
+function StepExport({
   exportPreset,
   exportSettings,
   projectId,
@@ -46,7 +46,7 @@ function StepContentExport({
   onLocateIssue,
   onSave,
   onPrev,
-}: StepContentExportProps) {
+}: StepExportProps) {
   return (
     <Card className={styles.stepCard}>
       <CardHeader>
@@ -118,4 +118,4 @@ function StepContentExport({
   );
 }
 
-export default StepContentExport;
+export default StepExport;

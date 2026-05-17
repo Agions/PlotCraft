@@ -1,46 +1,48 @@
 /**
- * Step 4: 角色设计
+ * Step 5: 场景渲染
  */
-import { User } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import React, { lazy } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import type { Character } from '@/core/types';
+import type { StoryboardFrame } from '@/features/storyboard/components/StoryboardEditor';
 
 import styles from '../../ProjectEdit.module.less';
 
-const CharacterDesigner = lazy(() => import('@/features/character/components/CharacterDesigner'));
+const RenderCenter = lazy(() => import('@/components/business/RenderCenter'));
 
-export interface StepContentCharacterProps {
-  characters: Character[];
+export interface StepRenderProps {
+  storyboardFrames: StoryboardFrame[];
   projectId: string | undefined;
-  onChange: (characters: Character[]) => void;
+  onApplyRenderedFrame: (frameId: string, imageUrl: string) => void;
   onPrev: () => void;
   onNext: () => void;
 }
 
-function StepContentCharacter({
-  characters,
+function StepRender({
+  storyboardFrames,
   projectId,
-  onChange,
+  onApplyRenderedFrame,
   onPrev,
   onNext,
-}: StepContentCharacterProps) {
+}: StepRenderProps) {
   return (
     <Card className={styles.stepCard}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <User className="h-5 w-5" />
-          角色设计
+          <CheckCircle className="h-5 w-5" />
+          场景渲染
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-muted-foreground mb-4">
-          为故事中的角色创建和管理形象档案，确保视觉一致性。
-        </p>
-        <div className={styles.characterDesignerContainer}>
-          <CharacterDesigner characters={characters} onChange={onChange} projectId={projectId} />
+        <p className="text-muted-foreground mb-4">渲染漫画场景，包括背景、道具和光影效果。</p>
+        <div className={styles.renderCenterContainer}>
+          <RenderCenter
+            frames={storyboardFrames}
+            projectId={projectId}
+            onApplyRenderedFrame={onApplyRenderedFrame}
+          />
         </div>
         <div className={styles.stepActions}>
           <div className="flex gap-2">
@@ -57,4 +59,4 @@ function StepContentCharacter({
   );
 }
 
-export default StepContentCharacter;
+export default StepRender;

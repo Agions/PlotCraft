@@ -17,7 +17,7 @@ import CollaborationPanel from './CollaborationPanel';
 
 const StoryboardEditor = lazy(() => import('@/features/storyboard/components/StoryboardEditor'));
 
-export interface StepContentStoryboardProps {
+export interface StepStoryboardProps {
   storyboardFrames: StoryboardFrame[];
   storyAnalysis: StoryAnalysis | null;
   selectedFrame: StoryboardFrame | null;
@@ -44,7 +44,7 @@ export interface StepContentStoryboardProps {
   onNext: () => void;
 }
 
-function StepContentStoryboard({
+function StepStoryboard({
   storyboardFrames,
   storyAnalysis,
   selectedFrame,
@@ -69,7 +69,7 @@ function StepContentStoryboard({
   onVersionLabelChange,
   onPrev,
   onNext,
-}: StepContentStoryboardProps) {
+}: StepStoryboardProps) {
   return (
     <Card className={styles.stepCard}>
       <CardHeader>
@@ -137,4 +137,4 @@ function StepContentStoryboard({
   );
 }
 
-export default StepContentStoryboard;
+export default StepStoryboard;

@@ -37,7 +37,7 @@ import { logger } from '@/core/utils/logger';
 import { useProjectStore } from '@/shared/stores';
 import { formatTimeHMS } from '@/shared/utils';
 
-import styles from './VideoEditor.module.less';
+import styles from './VideoEditorPage.module.less';
 
 // VideoSegment type (compatible with ScriptEditor interface)
 interface VideoSegment {

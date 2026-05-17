@@ -13,7 +13,7 @@ import styles from '../../ProjectEdit.module.less';
 
 const AudioEditor = lazy(() => import('@/features/audio/components/AudioEditor'));
 
-export interface StepContentAudioProps {
+export interface StepAudioProps {
   audioConfig: AudioTrackConfig;
   audioEditorKey: string;
   audioGenerating: boolean;
@@ -25,7 +25,7 @@ export interface StepContentAudioProps {
   onNext: () => void;
 }
 
-function StepContentAudio({
+function StepAudio({
   audioConfig,
   audioEditorKey,
   audioGenerating,
@@ -35,7 +35,7 @@ function StepContentAudio({
   onGenerateVoices,
   onPrev,
   onNext,
-}: StepContentAudioProps) {
+}: StepAudioProps) {
   return (
     <Card className={styles.stepCard}>
       <CardHeader>
@@ -78,4 +78,4 @@ function StepContentAudio({
   );
 }
 
-export default StepContentAudio;
+export default StepAudio;

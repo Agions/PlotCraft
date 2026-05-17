@@ -14,7 +14,7 @@ import styles from '../../ProjectEdit.module.less';
 
 const NovelImporter = lazy(() => import('@/features/script/components/NovelImporter'));
 
-export interface StepContentAIAnalysisProps {
+export interface StepAnalysisProps {
   content: string;
   novelMetadata: NovelMetadata | null;
   analysisDraft: string;
@@ -28,7 +28,7 @@ export interface StepContentAIAnalysisProps {
   onPrev: () => void;
 }
 
-function StepContentAIAnalysis({
+function StepAIAnalysis({
   content,
   novelMetadata,
   analysisDraft,
@@ -40,7 +40,7 @@ function StepContentAIAnalysis({
   onAccept,
   onDraftChange,
   onPrev,
-}: StepContentAIAnalysisProps) {
+}: StepAnalysisProps) {
   return (
     <Card className={styles.stepCard}>
       <CardHeader>
@@ -125,4 +125,4 @@ function StepContentAIAnalysis({
   );
 }
 
-export default StepContentAIAnalysis;
+export default StepAIAnalysis;

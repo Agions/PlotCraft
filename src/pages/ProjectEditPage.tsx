@@ -47,15 +47,15 @@ import type { StoryboardFrame } from '@/features/storyboard/components/Storyboar
 import { toast } from '@/shared/components/ui/Toast';
 
 import {
-  StepContentImport,
-  StepContentAIAnalysis,
-  StepContentScript,
-  StepContentStoryboard,
-  StepContentCharacter,
-  StepContentRender,
-  StepContentComposition,
-  StepContentAudio,
-  StepContentExport,
+  StepImport,
+  StepAnalysis,
+  StepScript,
+  StepStoryboard,
+  StepCharacter,
+  StepRender,
+  StepComposition,
+  StepAudio,
+  StepExport,
 } from './ProjectEdit/components';
 import styles from './ProjectEdit.module.less';
 
@@ -579,7 +579,7 @@ const ProjectEdit = () => {
     switch (currentStep) {
       case 0:
         return (
-          <StepContentImport
+          <StepImport
             content={content}
             loading={loading}
             onContentLoad={handleContentLoad}
@@ -590,7 +590,7 @@ const ProjectEdit = () => {
 
       case 1:
         return (
-          <StepContentAIAnalysis
+          <StepAnalysis
             content={content}
             novelMetadata={novelMetadata}
             analysisDraft={analysisDraft}
@@ -607,7 +607,7 @@ const ProjectEdit = () => {
 
       case 2:
         return (
-          <StepContentScript
+          <StepScript
             onExport={handleExportScript}
             onSave={(segments) => setScriptText(segments as unknown as string)}
             onPrev={() => setCurrentStep(1)}
@@ -617,7 +617,7 @@ const ProjectEdit = () => {
 
       case 3:
         return (
-          <StepContentStoryboard
+          <StepStoryboard
             storyboardFrames={storyboardFrames}
             storyAnalysis={storyAnalysis}
             selectedFrame={selectedFrame}
@@ -647,7 +647,7 @@ const ProjectEdit = () => {
 
       case 4:
         return (
-          <StepContentCharacter
+          <StepCharacter
             characters={characters}
             projectId={project?.id}
             onChange={setCharacters}
@@ -658,7 +658,7 @@ const ProjectEdit = () => {
 
       case 5:
         return (
-          <StepContentRender
+          <StepRender
             storyboardFrames={storyboardFrames}
             projectId={project?.id}
             onApplyRenderedFrame={handleApplyRenderedFrame}
@@ -669,7 +669,7 @@ const ProjectEdit = () => {
 
       case 6:
         return (
-          <StepContentComposition
+          <StepComposition
             storyboardFrames={storyboardFrames}
             projectId={project?.id}
             onCompositionChange={setComposition}
@@ -680,7 +680,7 @@ const ProjectEdit = () => {
 
       case 7:
         return (
-          <StepContentAudio
+          <StepAudio
             audioConfig={audioConfig}
             audioEditorKey={audioEditorKey}
             audioGenerating={audioGenerating}
@@ -695,7 +695,7 @@ const ProjectEdit = () => {
 
       case 8:
         return (
-          <StepContentExport
+          <StepExport
             exportPreset={exportPreset}
             exportSettings={exportSettings}
             projectId={project?.id}
