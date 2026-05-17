@@ -18,6 +18,7 @@ import * as React from 'react';
 import { useForm as useRhfForm, type UseFormReturn as RhfUseFormReturn } from 'react-hook-form';
 import { toast } from 'sonner';
 
+import { Alert as LegacyAlert } from '@/components/ui/alert';
 import {
   LegacyAvatar,
   type LegacyAvatarProps,
@@ -62,6 +63,13 @@ import { Option, type OptionProps } from '@/components/ui/option';
 import { Popconfirm, type PopconfirmProps } from '@/components/ui/popconfirm';
 import { Progress as ShadcnProgress } from '@/components/ui/progress';
 import {
+  Radio,
+  RadioGroup,
+  RadioButton,
+  type RadioGroupProps,
+  type RadioOption,
+} from '@/components/ui/radio-group';
+import {
   Select as ShadcnSelect,
   SelectContent,
   SelectItem,
@@ -70,6 +78,7 @@ import {
   AntDSelect,
 } from '@/components/ui/select';
 import { Space, SpaceItem } from '@/components/ui/space';
+import { Spin } from '@/components/ui/spin';
 import { Tag as ShadcnTag } from '@/components/ui/tag';
 import { TextArea, Textarea, type TextAreaProps } from '@/components/ui/textarea';
 import {
@@ -317,103 +326,6 @@ function LegacySelect({
 // ============================================================
 // AntD-compatible Radio.Group with button style
 // ============================================================
-interface RadioOption {
-  value: string;
-  label: React.ReactNode;
-  disabled?: boolean;
-}
-
-interface RadioGroupProps {
-  value?: string;
-  defaultValue?: string;
-  onChange?: (value: string) => void;
-  optionType?: 'default' | 'button';
-  buttonStyle?: 'solid' | 'outline';
-  children?: React.ReactNode;
-  options?: RadioOption[];
-  className?: string;
-}
-
-function RadioGroup({
-  value,
-  defaultValue,
-  onChange,
-  optionType,
-  buttonStyle,
-  children,
-  options,
-  className,
-}: RadioGroupProps) {
-  if (optionType === 'button') {
-    return (
-      <div className={cn('flex flex-wrap gap-1', className)} role="radiogroup">
-        {(options ?? []).map((opt) => (
-          <button
-            key={opt.value}
-            type="button"
-            disabled={opt.disabled}
-            onClick={() => onChange?.(opt.value)}
-            className={cn(
-              'px-3 py-1.5 text-sm rounded border transition-colors',
-              (value ?? defaultValue) === opt.value
-                ? buttonStyle === 'solid'
-                  ? 'bg-primary text-primary-foreground border-primary'
-                  : 'bg-primary/10 text-primary border-primary'
-                : 'bg-background text-foreground border-input hover:bg-accent',
-              opt.disabled && 'opacity-50 cursor-not-allowed'
-            )}
-          >
-            {opt.label}
-          </button>
-        ))}
-        {/* Also support children pattern */}
-        {children}
-      </div>
-    );
-  }
-
-  return (
-    <div className={cn('flex flex-col gap-1', className)} role="radiogroup">
-      {(options ?? []).map((opt) => (
-        <label key={opt.value} className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="radio"
-            checked={(value ?? defaultValue) === opt.value}
-            onChange={() => onChange?.(opt.value)}
-            disabled={opt.disabled}
-            className="accent-primary"
-          />
-          <span className="text-sm">{opt.label}</span>
-        </label>
-      ))}
-      {children}
-    </div>
-  );
-}
-
-interface RadioButtonProps {
-  value?: string;
-  disabled?: boolean;
-  children?: React.ReactNode;
-}
-
-function RadioButton({ children, ...props }: RadioButtonProps) {
-  return <RadioGroup {...props} options={[{ value: props.value ?? '', label: children ?? '' }]} />;
-}
-
-function Radio(props: React.ComponentPropsWithoutRef<'input'>) {
-  return (
-    <label className="flex items-center gap-2 cursor-pointer">
-      <input type="radio" {...props} className="accent-primary" />
-      <span className="text-sm">{props.children}</span>
-    </label>
-  );
-}
-
-(Radio as unknown as { Group: typeof RadioGroup; Button: typeof RadioButton }).Group = RadioGroup;
-(Radio as unknown as { Group: typeof RadioGroup; Button: typeof RadioButton }).Button = RadioButton;
-
-// ============================================================
 // Space component (flex gap wrapper)
 // ============================================================
 interface SpaceProps {
@@ -440,34 +352,6 @@ interface SpinProps {
   children?: React.ReactNode;
 }
 
-function Spin({
-  size = 'default',
-  tip,
-  className,
-  spinning = true,
-  indicator,
-  children,
-}: SpinProps) {
-  const sizeMap = { small: '1rem', default: '1.5rem', large: '2rem' };
-  const spinnerSize = sizeMap[size];
-
-  if (!spinning) return <>{children}</>;
-
-  return (
-    <div className={cn('flex flex-col items-center justify-center gap-2', className)}>
-      {indicator ?? (
-        <span
-          className="inline-block animate-spin"
-          style={{ fontSize: spinnerSize, lineHeight: spinnerSize }}
-        >
-          ⟳
-        </span>
-      )}
-      {tip && <span className="text-sm text-muted-foreground">{tip}</span>}
-    </div>
-  );
-}
-
 // ============================================================
 // AntD-compatible Alert (wraps shadcn Alert)
 // ============================================================
@@ -480,36 +364,6 @@ interface LegacyAlertProps {
   children?: React.ReactNode;
   closeable?: boolean;
   onClose?: () => void;
-}
-
-const typeIconMap: Record<string, React.ReactNode> = {
-  success: <span className="text-green-500">✓</span>,
-  warning: <span className="text-yellow-500">⚠</span>,
-  error: <span className="text-red-500">✕</span>,
-  info: <span className="text-blue-500">ℹ</span>,
-  default: <span className="text-muted-foreground">!</span>,
-};
-
-function LegacyAlert({
-  type = 'default',
-  showIcon,
-  message,
-  description,
-  className,
-  children,
-}: LegacyAlertProps) {
-  return (
-    <div className={cn('flex flex-col gap-1 p-3 rounded-md border', className)}>
-      <div className="flex items-start gap-2">
-        {showIcon && <span className="mt-0.5">{typeIconMap[type]}</span>}
-        <div className="flex flex-col gap-0.5">
-          {message && <div className="text-sm font-medium">{message}</div>}
-          {description && <div className="text-sm text-muted-foreground">{description}</div>}
-          {children}
-        </div>
-      </div>
-    </div>
-  );
 }
 
 // ============================================================
