@@ -29,6 +29,9 @@ import {
 } from '@/core/services';
 import { runWhenIdle } from '@/core/utils/idle';
 import { logger } from '@/core/utils/logger';
+import { AudioEditorPanel } from '@/features/audio/components/AudioEditorPanel';
+import { CostPanel } from '@/features/cost/components/CostPanel';
+import { ExportPanel } from '@/features/export/components/ExportPanel';
 import type { NovelMetadata } from '@/features/script/components/NovelImporter';
 import { StoryboardCollaborationPanel } from '@/features/storyboard';
 import type { StoryboardFrame } from '@/features/storyboard/components/StoryboardEditor';
@@ -642,24 +645,7 @@ const ProjectDetail = () => {
           <TabPane tab={renderTabLabel('audio', <Volume2 />, '配音')} key="audio">
             <div className={styles.workflowSection}>
               {activeScript?.content && activeScript.content.length > 0 ? (
-                <Suspense fallback={<Spin />}>
-                  <AudioEditor
-                    initialConfig={project.audioConfig}
-                    videoDuration={Math.max((project.storyboardFrames?.length ?? 0) * 5, 60)}
-                    onConfigChange={(config) => {
-                      const updatedProject = {
-                        ...project,
-                        audioConfig: config,
-                        updatedAt: new Date().toISOString(),
-                      };
-                      setProject(updatedProject);
-                      updateProject(updatedProject.id, updatedProject);
-                      tauriService
-                        .writeText(updatedProject.id, JSON.stringify(updatedProject))
-                        .catch(() => undefined);
-                    }}
-                  />
-                </Suspense>
+                <AudioEditorPanel project={project} onPersistPatch={persistProjectPatch} />
               ) : (
                 <Empty description="请先生成或编辑剧本" image={undefined}>
                   <Button
@@ -676,67 +662,18 @@ const ProjectDetail = () => {
 
           <TabPane tab={renderTabLabel('cost', <DollarSign />, '成本')} key="cost">
             <div className={styles.workflowSection}>
-              <div className={styles.costQuickActions}>
-                <Button icon={<Download />} onClick={handleExportReviewNotes}>
-                  导出评审记录
-                </Button>
-              </div>
-              <Suspense fallback={<Spin />}>
-                <CostDashboard projectId={project?.id} />
-              </Suspense>
+              <CostPanel projectId={project?.id} onExportReviewNotes={handleExportReviewNotes} />
             </div>
           </TabPane>
 
           <TabPane tab={renderTabLabel('export', <Download />, '导出')} key="export">
             <div className={styles.workflowSection}>
               {activeScript?.content && activeScript.content.length > 0 ? (
-                <Card>
-                  <Alert
-                    type={exportQualityGate.passed ? 'success' : 'warning'}
-                    showIcon
-                    message={
-                      exportQualityGate.passed
-                        ? '质量闸门通过，可进入导出流程'
-                        : '质量闸门未完全通过'
-                    }
-                    description={
-                      <ul className={styles.qualityGateList}>
-                        {exportQualityGate.issues.length > 0 ? (
-                          exportQualityGate.issues.map((issue) => (
-                            <li key={issue.code}>
-                              [{issue.level === 'error' ? '阻断' : '建议'}] {issue.title}：
-                              {issue.detail}
-                              {typeof issue.frameIndex === 'number'
-                                ? `（第 ${issue.frameIndex + 1} 镜）`
-                                : ''}
-                              {issue.field ? ` 字段: ${issue.field}` : ''}
-                              {issue.frameId ? (
-                                <Button
-                                  type="link"
-                                  size="small"
-                                  onClick={() =>
-                                    navigate(
-                                      `/projects/${id}/edit?step=3&frameId=${encodeURIComponent(issue.frameId ?? '')}`
-                                    )
-                                  }
-                                >
-                                  去修复
-                                </Button>
-                              ) : null}
-                            </li>
-                          ))
-                        ) : (
-                          <li>当前分镜与评测摘要均达到默认阈值。</li>
-                        )}
-                      </ul>
-                    }
-                  />
-                  <div className={styles.exportActions}>
-                    <Button type="primary" onClick={() => navigate(`/projects/${id}/edit`)}>
-                      前往编辑页导出视频
-                    </Button>
-                  </div>
-                </Card>
+                <ExportPanel
+                  projectId={project?.id ?? ''}
+                  qualityGate={exportQualityGate}
+                  onNavigateToEdit={() => navigate(`/projects/${id}/edit`)}
+                />
               ) : (
                 <Empty description="请先生成或编辑剧本" image={undefined}>
                   <Button
