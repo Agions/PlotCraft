@@ -651,42 +651,9 @@ function Button({
   );
 }
 
-// AntD-compatible Input (native input wrapper)
-// ============================================================
-interface LegacyInputProps extends Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  'size' | 'prefix'
-> {
-  size?: 'large' | 'small' | 'middle';
-  prefix?: React.ReactNode;
-  suffix?: React.ReactNode;
-}
+import { Input as ShadcnInput, type InputProps as ShadcnInputProps } from '@/components/ui/input';
 
-const LegacyInput = React.forwardRef<HTMLInputElement, LegacyInputProps>(
-  ({ size = 'middle', prefix, suffix, className, ...props }, ref) => {
-    const sizeClass = size === 'large' ? 'h-11' : size === 'small' ? 'h-8' : 'h-10';
-    return (
-      <div
-        className={cn(
-          'flex items-center border border-input rounded-md bg-background px-3 py-1 focus-within:ring-2 focus-within:ring-ring',
-          className
-        )}
-      >
-        {prefix && <span className="mr-2 text-muted-foreground">{prefix}</span>}
-        <input
-          ref={ref}
-          className={cn(
-            'flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground',
-            sizeClass
-          )}
-          {...props}
-        />
-        {suffix && <span className="ml-2 text-muted-foreground">{suffix}</span>}
-      </div>
-    );
-  }
-);
-LegacyInput.displayName = 'LegacyInput';
+export { ShadcnInput as Input, type ShadcnInputProps as InputProps };
 
 // ============================================================
 // AntD-compatible List
@@ -1099,7 +1066,6 @@ export {
   ShadcnParagraph as Paragraph,
   useRhfForm as useForm,
   Button,
-  LegacyInput as Input,
   ListWrapper as List,
   ListItem,
   LegacyTag as Tag,
@@ -1132,7 +1098,6 @@ export {
   type UploadProps,
   type LegacyAvatarProps as AvatarProps,
   type ButtonProps,
-  type LegacyInputProps,
   type ListWrapperProps,
   type ListItemProps,
   type SpinProps,
