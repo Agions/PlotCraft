@@ -12,6 +12,35 @@ export type { StoryboardFrame } from '../../features/storyboard/components/Story
 // Legacy type alias
 export type { Script as ScriptData } from '@/shared/types';
 
+// Explicitly re-export novel types from shared to replace local duplicate
+export {
+  EmotionType,
+  type NovelMetadata,
+  type Chapter,
+  type NovelScene,
+  type Character,
+  type CharacterRelationship,
+  type Dialogue,
+  type SceneEmotion,
+  type AnalyzeConfig,
+  type AnalyzeResult,
+  type NovelStatistics,
+  type SceneDescription,
+  type VisualElement,
+  type ExportOptions,
+  type ScriptSourceType,
+  type ScriptFileFormat,
+  type ScriptSource,
+  type ScriptChapter,
+  type ScriptValidationIssue,
+  type ScriptValidationResult,
+  type StoryAnalysisCharacter,
+  type StoryAnalysisChapter,
+  type StoryAnalysis,
+} from '@/shared/types/novel';
+// Novel.types.ts also has ScriptFormat - re-export it
+export type { ScriptFormat } from '@/shared/types/novel';
+
 // ========== Additional types used by hooks/stores (not in shared/types yet) ==========
 
 export type TaskStatus = {
