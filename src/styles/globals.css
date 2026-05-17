@@ -7,25 +7,30 @@
    ============================================ */
 
 :root {
-  /* Primary Colors */
-  --color-primary: #1E88E5;
-  --color-primary-hover: #42A5F5;
-  --color-primary-active: #1565C0;
-  --color-primary-light: #E3F2FD;
+  /* Primary Colors - refined blue palette */
+  --color-primary: #3b82f6;
+  --color-primary-hover: #2563eb;
+  --color-primary-active: #1d4ed8;
+  --color-primary-light: #eff6ff;
+  --color-primary-glow: rgba(59, 130, 246, 0.25);
 
   /* Functional Colors */
-  --color-success: #26A69A;
-  --color-warning: #FF9800;
-  --color-error: #FF5252;
-  --color-info: #42A5F5;
+  --color-success: #10b981;
+  --color-success-light: #d1fae5;
+  --color-warning: #f59e0b;
+  --color-warning-light: #fef3c7;
+  --color-error: #ef4444;
+  --color-error-light: #fee2e2;
+  --color-info: #6366f1;
+  --color-info-light: #eef2ff;
 
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-base: 6px;
-  --radius-default: 8px;
-  --radius-lg: 10px;
-  --radius-xl: 12px;
-  --radius-2xl: 16px;
+  /* Border Radius - more rounded/modern */
+  --radius-sm: 6px;
+  --radius-base: 8px;
+  --radius-default: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
   --radius-full: 9999px;
 
   /* Spacing */
@@ -36,88 +41,117 @@
   --spacing-lg: 20px;
   --spacing-xl: 24px;
   --spacing-2xl: 32px;
+  --spacing-3xl: 48px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-base: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.03), 0 4px 8px rgba(0, 0, 0, 0.03);
+  /* Shadows - layered, more depth */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-base: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.16), 0 12px 24px rgba(0, 0, 0, 0.1);
+  --shadow-card:
+    0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 20px var(--color-primary-glow);
+  --shadow-glow-lg: 0 0 40px var(--color-primary-glow);
 
   /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-base: 0.2s ease;
-  --transition-slow: 0.3s ease;
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Layout */
   --header-height: 64px;
-  --content-max-width: 1200px;
+  --content-max-width: 1280px;
   --container-padding: 24px;
 
   /* ============================================
      shadcn/ui CSS Design Tokens
      ============================================ */
-  --background: #ffffff;
-  --foreground: rgba(0, 0, 0, 0.85);
+  --background: #fafafa;
+  --foreground: rgba(15, 23, 42, 0.88);
   --card: #ffffff;
-  --card-foreground: rgba(0, 0, 0, 0.85);
+  --card-foreground: rgba(15, 23, 42, 0.88);
   --popover: #ffffff;
-  --popover-foreground: rgba(0, 0, 0, 0.85);
-  --primary: var(--color-primary, #1E88E5);
+  --popover-foreground: rgba(15, 23, 42, 0.88);
+  --primary: #3b82f6;
   --primary-foreground: #ffffff;
-  --secondary: #f0f2f5;
-  --secondary-foreground: rgba(0, 0, 0, 0.85);
-  --muted: #f0f2f5;
-  --muted-foreground: rgba(0, 0, 0, 0.45);
-  --accent: #f0f2f5;
-  --accent-foreground: rgba(0, 0, 0, 0.85);
-  --destructive: #FF5252;
+  --secondary: #f1f5f9;
+  --secondary-foreground: rgba(15, 23, 42, 0.88);
+  --muted: #f1f5f9;
+  --muted-foreground: rgba(100, 116, 139, 0.9);
+  --accent: #f1f5f9;
+  --accent-foreground: rgba(15, 23, 42, 0.88);
+  --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: #e0e0e0;
-  --input: #e0e0e0;
-  --ring: var(--color-primary, #1E88E5);
-  --radius: 8px;
+  --border: rgba(226, 232, 240, 0.8);
+  --input: #e2e8f0;
+  --ring: #3b82f6;
+  --radius: 10px;
+
+  /* ============================================
+     Glass morphism helpers
+     ============================================ */
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 /* Dark theme overrides - supports both dark-theme class and dark class */
 .dark-theme,
 .dark,
 :root.dark {
-  --color-primary: #42A5F5;
-  --color-primary-hover: #1E88E5;
-  --color-primary-active: #64B5F6;
+  --color-primary: #60a5fa;
+  --color-primary-hover: #3b82f6;
+  --color-primary-active: #93c5fd;
+  --color-primary-light: #1e3a5f;
+  --color-primary-glow: rgba(96, 165, 250, 0.3);
 
-  --color-success: #4DB6AC;
-  --color-warning: #FFB74D;
-  --color-error: #EF5350;
-  --color-info: #64B5F6;
+  --color-success: #34d399;
+  --color-success-light: #064e3b;
+  --color-warning: #fbbf24;
+  --color-warning-light: #451a03;
+  --color-error: #f87171;
+  --color-error-light: #450a0a;
+  --color-info: #818cf8;
+  --color-info-light: #1e1b4b;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-base: 0 2px 8px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.6);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.7);
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-base: 0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.6), 0 4px 8px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.7), 0 8px 16px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.8), 0 12px 24px rgba(0, 0, 0, 0.7);
+  --shadow-card:
+    0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.5), 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 20px var(--color-primary-glow);
+  --shadow-glow-lg: 0 0 40px var(--color-primary-glow);
 
   /* shadcn/ui dark mode tokens */
-  --background: #141414;
-  --foreground: rgba(255, 255, 255, 0.85);
-  --card: #1f1f1f;
-  --card-foreground: rgba(255, 255, 255, 0.85);
-  --popover: #1f1f1f;
-  --popover-foreground: rgba(255, 255, 255, 0.85);
-  --primary: #42A5F5;
-  --primary-foreground: #141414;
-  --secondary: #2d2d2d;
-  --secondary-foreground: rgba(255, 255, 255, 0.85);
-  --muted: #2d2d2d;
-  --muted-foreground: rgba(255, 255, 255, 0.45);
-  --accent: #2d2d2d;
-  --accent-foreground: rgba(255, 255, 255, 0.85);
-  --destructive: #EF5350;
+  --background: #0f172a;
+  --foreground: rgba(241, 245, 249, 0.88);
+  --card: #1e293b;
+  --card-foreground: rgba(241, 245, 249, 0.88);
+  --popover: #1e293b;
+  --popover-foreground: rgba(241, 245, 249, 0.88);
+  --primary: #60a5fa;
+  --primary-foreground: #0f172a;
+  --secondary: #334155;
+  --secondary-foreground: rgba(241, 245, 249, 0.88);
+  --muted: #334155;
+  --muted-foreground: rgba(148, 163, 184, 0.9);
+  --accent: #334155;
+  --accent-foreground: rgba(241, 245, 249, 0.88);
+  --destructive: #f87171;
   --destructive-foreground: #ffffff;
-  --border: #303030;
-  --input: #303030;
-  --ring: #42A5F5;
+  --border: rgba(51, 65, 85, 0.8);
+  --input: #334155;
+  --ring: #60a5fa;
+
+  --glass-bg: rgba(30, 41, 59, 0.72);
+  --glass-border: rgba(51, 65, 85, 0.4);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 /* ============================================
@@ -125,8 +159,12 @@
    ============================================ */
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUpIn {
@@ -239,13 +277,22 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ============================================

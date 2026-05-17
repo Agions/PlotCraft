@@ -58,7 +58,8 @@
   --vp-c-gutter: oklch(100% 0 0 / 0.04);
 
   /* ── Typography ── */
-  --vp-font-family-base: 'Inter', 'PingFang SC', 'Microsoft YaHei', ui-sans-serif, system-ui, sans-serif;
+  --vp-font-family-base:
+    'Inter', 'PingFang SC', 'Microsoft YaHei', ui-sans-serif, system-ui, sans-serif;
   --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
 
   /* ── Layout ── */
@@ -97,6 +98,12 @@
     var(--color-accent) 50%,
     var(--color-primary-light) 100%
   );
+  --vp-home-hero-image-background-image: linear-gradient(
+    135deg,
+    oklch(72% 0.18 255 / 0.1) 0%,
+    oklch(75% 0.18 300 / 0.08) 100%
+  );
+  --vp-home-hero-image-filter: blur(24px);
 
   /* ── Shadows ── */
   --vp-shadow-1: 0 1px 2px oklch(0% 0 0 / 0.4), 0 1px 4px oklch(0% 0 0 / 0.3);
@@ -170,7 +177,11 @@
   margin-bottom: 24px;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--vp-c-border);
-  background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-text-secondary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-text-primary) 0%,
+    var(--color-text-secondary) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -209,7 +220,8 @@
 }
 
 @keyframes h2-line-sweep {
-  0%, 100% {
+  0%,
+  100% {
     transform: scaleX(0);
     opacity: 0.5;
   }
@@ -227,7 +239,10 @@
   margin-bottom: 12px;
   padding-left: 14px;
   border-left: 3px solid var(--color-primary);
-  transition: border-color 0.25s ease, padding-left 0.25s ease, color 0.25s ease;
+  transition:
+    border-color 0.25s ease,
+    padding-left 0.25s ease,
+    color 0.25s ease;
 }
 
 .VPDoc h3:hover {
@@ -301,18 +316,14 @@ div[class*='language-']::before {
   left: -100%;
   width: 60%;
   height: 3px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    oklch(98% 0.01 255 / 0.6),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, oklch(98% 0.01 255 / 0.6), transparent);
   animation: code-scan 4s ease-in-out infinite;
   z-index: 1;
 }
 
 @keyframes code-scan {
-  0%, 100% {
+  0%,
+  100% {
     left: -100%;
     opacity: 0;
   }
@@ -377,11 +388,7 @@ div[class*='language-'] .copy:hover {
 }
 
 .VPDoc table th {
-  background: linear-gradient(
-    135deg,
-    oklch(22% 0 0) 0%,
-    oklch(18% 0 0) 100%
-  ) !important;
+  background: linear-gradient(135deg, oklch(22% 0 0) 0%, oklch(18% 0 0) 100%) !important;
   color: var(--color-text-primary) !important;
   font-weight: 600;
   font-size: 0.82rem;
@@ -401,18 +408,18 @@ div[class*='language-'] .copy:hover {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    oklch(100% 0 0 / 0.05),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, oklch(100% 0 0 / 0.05), transparent);
   animation: table-header-shimmer 4s ease-in-out infinite;
 }
 
 @keyframes table-header-shimmer {
-  0%, 100% { left: -100%; }
-  50%       { left: 100%; }
+  0%,
+  100% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
 }
 
 .VPDoc table td {
@@ -505,7 +512,9 @@ div[class*='language-'] .copy:hover {
   color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.2s ease, text-decoration 0.2s ease;
+  transition:
+    color 0.2s ease,
+    text-decoration 0.2s ease;
 }
 
 .VPDoc a:hover {
@@ -522,7 +531,9 @@ div[class*='language-'] .copy:hover {
   border-radius: 0 8px 8px 0;
   padding: 14px 20px;
   margin: 16px 0;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
 .VPDoc blockquote:hover {
@@ -596,17 +607,13 @@ div[class*='language-'] .copy:hover {
   transform: translateX(-50%);
   width: 200px;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--color-primary),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
   animation: footer-glow 3s ease-in-out infinite;
 }
 
 @keyframes footer-glow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
     width: 150px;
   }
@@ -685,22 +692,16 @@ div[class*='language-'] .copy:hover {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(
-    ellipse at 30% 20%,
-    oklch(72% 0.18 255 / 0.08) 0%,
-    transparent 50%
-  ),
-  radial-gradient(
-    ellipse at 70% 60%,
-    oklch(75% 0.18 300 / 0.06) 0%,
-    transparent 50%
-  );
+  background:
+    radial-gradient(ellipse at 30% 20%, oklch(72% 0.18 255 / 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, oklch(75% 0.18 300 / 0.06) 0%, transparent 50%);
   animation: hero-gradient-shift 12s ease-in-out infinite;
   z-index: 0;
 }
 
 @keyframes hero-gradient-shift {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) rotate(0deg);
   }
   33% {
@@ -730,12 +731,10 @@ div[class*='language-'] .copy:hover {
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(
-    135deg,
-    var(--color-primary),
-    var(--color-accent)
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
@@ -769,12 +768,10 @@ div[class*='language-'] .copy:hover {
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(
-    135deg,
-    var(--color-primary),
-    var(--color-accent)
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
@@ -852,12 +849,28 @@ div[class*='language-'] .copy:hover {
 /* ═══════════════════════════════════════════════════════════
    UTILITY CLASSES
    ═══════════════════════════════════════════════════════════ */
-.text-primary { color: var(--color-text-primary); }
-.text-secondary { color: var(--color-text-secondary); }
-.text-muted { color: var(--color-text-muted); }
-.text-accent { color: var(--color-primary); }
+.text-primary {
+  color: var(--color-text-primary);
+}
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+.text-muted {
+  color: var(--color-text-muted);
+}
+.text-accent {
+  color: var(--color-primary);
+}
 
-.bg-base { background-color: var(--color-bg-base); }
-.bg-elevated { background-color: var(--color-bg-elevated); }
-.bg-surface { background-color: var(--color-bg-surface); }
-.bg-card { background-color: var(--color-bg-card); }
+.bg-base {
+  background-color: var(--color-bg-base);
+}
+.bg-elevated {
+  background-color: var(--color-bg-elevated);
+}
+.bg-surface {
+  background-color: var(--color-bg-surface);
+}
+.bg-card {
+  background-color: var(--color-bg-card);
+}
