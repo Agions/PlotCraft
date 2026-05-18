@@ -3,13 +3,19 @@
 import * as React from 'react';
 
 // Import Collapse for re-export as Accordion
-import { Collapse as AntDCollapse, CollapsePanel as AntDCollapsePanel } from './ui-components';
-import type { CollapseProps, CollapsePanelProps } from './ui-components';
+import {
+  Collapse as AntDCollapse,
+  CollapsePanel as AntDCollapsePanel,
+} from '@/components/ui/collapse';
+import type { CollapseProps, CollapsePanelProps } from '@/components/ui/collapse';
 
 // Re-export Collapse as Accordion and AccordionItem
 export const Accordion = AntDCollapse;
 export const AccordionItem = AntDCollapsePanel;
-export type { CollapseProps as AccordionProps, CollapsePanelProps as AccordionItemProps };
+export type {
+  CollapseProps as AccordionProps,
+  CollapsePanelProps as AccordionItemProps,
+} from '@/components/ui/collapse';
 
 // AccordionTrigger - wraps header for use within AccordionItem
 export function AccordionTrigger({ children }: { children: React.ReactNode; className?: string }) {

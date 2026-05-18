@@ -13,10 +13,8 @@
 // Re-export from shadcn/ui components
 // ============================================================
 
-import { User } from 'lucide-react';
 import * as React from 'react';
 import { useForm as useRhfForm, type UseFormReturn as RhfUseFormReturn } from 'react-hook-form';
-import { toast } from 'sonner';
 
 import { Alert as LegacyAlert } from '@/components/ui/alert';
 import {
@@ -25,16 +23,8 @@ import {
   AvatarImage,
   AvatarFallback,
 } from '@/components/ui/avatar';
-import {
-  Card as AntdCard,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-  CardMeta,
-  type CardMetaProps,
-} from '@/components/ui/card';
+import { Button, type ButtonProps } from '@/components/ui/button';
+import { Card as AntdCard, CardMeta, type CardMetaProps } from '@/components/ui/card';
 import { Collapse, CollapsePanel } from '@/components/ui/collapse';
 import { ColorPicker, type ColorPickerProps } from '@/components/ui/color-picker';
 import {
@@ -45,17 +35,16 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Divider } from '@/components/ui/divider';
-import { Dropdown as LegacyDropdown } from '@/components/ui/dropdown';
+import { Dropdown } from '@/components/ui/dropdown';
 import {
   DropdownMenu as DropdownMenuRoot,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { Empty as ShadcnEmpty } from '@/components/ui/empty';
 import { Row, Col, type RowProps, type ColProps } from '@/components/ui/grid';
-import { InputNumber } from '@/components/ui/input-number';
+import { Input as ShadcnInput, type InputProps as ShadcnInputProps } from '@/components/ui/input';
+import { InputNumber, type InputNumberProps } from '@/components/ui/input-number';
 import { List as ShadcnList, ListItem } from '@/components/ui/list';
 import { message } from '@/components/ui/message';
 import { Modal, type ModalProps } from '@/components/ui/modal';
@@ -78,7 +67,7 @@ import {
   AntDSelect,
 } from '@/components/ui/select';
 import { Space, SpaceItem } from '@/components/ui/space';
-import { Spin } from '@/components/ui/spin';
+import { Spin, type SpinProps } from '@/components/ui/spin';
 import { Tag as ShadcnTag } from '@/components/ui/tag';
 import { TextArea, Textarea, type TextAreaProps } from '@/components/ui/textarea';
 import {
@@ -326,123 +315,6 @@ function LegacySelect({
 // ============================================================
 // AntD-compatible Radio.Group with button style
 // ============================================================
-// Space component (flex gap wrapper)
-// ============================================================
-interface SpaceProps {
-  direction?: 'horizontal' | 'vertical';
-  size?: 'small' | 'middle' | 'large' | number;
-  align?: 'start' | 'end' | 'center' | 'baseline';
-  className?: string;
-  children?: React.ReactNode;
-  wrap?: boolean;
-  style?: React.CSSProperties;
-  block?: boolean;
-  compact?: boolean;
-}
-
-// ============================================================
-// AntD-compatible Spin (loading spinner)
-// ============================================================
-interface SpinProps {
-  size?: 'small' | 'default' | 'large';
-  tip?: React.ReactNode;
-  className?: string;
-  spinning?: boolean;
-  indicator?: React.ReactNode;
-  children?: React.ReactNode;
-}
-
-// ============================================================
-// AntD-compatible Alert (wraps shadcn Alert)
-// ============================================================
-interface LegacyAlertProps {
-  type?: 'success' | 'info' | 'warning' | 'error' | 'default';
-  showIcon?: boolean;
-  message?: React.ReactNode;
-  description?: React.ReactNode;
-  className?: string;
-  children?: React.ReactNode;
-  closeable?: boolean;
-  onClose?: () => void;
-}
-
-// ============================================================
-// AntD-compatible Button
-// ============================================================
-interface ButtonProps {
-  type?: 'primary' | 'default' | 'dashed' | 'link' | 'text';
-  size?: 'small' | 'middle' | 'large';
-  icon?: React.ReactNode;
-  shape?: 'default' | 'circle' | 'round';
-  block?: boolean;
-  className?: string;
-  children?: React.ReactNode;
-  disabled?: boolean;
-  loading?: boolean;
-  htmlType?: React.ButtonHTMLAttributes<HTMLButtonElement>['type'];
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  style?: React.CSSProperties;
-  danger?: boolean;
-}
-
-function Button({
-  type = 'default',
-  size = 'middle',
-  icon,
-  shape = 'default',
-  block,
-  className,
-  children,
-  disabled,
-  loading,
-  ...props
-}: ButtonProps) {
-  const sizeClass =
-    size === 'small'
-      ? 'h-8 px-3 text-xs'
-      : size === 'large'
-        ? 'h-11 px-6 text-base'
-        : 'h-10 px-4 text-sm';
-  const shapeClass =
-    shape === 'circle'
-      ? 'rounded-full px-0 w-10'
-      : shape === 'round'
-        ? 'rounded-full'
-        : 'rounded-md';
-  const typeClass =
-    type === 'primary'
-      ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-      : type === 'dashed'
-        ? 'border border-dashed border-input hover:bg-accent'
-        : type === 'link'
-          ? 'text-primary underline hover:no-underline'
-          : type === 'text'
-            ? 'hover:bg-accent'
-            : 'bg-background border border-input hover:bg-accent';
-
-  return (
-    <button
-      type={props.htmlType ?? 'button'}
-      disabled={disabled || loading}
-      className={cn(
-        'inline-flex items-center justify-center gap-2 font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-        sizeClass,
-        shapeClass,
-        typeClass,
-        block && 'w-full',
-        className
-      )}
-      {...props}
-    >
-      {loading ? <span className="animate-spin">⟳</span> : icon && <span>{icon}</span>}
-      {children}
-    </button>
-  );
-}
-
-import { Input as ShadcnInput, type InputProps as ShadcnInputProps } from '@/components/ui/input';
-
-export { ShadcnInput as Input, type ShadcnInputProps as InputProps };
 
 // ============================================================
 // AntD-compatible List
@@ -610,71 +482,7 @@ function LegacyTable({
 }
 
 // ============================================================
-// AntD-compatible Tag
-// ============================================================
-function LegacyTag({ children, color, ...props }: any) {
-  return (
-    <ShadcnTag color={color} {...props}>
-      {children}
-    </ShadcnTag>
-  );
-}
-
-// ============================================================
-// InputNumber component (native number input wrapper)
-// ============================================================
-interface InputNumberProps {
-  value?: number;
-  defaultValue?: number;
-  onChange?: (value: number | null) => void;
-  min?: number;
-  max?: number;
-  step?: number;
-  size?: 'large' | 'small' | 'middle';
-  style?: React.CSSProperties;
-  className?: string;
-  placeholder?: string;
-  disabled?: boolean;
-}
-
-// ============================================================
-// Divider component
-// ============================================================
-interface DividerProps {
-  style?: React.CSSProperties;
-  orientation?: 'left' | 'right' | 'center';
-  className?: string;
-  children?: React.ReactNode;
-}
-
-// ============================================================
-// Collapse (wraps existing Accordion)
-// ============================================================
-interface CollapseItem {
-  key: string;
-  label: React.ReactNode;
-  children: React.ReactNode;
-}
-
-interface CollapseProps {
-  activeKey?: string | string[];
-  defaultActiveKey?: string | string[];
-  onChange?: (key: string | string[]) => void;
-  accordion?: boolean;
-  className?: string;
-  children?: React.ReactNode;
-  items?: CollapseItem[];
-  ghost?: boolean;
-}
-
-interface CollapsePanelProps {
-  key?: string;
-  header?: React.ReactNode;
-  children?: React.ReactNode;
-}
-
-// ============================================================
-// AntD-compatible Dropdown (wraps DropdownMenu)
+// AntD-compatible Table
 // ============================================================
 
 export {
@@ -685,6 +493,7 @@ export {
   Radio,
   RadioButton,
   Modal,
+  ShadcnInput as Input,
   InputNumber,
   Divider,
   Row,
@@ -693,11 +502,6 @@ export {
   CollapsePanel,
   AntdCard as Card,
   CardMeta,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
   Option,
   TextArea,
   Textarea,
@@ -714,7 +518,7 @@ export {
   Button,
   ListWrapper as List,
   ListItem,
-  LegacyTag as Tag,
+  ShadcnTag as Tag,
   LegacyTable as Table,
   ShadcnEmpty as Empty,
   ShadcnProgress as Progress,
@@ -723,29 +527,5 @@ export {
   Spin,
   LegacyAlert as Alert,
   Popconfirm,
-  LegacyDropdown as Dropdown,
-  type FormProps,
-  type FormItemProps,
-  type LegacySelectProps as SelectProps,
-  type LegacySelectProps as AntDSelectProps,
-  type RadioGroupProps,
-  type RadioOption,
-  type ModalProps,
-  type InputNumberProps,
-  type DividerProps,
-  type RowProps,
-  type ColProps,
-  type CollapseProps,
-  type CollapsePanelProps,
-  type CardMetaProps,
-  type OptionProps,
-  type TextAreaProps,
-  type ColorPickerProps,
-  type UploadProps,
-  type LegacyAvatarProps as AvatarProps,
-  type ButtonProps,
-  type ListWrapperProps,
-  type ListItemProps,
-  type SpinProps,
-  type LegacyAlertProps,
+  Dropdown,
 };
